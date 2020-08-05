@@ -43,6 +43,7 @@ Planned improvements
 Sample Template manifest
 ------------------------
 
+```
 name: My Awesome template
 version: 1.0
 description: ''
@@ -76,3 +77,4 @@ transforms:
     kind: ModifyFilePath
     old: Setup/Applications/Harness Sample App/Services/To-Do List K8s/
     new: "Setup/Applications/${applicationName}/Services/${serviceName}/"
+ ```
