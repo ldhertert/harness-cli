@@ -2,10 +2,13 @@
   "name": "harness-automation",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "harness-automation.js",
   "scripts": {
-    "start": "tsc && node dist/index.js",
-    "build": "pkg index.js -t node12-linux-x64,node12-macos-x64,node12-win-x64 --out-path dist"
+    "start": "node harness-automation.js",
+    "build-linux": "pkg harness-automation.js -t node12-linux-x64 --out-path dist/linux",
+    "build-macos": "pkg harness-automation.js -t node12-macos-x64 --out-path dist/macos",
+    "build-windows": "pkg harness-automation.js -t node12-windows-x64 --out-path dist/windows",
+    "build": "npm run build-linux && npm run build-macos && npm run build-windows"
   },
   "author": "Luke Hertert",
   "license": "ISC",
