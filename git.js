@@ -1,5 +1,6 @@
 const git = require('isomorphic-git');
-const http = require('isomorphic-git/http/node');
+//need to directly reference this file to make pkg work
+const http = require('./node_modules/isomorphic-git/http/node/index.cjs');
 const fs = require('fs');
 const util = require('./util');
 

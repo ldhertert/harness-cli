@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "tsc && node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pkg index.js -t node12-linux-x64,node12-macos-x64,node12-win-x64 --out-path dist"
   },
   "author": "Luke Hertert",
   "license": "ISC",
@@ -18,5 +18,8 @@
     "minimatch": "^3.0.4",
     "minimist": "^1.2.5",
     "mkdirp": "^1.0.4"
+  },
+  "pkg": {
+    "scripts": "node_modules/isomorphic-git/http/node/*.*"
   }
 }
