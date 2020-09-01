@@ -45,6 +45,7 @@ MVP Requirements
 - [ ] Investigate logistical concerns (support model, open/closed source, license, security scanning, etc)
 - [ ] Documentation
 - [ ] Automated CI/CD pipeline
+- [ ] Real world use case - copy core Harness demo resources to another account
 
 Planned improvements
 --------------------
