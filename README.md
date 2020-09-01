@@ -49,6 +49,7 @@ MVP Requirements
 Planned improvements
 --------------------
 
+* Move repo into harness org
 * Support embedding files directly into template manifest
 * Better error handling/CLI UX
 * In-memory filesystem for git operations
