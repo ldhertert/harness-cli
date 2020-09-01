@@ -55,7 +55,7 @@ Planned improvements
 * Better error handling/CLI UX
 * In-memory filesystem for git operations
 * Support additional sources for templates (i.e. url, s3, etc)
-* Child templates (reference another template from within a template)
+* Child templates (reference another template from within a template) and/or template inheritence (base service template, base application template, etc)
 * Additional transformation types (i.e. true template rendering engines)
 * Make template inputs/variables be Harness aware (i.e. if user provides secret name, we can look up the secret id via api)
 * Interactive CLI - prompt for template inputs
