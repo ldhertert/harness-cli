@@ -24,6 +24,20 @@ TARGET_REPO
 TARGET_BRANCH
 ```
 
+MVP Requirements
+----------------
+
+- [x] Packaged binary that can be easily run across multiple platforms
+- [x] Allow definition of a template (template manifest, name, version, description, input variables, source files, transformations, destination, etc)
+- [x] Pull source yaml files from existing Harness config as code 
+- [x] Transform yaml files based on user input as needed to customize new instance of template
+- [x] Push transformed yaml files to target Harness config as code repo
+- [ ] Leverage new API endpoints for config as code instead of git sync (waiting on Harness engineering to deliver)
+- [ ] Leverage Harness API for common onboarding tasks (secret creation, user/group provisioning, etc)
+- [ ] Investigate logistical concerns (support model, open/closed source, license, security scanning, etc)
+- [ ] Documentation
+- [ ] Automated CI/CD pipeline
+
 Planned improvements
 --------------------
 
@@ -39,6 +53,7 @@ Planned improvements
 * Conditional logic - allow users to conditionally include things like verification, support multiple artifact server types, etc
 * Additional harness admin tasks - graphql api items
 * Bulk management tasks - perform tasks across all applications within account
+* Automated testing
 
 Sample Template manifest
 ------------------------
