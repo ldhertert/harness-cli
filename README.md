@@ -40,7 +40,7 @@ MVP Requirements
 - [x] Pull source yaml files from existing Harness config as code 
 - [x] Transform yaml files based on user input as needed to customize new instance of template
 - [x] Push transformed yaml files to target Harness config as code repo
-- [ ] Leverage new API endpoints for config as code instead of git sync (waiting on Harness engineering to deliver)
+- [ ] Leverage new API endpoints for config as code instead of git sync (waiting on Harness engineering to deliver - https://harness.atlassian.net/browse/DX-1836)
 - [ ] Leverage Harness API for common onboarding tasks (secret creation, user/group provisioning, etc)
 - [ ] Investigate logistical concerns (support model, open/closed source, license, security scanning, etc)
 - [ ] Documentation
