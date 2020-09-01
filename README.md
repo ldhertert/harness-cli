@@ -1,3 +1,11 @@
+Goals
+-----
+
+* Provide a simple mechanism for customers to automate the onboarding of new application teams within the current Harness platform (CDNG will address the majority of the challenges that this project is meant to address)
+* Allow sharing of best practice templates amongst teams across Harness applications
+* Enable self service onboarding by application teams by leveraging templates provided by Harness COE
+* Leverage existing resources defined in Harness (i.e. config as code definitions, GraqpQL representations) as sources.  This enables the utiltiy to be as "future proof" as possible in the scenario where schemas/capabilities change over time.
+
 Usage
 -----
 
