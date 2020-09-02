@@ -1,25 +1,23 @@
 import {Command, flags} from '@oclif/command'
+import { Git } from '../../util/git'
 
 export default class GitClone extends Command {
   static description = 'describe the command here'
 
   static flags = {
-    help: flags.help({char: 'h'}),
-    // flag with a value (-n, --name=VALUE)
-    name: flags.string({char: 'n', description: 'name to print'}),
-    // flag with no value (-f, --force)
-    force: flags.boolean({char: 'f'}),
+    ref: flags.string({ default: 'master' }),
   }
 
-  static args = [{name: 'file'}]
+  static args = [{name: 'repo'}]
 
   async run() {
     const {args, flags} = this.parse(GitClone)
 
-    const name = flags.name ?? 'world'
-    this.log(`hello ${name} from /Users/lukehertert/code/harness-cli/src/commands/git/clone.ts`)
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`)
-    }
+    const git = new Git(args.repo, {
+      ref: flags.ref,
+      cwd: '/Users/lukehertert/code/harness-cli/workspace',
+      auth: {},
+    })
+    await git.clone()
   }
 }
