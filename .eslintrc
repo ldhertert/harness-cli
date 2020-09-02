@@ -5,6 +5,8 @@
   ],
   "rules": {
     "object-curly-spacing": "off",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "semi": "warn",
+    "indent": ["warn", 4]
   }
 }

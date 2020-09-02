@@ -10,6 +10,7 @@
     "@oclif/command": "*",
     "@oclif/config": "*",
     "@oclif/plugin-help": "*",
+    "glob": "^7.1.6",
     "isomorphic-git": "^1.7.4",
     "tslib": "^2.0.1"
   },
@@ -20,6 +21,7 @@
     "@types/mocha": "*",
     "@types/node": "*",
     "chai": "*",
+    "dotenv": "^8.2.0",
     "eslint": "*",
     "eslint-config-oclif": "*",
     "eslint-config-oclif-typescript": "*",
