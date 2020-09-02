@@ -1,105 +1,70 @@
-Goals
------
+harness-cli
+===========
 
-* Provide a simple mechanism for customers to automate the onboarding of new application teams within the current Harness platform (CDNG will address the majority of the challenges that this project is meant to address)
-* Allow sharing of best practice templates amongst teams across Harness applications
-* Enable self service onboarding by application teams by leveraging templates provided by Harness COE
-* Leverage existing resources defined in Harness (i.e. config as code definitions, GraqpQL representations) as sources.  This enables the utiltiy to be as "future proof" as possible in the scenario where schemas/capabilities change over time.
 
-Usage
------
+
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/harness-cli.svg)](https://npmjs.org/package/harness-cli)
+[![Downloads/week](https://img.shields.io/npm/dw/harness-cli.svg)](https://npmjs.org/package/harness-cli)
+[![License](https://img.shields.io/npm/l/harness-cli.svg)](https://github.com/ldhertert/harness-automation/blob/master/package.json)
+
+<!-- toc -->
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
+# Usage
+<!-- usage -->
+```sh-session
+$ npm install -g harness-cli
+$ harness COMMAND
+running command...
+$ harness (-v|--version|version)
+harness-cli/0.0.0 darwin-x64 node-v12.18.3
+$ harness --help [COMMAND]
+USAGE
+  $ harness COMMAND
+...
+```
+<!-- usagestop -->
+# Commands
+<!-- commands -->
+* [`harness hello [FILE]`](#harness-hello-file)
+* [`harness help [COMMAND]`](#harness-help-command)
+
+## `harness hello [FILE]`
+
+describe the command here
 
 ```
-harness-automation 
-    --template-repo https://github.com/ldhertert/harness-automation.git 
-    --template-repo-branch master 
-    --template-repo-token your-github-token 
-    --target-repo https://github.com/ldhertert/harness-automation.git 
-    --target-repo-branch master 
-    --target-repo-token your-github-token 
-    --var templateVar1="someValue" 
-    --var templateVar2="another value" 
-    --var-file vars.json
+USAGE
+  $ harness hello [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+
+EXAMPLE
+  $ harness hello
+  hello world from ./src/hello.ts!
 ```
 
-The following environment variables are also supported.
-```
-TEMPLATE_GITHUB_TOKEN
-TARGET_GITHUB_TOKEN
-TEMPLATE_REPO
-TEMPLATE_BRANCH
-TARGET_REPO
-TARGET_BRANCH
-```
+_See code: [src/commands/hello.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/hello.ts)_
 
-MVP Requirements
-----------------
+## `harness help [COMMAND]`
 
-- [x] Packaged binary that can be easily run across multiple platforms
-- [x] Allow definition of a template (template manifest, name, version, description, input variables, source files, transformations, destination, etc)
-- [x] Pull source yaml files from existing Harness config as code 
-- [x] Transform yaml files based on user input as needed to customize new instance of template
-- [x] Push transformed yaml files to target Harness config as code repo
-- [ ] Leverage new API endpoints for config as code instead of git sync (waiting on Harness engineering to deliver - https://harness.atlassian.net/browse/DX-1836)
-- [ ] Leverage Harness API for common onboarding tasks (secret creation, user/group provisioning, etc)
-- [ ] Investigate logistical concerns (support model, open/closed source, license, security scanning, etc)
-- [ ] Documentation
-- [ ] Automated CI/CD pipeline
-- [ ] Real world use case - copy core Harness demo resources to another account
-
-Planned improvements
---------------------
-
-* Move repo into harness org
-* Support embedding files directly into template manifest
-* Better error handling/CLI UX
-* In-memory filesystem for git operations
-* Support additional sources for templates (i.e. url, s3, etc)
-* Child templates (reference another template from within a template) and/or template inheritence (base service template, base application template, etc)
-* Additional transformation types (i.e. true template rendering engines)
-* Make template inputs/variables be Harness aware (i.e. if user provides secret name, we can look up the secret id via api)
-* Interactive CLI - prompt for template inputs
-* Chrome extension - browse available templates, choose template inputs interactively (i.e. application selector)
-* Conditional logic - allow users to conditionally include things like verification, support multiple artifact server types, etc
-* Additional harness admin tasks - graphql api items
-* Bulk management tasks - perform tasks across all applications within account
-* Automated testing
-
-Sample Template manifest
-------------------------
+display help for harness
 
 ```
-name: My Awesome template
-version: 1.0
-description: ''
-vars:
-  - name: applicationName
-    description: An existing Harness application name
-  - name: serviceName
-    description: The name of the service
-  - name: artifactSource
-    description: The Artifact Server connector name
-  - name: imageName
-    description: The docker image name
-files:
-  - repository: https://github.com/ldhertert/luke-testing-harness
-    branch: master
-    path: Setup/Applications/Harness Sample App/Services/To-Do List K8s/
-transforms:
-  - file: Setup/Applications/Harness Sample App/Services/To-Do List K8s/Manifests/Files/values.yaml
-    property: name
-    value: "${serviceName}"
-    kind: SetValue
-  - file: Setup/Applications/Harness Sample App/Services/To-Do List K8s/Artifact Servers/harness_todolist.yaml
-    property: imageName
-    value: "${imageName}"
-    kind: SetValue
-  - file: Setup/Applications/Harness Sample App/Services/To-Do List K8s/Artifact Servers/harness_todolist.yaml
-    property: serverName
-    value: "${artifactSource}"
-    kind: SetValue
-  - file: "**/*"
-    kind: ModifyFilePath
-    old: Setup/Applications/Harness Sample App/Services/To-Do List K8s/
-    new: "Setup/Applications/${applicationName}/Services/${serviceName}/"
- ```
+USAGE
+  $ harness help [COMMAND]
+
+ARGUMENTS
+  COMMAND  command to show help for
+
+OPTIONS
+  --all  see all commands in CLI
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+<!-- commandsstop -->
