@@ -28,8 +28,25 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`harness git:clone [FILE]`](#harness-gitclone-file)
 * [`harness hello [FILE]`](#harness-hello-file)
 * [`harness help [COMMAND]`](#harness-help-command)
+
+## `harness git:clone [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ harness git:clone [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/git/clone.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/git/clone.ts)_
 
 ## `harness hello [FILE]`
 
