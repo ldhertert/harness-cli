@@ -1,12 +1,23 @@
 {
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "unicorn"
+  ],
   "extends": [
     "oclif",
-    "oclif-typescript"
+    "oclif-typescript",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "object-curly-spacing": "off",
     "no-unused-vars": "warn",
     "semi": "warn",
-    "indent": ["warn", 4]
+    "indent": ["warn", 4],
+    "unicorn/no-abusive-eslint-disable": "off",
+    "lines-between-class-members": "off",
+    "no-await-in-loop": "off",
+    "unicorn/catch-error-name": "off"
   }
 }

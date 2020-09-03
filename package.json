@@ -20,16 +20,19 @@
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
     "chai": "*",
     "dotenv": "^8.2.0",
-    "eslint": "*",
+    "eslint": "^7.8.1",
     "eslint-config-oclif": "*",
     "eslint-config-oclif-typescript": "*",
+    "eslint-plugin-unicorn": "^21.0.0",
     "globby": "*",
     "mocha": "*",
     "nyc": "*",
     "ts-node": "*",
-    "typescript": "*"
+    "typescript": "^4.0.2"
   },
   "engines": {
     "node": ">=12.18.0"

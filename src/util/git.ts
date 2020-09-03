@@ -1,7 +1,7 @@
 import * as git from 'isomorphic-git'
 import * as path from 'path'
 import * as fs from 'fs'
-import { glob } from './filesystem'
+import { FileSystem } from './filesystem'
 import * as http from 'isomorphic-git/http/node'
 
 interface Options {
@@ -11,6 +11,10 @@ interface Options {
         token?: string;
         username?: string;
         password?: string;
+    };
+    author?: {
+        name: string;
+        email: string;
     };
 }
 
@@ -27,14 +31,25 @@ export class Git {
         password?: string;
     }
 
+    author: {
+        name: string;
+        email: string;
+    }
+
+    protected fs = new FileSystem();
+
     constructor(repo: string, opts: Options) {
         this.repo = repo
         this.ref = opts.ref || 'master'
         this.cwd = opts.cwd || path.join(process.cwd(), 'repo')
         this.auth = opts.auth
+        this.author = opts.author || {
+            name: 'Harness Automation',
+            email: 'no-reply@harness.io',
+        }
     }
 
-    public async clone() {
+    public async clone(): Promise<void> {
         await git.clone({
             fs,
             http,
@@ -47,27 +62,24 @@ export class Git {
         })
     }
 
-    public async addAll(pattern?: string) {
-        const files = await glob(pattern || '**/*.yaml', this.cwd)
-        return Promise.all(files.map(async file => {
+    public async addAll(pattern?: string): Promise<void> {
+        const files = await this.fs.glob(pattern || '**/*.yaml', this.cwd)
+        await Promise.all(files.map(async file => {
             await git.add({ fs, dir: this.cwd, filepath: file })
         }))
     }
 
-    public async commit(message: string, author?: any) {
+    public async commit(message: string): Promise<void> {
         await git.commit({
             fs,
             dir: this.cwd,
             message: message,
-            author: author || {
-                name: 'Harness Automation',
-                email: 'no-reply@harness.io',
-            },
+            author: this.author,
 
         })
     }
 
-    public async push() {
+    public async push(): Promise<void> {
         await git.push({
             fs,
             http,

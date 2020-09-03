@@ -7,3 +7,4 @@
 /yarn.lock
 node_modules
 src/debug.ts
+.DS_Store
