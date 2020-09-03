@@ -1,7 +1,19 @@
+todo
+====
+
+* Logging
+* Error handling
+* Templating
+* GraphQL
+* Packaging
+* Automated build
+* Tests
+* Move to harness github org
+* Validation of user input
+* In memory file system
+
 harness-cli
 ===========
-
-
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/harness-cli.svg)](https://npmjs.org/package/harness-cli)
@@ -28,22 +40,24 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`harness git:clone [FILE]`](#harness-gitclone-file)
+* [`harness git:clone [REPO]`](#harness-gitclone-repo)
 * [`harness hello [FILE]`](#harness-hello-file)
 * [`harness help [COMMAND]`](#harness-help-command)
 
-## `harness git:clone [FILE]`
+## `harness git:clone [REPO]`
 
 describe the command here
 
 ```
 USAGE
-  $ harness git:clone [FILE]
+  $ harness git:clone [REPO]
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  --cwd=cwd
+  --password=password  Github password
+  --ref=ref            [default: master]
+  --token=token        Github personal access token
+  --username=username  Github username
 ```
 
 _See code: [src/commands/git/clone.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/git/clone.ts)_
