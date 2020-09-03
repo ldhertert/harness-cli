@@ -1,13 +1,12 @@
 import { File } from '../../util/filesystem'
 import { LocalStorageProvider, ConfigLocal } from './local-storage'
 import { GitOptions, Git } from '../../util/git'
-import { StorageType } from './storage-provider'
+import { StorageType, StorageProviderRef } from './storage-provider'
 
 export interface ConfigGit extends ConfigLocal, GitOptions {
 }
 
 export class GitStorageProvider extends LocalStorageProvider {
-    protected type: StorageType;
     protected git: Git
 
     constructor(options: GitOptions) {
@@ -20,7 +19,15 @@ export class GitStorageProvider extends LocalStorageProvider {
         this.git = git
     }
 
+    static createRef(opts: GitOptions): StorageProviderRef {
+        return {
+            sourceType: StorageType.Git,
+            opts: opts,
+        }
+    }
+
     async init(): Promise<boolean> {
+        console.log(`Cloning ${this.git.repo} to ${this.git.cwd}`)
         await this.git.clone()
         this.initialized = true
         return true

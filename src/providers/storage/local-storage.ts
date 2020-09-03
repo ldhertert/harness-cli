@@ -1,6 +1,7 @@
 import { FileSystem, File } from '../../util/filesystem'
 import path = require('path');
-import { StorageProvider, StorageType } from './storage-provider'
+import { StorageProvider, StorageType, StorageProviderRef } from './storage-provider'
+import { ConfigGit } from './git-storage'
 
 export interface ConfigLocal {
     directory: string;
@@ -18,6 +19,13 @@ export class LocalStorageProvider implements StorageProvider {
         this.config = config
         this.config.mode = this.fs.parseFileMode(this.config.mode || 0o777)
         this.mode = this.config.mode
+    }
+
+    static createRef(opts: ConfigGit): StorageProviderRef {
+        return {
+            sourceType: StorageType.Local,
+            opts: opts,
+        }
     }
 
     getType(): StorageType {

@@ -1,8 +1,15 @@
 import { File } from '../../util/filesystem'
+import { LocalStorageProvider, ConfigLocal } from './local-storage'
+import { GitStorageProvider, ConfigGit } from './git-storage'
 
 export enum StorageType {
     Local = 'Local',
     Git = 'Git'
+}
+
+export interface StorageProviderRef {
+    sourceType: StorageType
+    opts: unknown
 }
 
 export interface StorageProvider {
@@ -22,4 +29,16 @@ export interface StorageProvider {
 
     deleteFile(name: string): Promise<void>;
     deleteFiles(pattern: string): Promise<void>;
+}
+
+export function getStorageProvider(ref: StorageProviderRef): StorageProvider {
+    if (ref.sourceType.toLowerCase() === StorageType.Local.toLowerCase()) {
+        return new LocalStorageProvider(ref.opts as ConfigLocal)
+    }
+
+    if (ref.sourceType.toLowerCase() === StorageType.Git.toLowerCase()) {
+        return new GitStorageProvider(ref.opts as ConfigGit)
+    }
+
+    throw new Error('Unsupported storage provider.')
 }
