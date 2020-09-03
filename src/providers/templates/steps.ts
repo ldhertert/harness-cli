@@ -42,6 +42,6 @@ export class FileSourceStep extends Step {
         const storageProvider = getStorageProvider(this.source)
         await storageProvider.init()
         const files = await storageProvider.getFiles(this.glob || '**/*.*')
-        console.log(JSON.stringify(files, null, 4))
+        console.log(JSON.stringify(files, undefined, 4))
     }
 }

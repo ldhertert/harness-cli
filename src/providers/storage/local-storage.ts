@@ -57,10 +57,9 @@ export class LocalStorageProvider implements StorageProvider {
     async listFiles(pattern?: string | undefined): Promise<[string, number][]> {
         const files = await this.fs.glob(pattern || '*.*', this.config.directory)
         const result: [string, number][] = []
-        for (let i = 0; i < files.length; i += 1) {
-            const f = files[i]
-            const stat = await this.fs.pathInfo(path.join(this.config.directory, f))
-            result.push([f.replace(`${this.config.directory}/`, ''), stat.size])
+        for (const file of files) {
+            const stat = await this.fs.pathInfo(path.join(this.config.directory, file))
+            result.push([file.replace(`${this.config.directory}/`, ''), stat.size])
         }
         return result
     }

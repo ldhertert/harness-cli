@@ -58,7 +58,9 @@
   },
   "repository": "ldhertert/harness-automation",
   "scripts": {
-    "lint": "eslint ./src --ext .ts --config .eslintrc",
+    "lint": "eslint ./src",
+    "compile": "tsc",
+    "build": "npm run compile && npm run lint && oclif-dev readme",
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",

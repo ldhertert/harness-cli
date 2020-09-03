@@ -30,7 +30,7 @@ export class FileSystem {
     async createDirectory(path: string, mode: string | number): Promise<void> {
         try {
             await fs.promises.access(path)
-        } catch (e) {
+        } catch {
             await fs.promises
                 .mkdir(path, {
                     recursive: true,
@@ -79,7 +79,7 @@ export class FileSystem {
             return fs.promises.unlink(path.join(cwd || '', file.path))
                 .catch(err => {
                     // don't throw an error if the file has already been removed (or didn't exist at all)
-                    if (err.message.indexOf('no such file or directory') >= 0) {
+                    if (err.message.includes('no such file or directory')) {
                         throw new Error(err.message)
                     }
                 })
@@ -90,7 +90,7 @@ export class FileSystem {
         try {
             await fs.promises.access(path)
             return true
-        } catch (e) {
+        } catch {
             return false
         }
     }

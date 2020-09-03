@@ -18,6 +18,8 @@
     "unicorn/no-abusive-eslint-disable": "off",
     "lines-between-class-members": "off",
     "no-await-in-loop": "off",
-    "unicorn/catch-error-name": "off"
+    "unicorn/catch-error-name": "off",
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/prefer-string-slice": "off"
   }
 }
