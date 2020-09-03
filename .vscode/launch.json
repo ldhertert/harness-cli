@@ -12,9 +12,8 @@
           "preLaunchTask": "tsc: build - tsconfig.json",
           "outFiles": ["${workspaceFolder}/lib/**/*.js"],
           "skipFiles": [
-            "<node_internals>/**/*.js",
-            "**/*async_hook*.js",
-            "**/*task_queues*.js"
+            "${workspaceRoot}/node_modules/**/*.js",
+            "<node_internals>/**/*.js" 
           ]
         }
       ]

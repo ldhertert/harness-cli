@@ -1,5 +1,7 @@
 import { StorageProviderRef, getStorageProvider } from '../storage/storage-provider'
 import { TemplateExecutionContext } from './template'
+import * as minimatch from 'minimatch'
+import _ = require('lodash');
 
 enum StepType {
     FileSource = 'FileSource',
@@ -36,13 +38,13 @@ export class FileSourceStep extends Step {
     public constructor(name: string, source: StorageProviderRef, glob?: string) {
         super(name)
         this.source = source
-        this.glob = glob
+        this.glob = glob || '**/*.yaml'
     }
 
     public async run(context: TemplateExecutionContext): Promise<void> {
         const storageProvider = getStorageProvider(this.source)
         await storageProvider.init()
-        const files = await storageProvider.getFiles(this.glob || '**/*.*')
+        const files = await storageProvider.getFiles(this.glob as string)
         
         files.forEach(newFile => {
             const existingFiles = context.workspace.filter(existingFile => newFile.path.toLowerCase() === existingFile.path.toLowerCase())
@@ -54,5 +56,27 @@ export class FileSourceStep extends Step {
                 context.workspace.push(newFile)
             }
         })
+    }
+}
+
+export class RenameFileStep extends Step {
+    type = StepType.RenameFile
+    replace: string;
+    search: RegExp | string;
+
+    public constructor(name: string, search: RegExp | string, replace: string, glob?: string) {
+        super(name)
+        this.search = search
+        this.replace = replace
+        this.glob = glob || '**/*.yaml'
+    }
+
+    public async run(context: TemplateExecutionContext): Promise<void> {
+        const filesToProcess = context.workspace.filter(file => minimatch(file.path, this.glob as string))
+        filesToProcess.forEach(file => {
+            const newPath = _.template(this.replace)(context.vars)
+            file.path = _.replace(file.path, this.search, newPath)
+        })
+        return Promise.resolve()
     }
 }

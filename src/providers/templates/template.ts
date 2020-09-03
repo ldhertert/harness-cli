@@ -10,7 +10,6 @@ export interface TemplateRef {
 export interface TemplateExecutionContext {
     cwd: string,
     vars: any,
-    context: any,
     workspace: File[],
     outputs: any
 }
@@ -40,13 +39,12 @@ export class Template {
         const context: TemplateExecutionContext = {
             cwd: cwd,
             vars: {},
-            context: {},
             workspace: [],
             outputs: {},
         }
 
         this.processVariables(inputVars, context)
-        this.executeTemplateSteps(context)
+        await this.executeTemplateSteps(context)
 
         // Preview changes
 
