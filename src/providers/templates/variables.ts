@@ -1,4 +1,4 @@
-enum VariableType {
+export enum VariableType {
     String = 'String',
     Boolean = 'Boolean',
     Number = 'Number',
@@ -8,8 +8,8 @@ enum VariableType {
 
 export interface Variable {
     name: string;
-    description: string;
+    description?: string;
     type: VariableType;
-    defaultValue: unknown;
+    defaultValue?: unknown;
     required: boolean;
 }

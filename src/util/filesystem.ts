@@ -23,7 +23,7 @@ export class FileSystem {
         })
     }
 
-    expmktemp(): string {
+    mktemp(): string {
         return fs.mkdtempSync(path.join(os.tmpdir(), 'harness'))
     }
 

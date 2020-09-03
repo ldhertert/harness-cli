@@ -12,6 +12,7 @@
     "@oclif/plugin-help": "*",
     "glob": "^7.1.6",
     "isomorphic-git": "^1.7.4",
+    "lodash": "^4.17.20",
     "tslib": "^2.0.1"
   },
   "devDependencies": {

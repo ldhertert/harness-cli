@@ -1,6 +1,7 @@
 import { Variable } from './variables'
 import { Step } from './steps'
 import { File, FileSystem } from '../../util/filesystem'
+import * as _ from 'lodash'
 
 export interface TemplateRef {
     source: string
@@ -38,22 +39,14 @@ export class Template {
         const cwd = await fs.mktemp()
         const context: TemplateExecutionContext = {
             cwd: cwd,
-            vars: inputVars,
+            vars: {},
             context: {},
             workspace: [],
             outputs: {},
         }
 
-        // Process variables
-        // 4) Load user provided variables
-        // 5) Merge user provided variables with template variables with default values
-        // 6) Evaluate any templatized variables
-        // 7) Perform template variable validation with computed variables values
-
-        // Execute steps
-        for (const step of this.steps) {
-            await step.run(context)
-        }
+        this.processVariables(inputVars, context)
+        this.executeTemplateSteps(context)
 
         // Preview changes
 
@@ -62,7 +55,38 @@ export class Template {
         // Validate success
 
         console.log(JSON.stringify(context, undefined, 4))
+        
         // Cleanup workspace
-        // await fs.rmdir(cwd)
+        await fs.rmdir(context.cwd)
+    }
+
+    private processVariables(inputVars: any, context: TemplateExecutionContext): void{
+        // Process variables
+        context.vars = inputVars || {}
+
+        // Merge user provided variables with template variables with default values
+        const defaults: any = {}
+        this.variables.filter(v => v.defaultValue !== undefined)
+            .forEach(v => {
+                defaults[v.name] = v.defaultValue
+            })
+        _.defaults(context.vars, defaults)
+
+        // TODO: Evaluate any templatized variables
+
+        // Perform template variable validation with computed variables values
+        const verificationFailures = this.variables.filter(v => v.required && context.vars[v.name] === undefined)
+            .map(v => v.name)
+
+        if (verificationFailures.length > 0) {
+            throw new Error(`The following required variables were not provided: ${verificationFailures.join(',')}`)
+        }
+    }
+
+    private async executeTemplateSteps(context: TemplateExecutionContext) : Promise<void> {
+        // Execute steps
+        for (const step of this.steps) {
+            await step.run(context)
+        }
     }
 }
