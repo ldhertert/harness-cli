@@ -12,6 +12,7 @@
     "@oclif/plugin-help": "*",
     "glob": "^7.1.6",
     "isomorphic-git": "^1.7.4",
+    "js-yaml": "^3.14.0",
     "lodash": "^4.17.20",
     "minimatch": "^3.0.4",
     "tslib": "^2.0.1"
@@ -20,6 +21,7 @@
     "@oclif/dev-cli": "*",
     "@oclif/test": "*",
     "@types/chai": "*",
+    "@types/js-yaml": "^3.12.5",
     "@types/mocha": "*",
     "@types/node": "*",
     "@typescript-eslint/eslint-plugin": "^4.0.1",

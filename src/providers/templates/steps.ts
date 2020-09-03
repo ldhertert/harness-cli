@@ -2,6 +2,7 @@ import { StorageProviderRef, getStorageProvider } from '../storage/storage-provi
 import { TemplateExecutionContext } from './template'
 import * as minimatch from 'minimatch'
 import _ = require('lodash');
+import { fromYaml, toYaml } from '../../util/objects'
 
 enum StepType {
     FileSource = 'FileSource',
@@ -76,6 +77,29 @@ export class RenameFileStep extends Step {
         filesToProcess.forEach(file => {
             const newPath = _.template(this.replace)(context.vars)
             file.path = _.replace(file.path, this.search, newPath)
+        })
+        return Promise.resolve()
+    }
+}
+
+export class SetValueStep extends Step {
+    type = StepType.SetValue
+    path: string;
+    value: any;
+
+    public constructor(name: string, path: string, value: any, glob?: string) {
+        super(name)
+        this.path = path
+        this.value = value
+        this.glob = glob || '**/*.yaml'
+    }
+
+    public async run(context: TemplateExecutionContext): Promise<void> {
+        const filesToProcess = context.workspace.filter(file => minimatch(file.path, this.glob as string))
+        filesToProcess.forEach(file => {
+            const obj = fromYaml(file.content)
+            _.set(obj, this.path, this.value)
+            file.content = toYaml(obj)
         })
         return Promise.resolve()
     }
