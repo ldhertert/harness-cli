@@ -23,13 +23,14 @@ export class FileSystem {
         })
     }
 
-    mktemp(): string {
+    expmktemp(): string {
         return fs.mkdtempSync(path.join(os.tmpdir(), 'harness'))
     }
 
-    async createDirectory(path: string, mode: string | number): Promise<void> {
+    async createDirectory(path: string, mode: string | number): Promise<string> {
         try {
             await fs.promises.access(path)
+            return path
         } catch {
             await fs.promises
                 .mkdir(path, {
@@ -39,6 +40,7 @@ export class FileSystem {
                 .catch(e => {
                     throw e
                 })
+            return path
         }
     }
 
