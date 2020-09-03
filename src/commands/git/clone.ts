@@ -14,12 +14,13 @@ export default class GitClone extends Command {
 
   static args = [{name: 'repo'}]
 
-  async run() {
+  async run(): Promise<void> {
       const {args, flags} = this.parse(GitClone)
 
-      const git = new Git(args.repo, {
+      const git = new Git({
+          repo: args.repo,
           ref: flags.ref,
-          cwd: flags.cwd || '/Users/lukehertert/code/harness-cli/workspace',
+          cwd: flags.cwd,
           auth: {
               token: flags.token,
           },

@@ -1,10 +1,10 @@
 import * as git from 'isomorphic-git'
-import * as path from 'path'
 import * as fs from 'fs'
 import { FileSystem } from './filesystem'
 import * as http from 'isomorphic-git/http/node'
 
-interface Options {
+export interface GitOptions {
+    repo: string;
     ref?: string;
     cwd?: string;
     auth: {
@@ -38,10 +38,10 @@ export class Git {
 
     protected fs = new FileSystem();
 
-    constructor(repo: string, opts: Options) {
-        this.repo = repo
+    constructor(opts: GitOptions) {
+        this.repo = opts.repo
         this.ref = opts.ref || 'master'
-        this.cwd = opts.cwd || path.join(process.cwd(), 'repo')
+        this.cwd = opts.cwd || this.fs.mktemp()
         this.auth = opts.auth
         this.author = opts.author || {
             name: 'Harness Automation',
@@ -62,11 +62,47 @@ export class Git {
         })
     }
 
-    public async addAll(pattern?: string): Promise<void> {
-        const files = await this.fs.glob(pattern || '**/*.yaml', this.cwd)
-        await Promise.all(files.map(async file => {
-            await git.add({ fs, dir: this.cwd, filepath: file })
+    public async stageAll(): Promise<boolean> {
+        let status = await git.statusMatrix({
+            fs,
+            dir: this.cwd,
+        })
+
+        const FILE = 0
+        const HEAD = 1
+        const WORKDIR = 2
+        const STAGE = 3
+
+        const filesToStage = status
+            .filter(row => row[WORKDIR] !== row[STAGE])
+            .map(row => {
+                return {
+                    path: row[FILE],
+                    remove: row[WORKDIR] === 0,
+                }
+            })
+
+        await Promise.all(filesToStage.map(async file => {
+            if (file.remove) {
+                await git.remove({ fs, dir: this.cwd, filepath: file.path })
+            } else {
+                await git.add({ fs, dir: this.cwd, filepath: file.path })
+            }
         }))
+
+        status = await git.statusMatrix({
+            fs,
+            dir: this.cwd,
+        })
+
+        const unmodifiedFiles = status
+            .filter(row => row[WORKDIR] === 1 && row[STAGE] === 1 && row[HEAD] === 1)
+
+        if (unmodifiedFiles.length === status.length) {
+            // no changes have been made.  Can skip commit & push
+            return false
+        }
+        return true
     }
 
     public async commit(message: string): Promise<void> {
@@ -89,5 +125,13 @@ export class Git {
                 return { username: this.auth.username || this.auth.token || '', password: this.auth.password }
             },
         })
+    }
+
+    public async pushAllChanges(message?: string): Promise<void> {
+        const changesExist = await this.stageAll()
+        if (changesExist) {
+            await this.commit(message || 'Changes made by Harness Autmation Tool')
+            await this.push()
+        }
     }
 }

@@ -1,28 +1,6 @@
-import { FileSystem, File } from './filesystem'
+import { FileSystem, File } from '../../util/filesystem'
 import path = require('path');
-
-export enum StorageType {
-    Local = 'Local'
-}
-
-export interface StorageProvider {
-    getType(): StorageType;
-    getConfig(): unknown;
-    init(): Promise<boolean>;
-    test(): Promise<void>;
-
-    listFiles(pattern?: string): Promise<[string, number][]>;
-    fileExists(name: string): Promise<boolean>;
-
-    getFile(names: string): Promise<File>;
-    getFiles(pattern: string): Promise<File[]>;
-
-    storeFile(file: File): Promise<void>;
-    storeFiles(files: File[]): Promise<void>;
-
-    deleteFile(name: string): Promise<void>;
-    deleteFiles(pattern: string): Promise<void>;
-}
+import { StorageProvider, StorageType } from './storage-provider'
 
 export interface ConfigLocal {
     directory: string;

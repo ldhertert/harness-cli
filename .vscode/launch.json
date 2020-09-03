@@ -13,7 +13,8 @@
           "outFiles": ["${workspaceFolder}/lib/**/*.js"],
           "skipFiles": [
             "<node_internals>/**/*.js",
-            "**/*async_hook*.js"
+            "**/*async_hook*.js",
+            "**/*task_queues*.js"
           ]
         }
       ]

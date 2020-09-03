@@ -23,9 +23,8 @@ export class FileSystem {
         })
     }
 
-    async mktemp(): Promise<string> {
-        const workdir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'harness'))
-        return workdir
+    mktemp(): string {
+        return fs.mkdtempSync(path.join(os.tmpdir(), 'harness'))
     }
 
     async createDirectory(path: string, mode: string | number): Promise<void> {
