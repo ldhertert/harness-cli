@@ -86,6 +86,9 @@ export class LocalStorageProvider implements StorageProvider {
     }
 
     async storeFiles(files: File[]): Promise<void> {
+        for (const file of files) {
+            await this.fs.createDirectory(path.dirname(file.path), this.mode, this.config.directory)
+        }
         return this.fs.saveFile(files, this.config.directory)
     }
 

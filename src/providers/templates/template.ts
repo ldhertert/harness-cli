@@ -2,6 +2,7 @@ import { Variable } from './variables'
 import { Step } from './steps'
 import { File, FileSystem } from '../../util/filesystem'
 import * as _ from 'lodash'
+import { StorageProvider } from '../storage/storage-provider'
 
 export interface TemplateRef {
     source: string
@@ -32,7 +33,7 @@ export class Template {
         this.steps = []
     }
 
-    public async execute(inputVars: any): Promise<void> {
+    public async execute(inputVars: any, destination: StorageProvider): Promise<void> {
         // Create workspace
         const fs = new FileSystem()
         const cwd = await fs.mktemp()
@@ -49,11 +50,10 @@ export class Template {
         // Preview changes
 
         // Upsert yaml results
+        await destination.storeFiles(context.workspace)
 
         // Validate success
 
-        console.log(JSON.stringify(context, undefined, 4))
-        
         // Cleanup workspace
         await fs.rmdir(context.cwd)
     }
