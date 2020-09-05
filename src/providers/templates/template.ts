@@ -26,8 +26,8 @@ export class Template {
     variables: Variable[]
     steps: Step[]
 
-    public constructor(name: string) {
-        this.name = name
+    public constructor(name?: string) {
+        this.name = name || ''
         this.sourceFiles = []
         this.variables = []
         this.steps = []

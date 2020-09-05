@@ -4,7 +4,7 @@ import * as minimatch from 'minimatch'
 import _ = require('lodash');
 import { fromYaml, toYaml } from '../../util/objects'
 
-enum StepType {
+export enum StepType {
     FileSource = 'FileSource',
     RenameFile = 'RenameFile',
     SetValue = 'SetValue',
