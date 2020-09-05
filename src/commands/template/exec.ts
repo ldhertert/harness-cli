@@ -16,7 +16,7 @@ export default class TemplateExec extends Command {
   static args = [{ name: 'manifest', required: true }]
 
   async run() {
-      const { args, flags } = this.parse(TemplateExec)
+      const { args } = this.parse(TemplateExec)
 
       const inputVars: any = { applicationName: 'Plex', serviceName: 'ombi3' }
 
@@ -24,7 +24,7 @@ export default class TemplateExec extends Command {
       this.log(`Successfully loaded template from ${args.manifest}`)
       const template = await this.parseTemplate(templateText)
       this.log(`Successfully parsed template '${template.name}'`)
-      const vars = await this.processVariables(inputVars, args, flags)
+      const vars = await this.processVariables(inputVars)
       this.log('Successfully proccessed variables')
       const destination = await this.getDestination()
       await template.execute(vars, destination)
@@ -64,7 +64,7 @@ export default class TemplateExec extends Command {
       return template
   }
 
-  async processVariables(userVars: any, args: any, flags: any) {
+  async processVariables(userVars: any) {
       const vars = userVars
       // todo merge with flags
       return Promise.resolve(vars)
