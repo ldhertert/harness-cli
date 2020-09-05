@@ -5,25 +5,25 @@ import { StorageType, StorageProviderRef } from './providers/storage/storage-pro
 import { GitStorageProvider, ConfigGit } from './providers/storage/git-storage'
 import { VariableType } from './providers/templates/variables'
 import { LocalStorageProvider } from './providers/storage/local-storage'
-import * as fs  from 'fs'
+import * as fs from 'fs'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
 
 async function run(): Promise<void> {
 
-    let sourceTemplate = JSON.parse(await fs.promises.readFile('./template.json', { encoding: 'utf-8'}))
+    let sourceTemplate = JSON.parse(await fs.promises.readFile('./template.json', { encoding: 'utf-8' }))
     let template = new Template(sourceTemplate.name);
     template.sourceFiles = sourceTemplate.sourceFiles;
     template.variables = sourceTemplate.variables;
-    for(const step of sourceTemplate.steps) {
+    for (const step of sourceTemplate.steps) {
         if (step.type === StepType.FileSource) {
             template.steps.push(new FileSourceStep(step.name, step.source, step.glob))
         } else if (step.type === StepType.RenameFile) {
             template.steps.push(new RenameFileStep(step.name, step.search, step.replace, step.glob))
         } else if (step.type === StepType.SetValue) {
-            template.steps.push(new SetValueStep(step.name, step.path, step.value, step.glob ))
-        } else { 
+            template.steps.push(new SetValueStep(step.name, step.path, step.value, step.glob))
+        } else {
             throw new Error("Invalid step type")
         }
     }

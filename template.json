@@ -32,7 +32,7 @@
             "name": "Rename Application",
             "type": "RenameFile",
             "search": "Setup/Applications/Plex/Services/ombi/",
-            "replace": "Setup/Applications/<%= applicationName %>/Services/ombi2/"
+            "replace": "Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>/"
         },
         {
             "name": "Set some value",
