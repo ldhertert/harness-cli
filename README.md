@@ -43,7 +43,7 @@ USAGE
 * [`harness git:clone [REPO]`](#harness-gitclone-repo)
 * [`harness hello [FILE]`](#harness-hello-file)
 * [`harness help [COMMAND]`](#harness-help-command)
-* [`harness template:exec [FILE]`](#harness-templateexec-file)
+* [`harness template:exec MANIFEST`](#harness-templateexec-manifest)
 
 ## `harness git:clone [REPO]`
 
@@ -100,18 +100,17 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 
-## `harness template:exec [FILE]`
+## `harness template:exec MANIFEST`
 
-describe the command here
+Apply steps defined in template manifest and send reults to target Harness account
 
 ```
 USAGE
-  $ harness template:exec [FILE]
+  $ harness template:exec MANIFEST
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  --dest=dest  (required)
+  --var=var
 ```
 
 _See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/template/exec.ts)_
