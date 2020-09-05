@@ -1,6 +1,7 @@
 todo
 ====
 
+* Configuration/Secrets
 * Logging
 * Error handling
 * Templating
