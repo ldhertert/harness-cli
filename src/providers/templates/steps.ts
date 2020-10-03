@@ -43,7 +43,7 @@ export class FileSourceStep extends Step {
     }
 
     public async run(context: TemplateExecutionContext): Promise<void> {
-        const storageProvider = getStorageProvider(this.source)
+        const storageProvider = getStorageProvider(this.source, context.credentials)
         await storageProvider.init()
         const files = await storageProvider.getFiles(this.glob as string)
         
@@ -57,6 +57,7 @@ export class FileSourceStep extends Step {
                 context.workspace.push(newFile)
             }
         })
+        await storageProvider.dispose()
     }
 }
 

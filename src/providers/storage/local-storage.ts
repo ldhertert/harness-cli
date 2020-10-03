@@ -99,4 +99,8 @@ export class LocalStorageProvider implements StorageProvider {
     async deleteFiles(pattern: string): Promise<void> {
         return this.fs.deleteFiles(pattern, this.config.directory)
     }
+
+    async dispose(): Promise<void> {
+        return Promise.resolve()
+    }
 }

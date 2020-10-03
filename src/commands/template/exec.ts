@@ -1,9 +1,9 @@
 import { Command, flags } from '@oclif/command'
 import * as fs from 'fs'
 import { Template } from '../../providers/templates/template'
-import { StepType, FileSourceStep, RenameFileStep, SetValueStep } from '../../providers/templates/steps'
-import { StorageType, StorageProviderRef } from '../../providers/storage/storage-provider'
 import { GitStorageProvider } from '../../providers/storage/git-storage'
+import { Credentials, CredentialType, GitCredentials } from '../../util/config'
+import { GitOptions } from '../../util/git'
 
 export default class TemplateExec extends Command {
   static description = 'Apply steps defined in template manifest and send reults to target Harness account'
@@ -11,14 +11,15 @@ export default class TemplateExec extends Command {
   static flags = {
       var: flags.string({ multiple: true }),
       dest: flags.string({ required: true }),
+      gitToken: flags.string({ env: 'GIT_TOKEN', description: 'Token to use for git authentication' }),
   }
 
   static args = [{ name: 'manifest', required: true }]
 
   async run() {
-      const { args } = this.parse(TemplateExec)
+      const { args, flags } = this.parse(TemplateExec)
 
-      const inputVars: any = { applicationName: 'Plex', serviceName: 'ombi3' }
+      const inputVars: any = { applicationName: 'Plex', serviceName: 'ombi4' }
 
       const templateText = await fs.promises.readFile(args.manifest, { encoding: 'utf-8' })
       this.log(`Successfully loaded template from ${args.manifest}`)
@@ -26,42 +27,29 @@ export default class TemplateExec extends Command {
       this.log(`Successfully parsed template '${template.name}'`)
       const vars = await this.processVariables(inputVars)
       this.log('Successfully proccessed variables')
-      const destination = await this.getDestination()
-      await template.execute(vars, destination)
-      this.log(JSON.stringify(template, undefined, 4))
+
+      const credentials = await this.getCredentials(flags.gitToken)
+
+      const destination = await this.getDestination(flags.dest, credentials)
+      
+      await template.execute(vars, destination, credentials)
+      // this.log(JSON.stringify(template, undefined, 4))
   }
 
   async parseTemplate(templateText: string) {
-      const sourceTemplate = JSON.parse(templateText)
-
-      const template = new Template(sourceTemplate.name)
-      template.sourceFiles = sourceTemplate.sourceFiles
-      template.variables = sourceTemplate.variables
-      for (const step of sourceTemplate.steps) {
-          if (step.type === StepType.FileSource) {
-              template.steps.push(new FileSourceStep(step.name, step.source, step.glob))
-          } else if (step.type === StepType.RenameFile) {
-              template.steps.push(new RenameFileStep(step.name, step.search, step.replace, step.glob))
-          } else if (step.type === StepType.SetValue) {
-              template.steps.push(new SetValueStep(step.name, step.path, step.value, step.glob))
-          } else {
-              throw new Error('Invalid step type')
-          }
-      }
-
-      // this is a hack 
-      (template.steps[0] as FileSourceStep).source = {
-          sourceType: StorageType.Git,
-          opts: {
-              repo: 'https://github.com/ldhertert/luke-testing-harness.git',
-              ref: 'master',
-              auth: {
-                  token: process.env.GITHUB_TOKEN,
-              },
-          },
-      } as StorageProviderRef
-
+      const parsedTemplate = JSON.parse(templateText)
+      const template = new Template(parsedTemplate)
       return template
+  }
+
+  async getCredentials(gitToken?: string): Promise<Credentials[]> {
+      const gitHubToken: GitCredentials = {
+          type: CredentialType.Git,
+          token: gitToken,
+      }
+      return Promise.resolve([
+          gitHubToken,
+      ])
   }
 
   async processVariables(userVars: any) {
@@ -70,17 +58,13 @@ export default class TemplateExec extends Command {
       return Promise.resolve(vars)
   }
 
-  async getDestination() {
+  async getDestination(dest: string, credentials: Credentials[]) {
       // this needs to not be hard coded either
-      const gitOptionsDest = {
-          repo: 'https://github.com/ldhertert/luke-testing-harness.git',
+      const gitOptionsDest: GitOptions = {
+          repo: dest,
           ref: 'master',
-          auth: {
-              token: process.env.GITHUB_TOKEN,
-          },
       }
-      const destination = new GitStorageProvider(gitOptionsDest)
-      await destination.init()
+      const destination = new GitStorageProvider(gitOptionsDest, credentials)
       return destination
   }
 }

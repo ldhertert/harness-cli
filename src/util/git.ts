@@ -2,12 +2,13 @@ import * as git from 'isomorphic-git'
 import * as fs from 'fs'
 import { FileSystem } from './filesystem'
 import * as http from 'isomorphic-git/http/node'
+import { GitCredentials } from './config'
 
 export interface GitOptions {
     repo: string;
     ref?: string;
     cwd?: string;
-    auth: {
+    auth?: {
         token?: string;
         username?: string;
         password?: string;
@@ -38,11 +39,33 @@ export class Git {
 
     protected fs = new FileSystem();
 
-    constructor(opts: GitOptions) {
+    constructor(opts: GitOptions, credentials: GitCredentials[]) {
         this.repo = opts.repo
         this.ref = opts.ref || 'master'
         this.cwd = opts.cwd || this.fs.mktemp()
-        this.auth = opts.auth
+
+        if (opts.auth) {
+            this.auth = opts.auth
+        } else {
+            const defaultCredentials = credentials.filter(cred => cred.url === undefined)
+            const credentialMatches = credentials.filter(cred => cred.url && this.repo.toLowerCase().startsWith(cred.url.toLowerCase()))
+            if (credentialMatches.length > 0) {
+                this.auth = {
+                    username: credentialMatches[0].username,
+                    password: credentialMatches[0].password,
+                    token: credentialMatches[0].token,
+                }
+            } else if (defaultCredentials.length > 0) {
+                this.auth = {
+                    username: defaultCredentials[0].username,
+                    password: defaultCredentials[0].password,
+                    token: defaultCredentials[0].token,
+                }
+            } else {
+                console.log('matched nothing')
+                this.auth = {}
+            }
+        }
         this.author = opts.author || {
             name: 'Harness Automation',
             email: 'no-reply@harness.io',
@@ -133,5 +156,10 @@ export class Git {
             await this.commit(message || 'Changes made by Harness Autmation Tool')
             await this.push()
         }
+    }
+
+    public async dispose(): Promise<void> {
+        // console.log(`Removing directory ${this.cwd}`)
+        await this.fs.rmdir(this.cwd)
     }
 }

@@ -18,7 +18,7 @@
     ],
     "steps": [
         {
-            "name": "Get files from disk",
+            "name": "Get source files from https://github.com/ldhertert/luke-testing-harness.git",
             "type": "FileSource",
             "source": {
                 "sourceType": "Git",

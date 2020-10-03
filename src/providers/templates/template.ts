@@ -1,18 +1,19 @@
 import { Variable } from './variables'
-import { Step } from './steps'
-import { File, FileSystem } from '../../util/filesystem'
+import { Step, StepType, FileSourceStep, RenameFileStep, SetValueStep } from './steps'
+import { File } from '../../util/filesystem'
 import * as _ from 'lodash'
 import { StorageProvider } from '../storage/storage-provider'
+import { Credentials } from '../../util/config'
 
 export interface TemplateRef {
     source: string
 }
 
 export interface TemplateExecutionContext {
-    cwd: string,
     vars: any,
     workspace: File[],
-    outputs: any
+    outputs: any,
+    credentials: Credentials[]
 }
 
 export class Template {
@@ -26,22 +27,32 @@ export class Template {
     variables: Variable[]
     steps: Step[]
 
-    public constructor(name?: string) {
-        this.name = name || ''
-        this.sourceFiles = []
-        this.variables = []
+    public constructor(inputObj: any) {
+        this.name = inputObj.name || ''
+        this.sourceFiles = inputObj.sourceFiles || []
+        this.variables = inputObj.variables || []
+        
         this.steps = []
+        for (const step of (inputObj.steps || [])) {
+            if (step.type === StepType.FileSource) {
+                this.steps.push(new FileSourceStep(step.name, step.source, step.glob))
+            } else if (step.type === StepType.RenameFile) {
+                this.steps.push(new RenameFileStep(step.name, step.search, step.replace, step.glob))
+            } else if (step.type === StepType.SetValue) {
+                this.steps.push(new SetValueStep(step.name, step.path, step.value, step.glob))
+            } else {
+                throw new Error('Invalid step type')
+            }
+        }
     }
 
-    public async execute(inputVars: any, destination: StorageProvider): Promise<void> {
+    public async execute(inputVars: any, destination: StorageProvider, credentials: Credentials[]): Promise<void> {
         // Create workspace
-        const fs = new FileSystem()
-        const cwd = await fs.mktemp()
         const context: TemplateExecutionContext = {
-            cwd: cwd,
             vars: {},
             workspace: [],
             outputs: {},
+            credentials: credentials,
         }
 
         this.processVariables(inputVars, context)
@@ -50,12 +61,12 @@ export class Template {
         // Preview changes
 
         // Upsert yaml results
+        await destination.init()
+        console.log('Pushing changes to destination')
         await destination.storeFiles(context.workspace)
+        await destination.dispose()
 
         // Validate success
-
-        // Cleanup workspace
-        await fs.rmdir(context.cwd)
     }
 
     private processVariables(inputVars: any, context: TemplateExecutionContext): void{
@@ -84,6 +95,7 @@ export class Template {
     private async executeTemplateSteps(context: TemplateExecutionContext) : Promise<void> {
         // Execute steps
         for (const step of this.steps) {
+            console.log(`Executing step '${step.name}'`)
             await step.run(context)
         }
     }
