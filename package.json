@@ -10,9 +10,12 @@
     "@oclif/command": "*",
     "@oclif/config": "*",
     "@oclif/plugin-help": "*",
+    "axios": "^0.20.0",
+    "form-data": "^3.0.0",
     "glob": "^7.1.6",
     "isomorphic-git": "^1.7.4",
     "js-yaml": "^3.14.0",
+    "jszip": "^3.5.0",
     "lodash": "^4.17.20",
     "minimatch": "^3.0.4",
     "tslib": "^2.0.1"
