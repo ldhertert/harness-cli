@@ -1,3 +1,8 @@
+Testing
+=======
+
+`harness template:exec ./template.json --dest https://github.com/ldhertert/luke-testing-harness.git --var applicationName=Plex --var serviceName=ombi5`
+
 todo
 ====
 

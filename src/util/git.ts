@@ -39,7 +39,7 @@ export class Git {
 
     protected fs = new FileSystem();
 
-    constructor(opts: GitOptions, credentials: GitCredentials[]) {
+    constructor(opts: GitOptions, credentials?: GitCredentials[]) {
         this.repo = opts.repo
         this.ref = opts.ref || 'master'
         this.cwd = opts.cwd || this.fs.mktemp()
@@ -47,15 +47,15 @@ export class Git {
         if (opts.auth) {
             this.auth = opts.auth
         } else {
-            const defaultCredentials = credentials.filter(cred => cred.url === undefined)
-            const credentialMatches = credentials.filter(cred => cred.url && this.repo.toLowerCase().startsWith(cred.url.toLowerCase()))
-            if (credentialMatches.length > 0) {
+            const defaultCredentials = credentials?.filter(cred => cred.url === undefined)
+            const credentialMatches = credentials?.filter(cred => cred.url && this.repo.toLowerCase().startsWith(cred.url.toLowerCase()))
+            if (credentialMatches && credentialMatches.length > 0) {
                 this.auth = {
                     username: credentialMatches[0].username,
                     password: credentialMatches[0].password,
                     token: credentialMatches[0].token,
                 }
-            } else if (defaultCredentials.length > 0) {
+            } else if (defaultCredentials && defaultCredentials.length > 0) {
                 this.auth = {
                     username: defaultCredentials[0].username,
                     password: defaultCredentials[0].password,
