@@ -48,6 +48,8 @@ USAGE
 <!-- commands -->
 * [`harness application:create NAME [DESCRIPTION]`](#harness-applicationcreate-name-description)
 * [`harness application:delete NAMEORID`](#harness-applicationdelete-nameorid)
+* [`harness application:get NAMEORID`](#harness-applicationget-nameorid)
+* [`harness application:list`](#harness-applicationlist)
 * [`harness application:update NAMEORID`](#harness-applicationupdate-nameorid)
 * [`harness help [COMMAND]`](#harness-help-command)
 * [`harness secrets:create NAME VALUE`](#harness-secretscreate-name-value)
@@ -86,6 +88,31 @@ ARGUMENTS
 ```
 
 _See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/delete.ts)_
+
+## `harness application:get NAMEORID`
+
+Get an application
+
+```
+USAGE
+  $ harness application:get NAMEORID
+
+ARGUMENTS
+  NAMEORID  The name or id of the application
+```
+
+_See code: [src/commands/application/get.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/get.ts)_
+
+## `harness application:list`
+
+List Applications
+
+```
+USAGE
+  $ harness application:list
+```
+
+_See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/list.ts)_
 
 ## `harness application:update NAMEORID`
 
