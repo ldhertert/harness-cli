@@ -81,8 +81,8 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
           } else if (env === 'NON_PROD_ENVS') {
               appEnvScope.environment.filterType = EnvFilterType.NonProd
           } else {
-              // need to do lookup by name once that api client is written
-              appEnvScope.environment.envId = env
+              const environment = await harness.environments.get(env, appEnvScope.application.appId)
+              appEnvScope.environment.envId = environment.id
           }
 
           usageScope.appEnvScopes.push(appEnvScope)

@@ -54,7 +54,7 @@ export class GitConnectors {
 
         const vars: any = {}
 
-        const limit = 1
+        const limit = 100
         let offset = 0
         let results: any[] = []
         let hasMore = true
