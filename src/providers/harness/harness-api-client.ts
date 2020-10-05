@@ -2,6 +2,7 @@ import { URL } from 'url'
 import { GraphQLClient } from '../../util/graphql-client'
 import { Applications } from './applications'
 import { GitConnectors } from './git-connectors'
+import { Secrets } from './secrets'
 
 export interface HarnessApiOptions {
     accountId: string,
@@ -17,6 +18,7 @@ export class Harness {
 
     applications: Applications;
     connectors: { git: GitConnectors; };
+    secrets: Secrets;
 
     constructor(options: HarnessApiOptions) {
         this.managerUrl = new URL(options.managerUrl || 'https://app.harness.io').origin
@@ -27,6 +29,7 @@ export class Harness {
             'Content-Type': 'application/json',
         })
 
+        this.secrets = new Secrets(this.gql)
         this.applications = new Applications(this.gql)
         this.connectors = {
             git: new GitConnectors(this.gql),
