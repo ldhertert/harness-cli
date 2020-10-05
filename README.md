@@ -46,49 +46,67 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`harness git:clone [REPO]`](#harness-gitclone-repo)
-* [`harness hello [FILE]`](#harness-hello-file)
+* [`harness application:create NAME [DESCRIPTION]`](#harness-applicationcreate-name-description)
+* [`harness application:delete NAMEORID`](#harness-applicationdelete-nameorid)
+* [`harness application:update NAMEORID`](#harness-applicationupdate-nameorid)
 * [`harness help [COMMAND]`](#harness-help-command)
 * [`harness secrets:create NAME VALUE`](#harness-secretscreate-name-value)
 * [`harness template:exec MANIFEST`](#harness-templateexec-manifest)
 
-## `harness git:clone [REPO]`
+## `harness application:create NAME [DESCRIPTION]`
 
-describe the command here
-
-```
-USAGE
-  $ harness git:clone [REPO]
-
-OPTIONS
-  --cwd=cwd
-  --password=password  Github password
-  --ref=ref            [default: master]
-  --token=token        Github personal access token
-  --username=username  Github username
-```
-
-_See code: [src/commands/git/clone.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/git/clone.ts)_
-
-## `harness hello [FILE]`
-
-describe the command here
+Create a new application
 
 ```
 USAGE
-  $ harness hello [FILE]
+  $ harness application:create NAME [DESCRIPTION]
+
+ARGUMENTS
+  NAME         The name of the application
+  DESCRIPTION  A description of the application
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ harness hello
-  hello world from ./src/hello.ts!
+  --branch=branch              The branch name to use for git sync
+  --gitConnector=gitConnector  The name or id of the git connector to use for git sync
+  --syncEnabled                Whether or not git sync should be enabled
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/hello.ts)_
+_See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/create.ts)_
+
+## `harness application:delete NAMEORID`
+
+Delete an application
+
+```
+USAGE
+  $ harness application:delete NAMEORID
+
+ARGUMENTS
+  NAMEORID  The current name or id of the application
+```
+
+_See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/delete.ts)_
+
+## `harness application:update NAMEORID`
+
+Update an application
+
+```
+USAGE
+  $ harness application:update NAMEORID
+
+ARGUMENTS
+  NAMEORID  The current name or id of the application
+
+OPTIONS
+  --branch=branch              The branch name to use for git sync
+  --description=description    The new description of the application. If omitted, the value will remain unchanged.
+  --gitConnector=gitConnector  The name or id of the git connector to use for git sync
+  --name=name                  The new name of the application.  If omitted, the value will remain unchanged.
+  --syncEnabled                Whether or not git sync should be enabled. If omitted, the value will remain unchanged.
+```
+
+_See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/update.ts)_
 
 ## `harness help [COMMAND]`
 
@@ -126,7 +144,7 @@ OPTIONS
   --scope=scope
       [default: ALL_APPS::PROD_ENVS,ALL_APPS::NON_PROD_ENVS] 
       Restrict the use of this resource to specific Harness components.  
-      The expected format is "application:environment".  
+      The expected format is "application::environment".  
       The supported values for applications are "ALL_APPS", an application name, or an application id.  
       The supported values for environments are "PROD_ENVS", "NON_PROD_ENVS", an environment name, or an environment id.
 

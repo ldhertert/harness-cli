@@ -3,6 +3,7 @@ import { Git } from '../../util/git'
 
 export default class GitClone extends Command {
   static description = 'describe the command here'
+  static hidden = true
 
   static flags = {
       ref: flags.string({ default: 'master' }),

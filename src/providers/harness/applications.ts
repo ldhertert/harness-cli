@@ -1,4 +1,10 @@
-import { GraphQLClient } from '../../util/graphql-client'
+import { GraphQLClient, GraphQLError } from '../../util/graphql-client'
+
+export interface GitSyncOptions {
+    gitConnectorId?: string,
+    syncEnabled: boolean,
+    branch?: string
+}
 
 export class Applications {
     protected client: GraphQLClient;
@@ -98,9 +104,9 @@ export class Applications {
 
         const result = await this.client.execute(query, vars)
         return result.data.result
-    } 
+    }
 
-    async create(name: string, description?: string) {
+    async create(name: string, description?: string, gitSyncOptions?: GitSyncOptions) {
         const query = `
         mutation ($input: CreateApplicationInput!) {
             result: createApplication(input: $input) {
@@ -110,19 +116,37 @@ export class Applications {
             }
         }`
 
-        const vars = { 
+        const vars = {
             input: {
-                name, 
+                name,
                 description,
             },
         }
+        let application: any
 
-        const result = await this.client.execute(query, vars)
-        return result.data.result.resource
+        try {
+            const result = await this.client.execute(query, vars)
+            application = result.data.result.resource
+        } catch (exception) {
+            // Seeing weird behavior with this API
+            // Initial create returns both a result and an error saying that user is not authorized
+            if (exception instanceof GraphQLError && exception.data?.result?.resource) {
+                application = exception.data.result.resource
+            } else {
+                throw exception
+            }
+        }
+
+        if (gitSyncOptions) {
+            await this.updateGitConfig(application.id, gitSyncOptions)
+            application = await this.getById(application.id)
+        }
+
+        return application
     }
 
-    async update(idOrName: string, newName: string, description?: string) {
-        const application = await this.get(idOrName)
+    async update(idOrName: string, newName?: string, description?: string, gitSyncOptions?: GitSyncOptions) {
+        let application = await this.get(idOrName)
         const query = `
         mutation ($input: UpdateApplicationInput!) {
             result: updateApplication(input: $input) {
@@ -132,44 +156,71 @@ export class Applications {
             }
         }`
 
-        const vars = { 
+        const vars = {
             input: {
                 applicationId: application.id,
-                name: newName, 
+                name: newName,
                 description,
             },
         }
 
         const result = await this.client.execute(query, vars)
-        return result.data.result.resource
-    }
 
-    async updateGitConfig(applicationId: string, gitConnectorId: string, syncEnabled: boolean, branch?: string) {
-        const query = `
-        mutation ($input: UpdateApplicationGitSyncConfigInput!) {
-            result: updateApplicationGitSyncConfig(input: $input) {
-                resource: gitSyncConfig {
-                    branch
-                    syncEnabled
-                    gitConnector {
-                        id
-                        name
-                    }
-                }
-            }
-        }`
+        application = result.data.result.resource
 
-        const vars = { 
-            input: {
-                applicationId,
-                gitConnectorId, 
-                branch: branch || 'master',
-                syncEnabled,
-            },
+        if (gitSyncOptions) {
+            await this.updateGitConfig(application.id, gitSyncOptions)
+            application = await this.getById(application.id)
         }
 
-        const result = await this.client.execute(query, vars)
-        return result.data.result.resource
+        return application
+    }
+
+    async updateGitConfig(applicationId: string, options: GitSyncOptions) {
+        let query: string
+        let vars: any
+
+        options = options || { syncEnabled: false }
+
+        if (options.syncEnabled) {
+            query = `
+            mutation ($input: UpdateApplicationGitSyncConfigInput!) {
+                result: updateApplicationGitSyncConfig(input: $input) {
+                    resource: gitSyncConfig {
+                        branch
+                        syncEnabled
+                        gitConnector {
+                            id
+                            name
+                        }
+                    }
+                }
+            }`
+            vars = {
+                input: {
+                    applicationId,
+                    gitConnectorId: options.gitConnectorId,
+                    branch: options.branch || 'master',
+                    syncEnabled: options.syncEnabled,
+                },
+            }
+        } else {
+            query = `
+            mutation ($input:  RemoveApplicationGitSyncConfigInput!) {
+                removeApplicationGitSyncConfig(input: $input){
+                    clientMutationId
+                }
+            }            
+            `
+            vars = {
+                input: {
+                    applicationId,
+                },
+            }
+        }
+
+        await this.client.execute(query, vars)
+        return this.getById(applicationId)
     }
 
     async delete(idOrName: string) {
@@ -181,7 +232,7 @@ export class Applications {
             }
         }`
 
-        const vars = { 
+        const vars = {
             input: {
                 applicationId: application.id,
             },

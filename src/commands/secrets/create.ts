@@ -16,7 +16,7 @@ export default class SecretsCreate extends Command {
       scope: flags.string({
           description: `
 Restrict the use of this resource to specific Harness components.  
-The expected format is "application:environment".  
+The expected format is "application::environment".  
 The supported values for applications are "ALL_APPS", an application name, or an application id.  
 The supported values for environments are "PROD_ENVS", "NON_PROD_ENVS", an environment name, or an environment id.
 
