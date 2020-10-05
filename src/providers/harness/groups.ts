@@ -4,7 +4,7 @@ export interface GroupOptions {
     permissions?: any
 }
 
-export class UserGroups {
+export class Groups {
     protected client: GraphQLClient;
     private fields = `
         id
@@ -103,6 +103,48 @@ export class UserGroups {
         }
 
         return results
+    }
+
+    async get(idOrName: string) {
+        try {
+            const byNameResult = await this.getByName(idOrName)
+            return byNameResult
+        } catch {
+            try {
+                const byIdResult = await this.getById(idOrName)
+                return byIdResult
+            } catch {
+                throw new Error(`Resource not found with name or ID '${idOrName}'`)
+            }
+        }
+    }
+
+    private async getById(id: string) {
+        const query = `
+        query ($id: String!) {
+            result: userGroup(userGroupId: $id) {
+                ${this.fields}
+            }
+        }`
+
+        const vars = { id }
+
+        const result = await this.client.execute(query, vars)
+        return result.data.result
+    }
+
+    private async getByName(name: string) {
+        const query = `
+        query ($name: String!) {
+            result: userGroupByName(name: $name) {
+                ${this.fields}
+            }
+        }`
+
+        const vars = { name }
+
+        const result = await this.client.execute(query, vars)
+        return result.data.result
     }
 
     async create(name: string, opts: GroupOptions) {

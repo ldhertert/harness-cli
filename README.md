@@ -52,9 +52,14 @@ USAGE
 * [`harness application:list`](#harness-applicationlist)
 * [`harness application:update NAMEORID`](#harness-applicationupdate-nameorid)
 * [`harness cloud-provider:create-k8s NAME`](#harness-cloud-providercreate-k8s-name)
+* [`harness groups:create NAME`](#harness-groupscreate-name)
+* [`harness groups:get NAMEORID`](#harness-groupsget-nameorid)
+* [`harness groups:list`](#harness-groupslist)
 * [`harness help [COMMAND]`](#harness-help-command)
 * [`harness secrets:create NAME VALUE`](#harness-secretscreate-name-value)
 * [`harness template:exec MANIFEST`](#harness-templateexec-manifest)
+* [`harness users:create EMAIL NAME`](#harness-userscreate-email-name)
+* [`harness users:get USER`](#harness-usersget-user)
 
 ## `harness application:create NAME [DESCRIPTION]`
 
@@ -189,6 +194,65 @@ OPTIONS
 
 _See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/cloud-provider/create-k8s.ts)_
 
+## `harness groups:create NAME`
+
+Create a new user group. Note - not all functionality has been implemented yet
+
+```
+USAGE
+  $ harness groups:create NAME
+
+ARGUMENTS
+  NAME  The name of the group
+
+OPTIONS
+  --applicationScope=applicationScope      An application id or name.  This will replace any Application Restrictions
+                                           with the provided applications.  Multiple values are allowed
+
+  --copyPermissionFrom=copyPermissionFrom  Copy permissions from an existing group.
+
+  --harnessAccountId=harnessAccountId      (required) The Harness Account Id
+
+  --harnessApiKey=harnessApiKey            (required) The Harness API Key
+
+  --permissions=permissions                JSON encoded permissions object
+```
+
+_See code: [src/commands/groups/create.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/groups/create.ts)_
+
+## `harness groups:get NAMEORID`
+
+Get user groups
+
+```
+USAGE
+  $ harness groups:get NAMEORID
+
+ARGUMENTS
+  NAMEORID  The name or id of the user group
+
+OPTIONS
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
+```
+
+_See code: [src/commands/groups/get.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/groups/get.ts)_
+
+## `harness groups:list`
+
+List User groups
+
+```
+USAGE
+  $ harness groups:list
+
+OPTIONS
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
+```
+
+_See code: [src/commands/groups/list.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/groups/list.ts)_
+
 ## `harness help [COMMAND]`
 
 display help for harness
@@ -262,4 +326,42 @@ OPTIONS
 ```
 
 _See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/template/exec.ts)_
+
+## `harness users:create EMAIL NAME`
+
+Create user
+
+```
+USAGE
+  $ harness users:create EMAIL NAME
+
+ARGUMENTS
+  EMAIL  The email of the user
+  NAME   The name of the user
+
+OPTIONS
+  --groups=groups
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
+```
+
+_See code: [src/commands/users/create.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/users/create.ts)_
+
+## `harness users:get USER`
+
+Get users
+
+```
+USAGE
+  $ harness users:get USER
+
+ARGUMENTS
+  USER  The email, name, or id of the user
+
+OPTIONS
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
+```
+
+_See code: [src/commands/users/get.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/users/get.ts)_
 <!-- commandsstop -->
