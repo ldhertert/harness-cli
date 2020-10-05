@@ -14,15 +14,14 @@ export default class ApplicationsCreate extends Command {
       syncEnabled: flags.boolean({ description: 'Whether or not git sync should be enabled', dependsOn: ['gitConnector'] }),
       gitConnector: flags.string({ description: 'The name or id of the git connector to use for git sync' }),
       branch: flags.string({ description: 'The branch name to use for git sync' }),
+      harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
+      harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
   }
 
   async run() {
       const { args, flags } = this.parse(ApplicationsCreate)
 
-      const harness = new Harness({
-          accountId: process.env.HARNESS_ACCOUNT || '',
-          apiKey: process.env.HARNESS_API_KEY || '',
-      })
+      const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
 
       let gitSyncOptions: GitSyncOptions | undefined
       if (flags.syncEnabled && flags.gitConnector) {

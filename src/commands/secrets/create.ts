@@ -31,15 +31,14 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
       }),
       // secret manager
       type: flags.enum({ options: [SecretType.Text], required: true, default: SecretType.Text }),
+      harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
+      harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
   }
 
   async run() {
       const { args, flags } = this.parse(SecretsCreate)
 
-      const harness = new Harness({
-          accountId: process.env.HARNESS_ACCOUNT || '',
-          apiKey: process.env.HARNESS_API_KEY || '',
-      })
+      const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
 
       const secret = await harness.secrets.create({ 
           name: args.name, 

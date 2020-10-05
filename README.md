@@ -68,9 +68,11 @@ ARGUMENTS
   DESCRIPTION  A description of the application
 
 OPTIONS
-  --branch=branch              The branch name to use for git sync
-  --gitConnector=gitConnector  The name or id of the git connector to use for git sync
-  --syncEnabled                Whether or not git sync should be enabled
+  --branch=branch                      The branch name to use for git sync
+  --gitConnector=gitConnector          The name or id of the git connector to use for git sync
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
+  --syncEnabled                        Whether or not git sync should be enabled
 ```
 
 _See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/create.ts)_
@@ -85,6 +87,10 @@ USAGE
 
 ARGUMENTS
   NAMEORID  The current name or id of the application
+
+OPTIONS
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
 _See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/delete.ts)_
@@ -99,6 +105,10 @@ USAGE
 
 ARGUMENTS
   NAMEORID  The name or id of the application
+
+OPTIONS
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
 _See code: [src/commands/application/get.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/get.ts)_
@@ -110,6 +120,10 @@ List Applications
 ```
 USAGE
   $ harness application:list
+
+OPTIONS
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
 _See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/list.ts)_
@@ -126,11 +140,21 @@ ARGUMENTS
   NAMEORID  The current name or id of the application
 
 OPTIONS
-  --branch=branch              The branch name to use for git sync
-  --description=description    The new description of the application. If omitted, the value will remain unchanged.
-  --gitConnector=gitConnector  The name or id of the git connector to use for git sync
-  --name=name                  The new name of the application.  If omitted, the value will remain unchanged.
-  --syncEnabled                Whether or not git sync should be enabled. If omitted, the value will remain unchanged.
+  --branch=branch                      The branch name to use for git sync
+
+  --description=description            The new description of the application. If omitted, the value will remain
+                                       unchanged.
+
+  --gitConnector=gitConnector          The name or id of the git connector to use for git sync
+
+  --harnessAccountId=harnessAccountId  (required) The Harness Account Id
+
+  --harnessApiKey=harnessApiKey        (required) The Harness API Key
+
+  --name=name                          The new name of the application.  If omitted, the value will remain unchanged.
+
+  --syncEnabled                        Whether or not git sync should be enabled. If omitted, the value will remain
+                                       unchanged.
 ```
 
 _See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/update.ts)_
@@ -167,6 +191,12 @@ ARGUMENTS
 OPTIONS
   --accountScope
       Scope this secret to the account for use in delegate profiles
+
+  --harnessAccountId=harnessAccountId
+      (required) The Harness Account Id
+
+  --harnessApiKey=harnessApiKey
+      (required) The Harness API Key
 
   --scope=scope
       [default: ALL_APPS::PROD_ENVS,ALL_APPS::NON_PROD_ENVS] 

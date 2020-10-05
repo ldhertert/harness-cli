@@ -1,4 +1,4 @@
-import { Command } from '@oclif/command'
+import { Command, flags } from '@oclif/command'
 import { Harness } from '../../providers/harness/harness-api-client'
 
 export default class ApplicationsDelete extends Command {
@@ -9,15 +9,14 @@ export default class ApplicationsDelete extends Command {
   ]
 
   static flags = {
+      harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
+      harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
   }
 
   async run() {
-      const { args } = this.parse(ApplicationsDelete)
+      const { args, flags } = this.parse(ApplicationsDelete)
 
-      const harness = new Harness({
-          accountId: process.env.HARNESS_ACCOUNT || '',
-          apiKey: process.env.HARNESS_API_KEY || '',
-      })
+      const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
 
       await harness.applications.delete(args.nameOrId)
       this.log(`Successfully deleted ${args.nameOrId}`)
