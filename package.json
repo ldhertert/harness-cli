@@ -1,31 +1,85 @@
 {
-  "name": "harness-automation",
-  "version": "1.0.0",
-  "description": "",
-  "main": "harness-automation.js",
-  "scripts": {
-    "start": "node harness-automation.js",
-    "build-linux": "npx pkg harness-automation.js -t node12-linux-x64 --out-path dist/linux",
-    "build-macos": "npx pkg harness-automation.js -t node12-macos-x64 --out-path dist/macos",
-    "build-windows": "npx pkg harness-automation.js -t node12-windows-x64 --out-path dist/windows",
-    "build": "npm run build-linux && npm run build-macos && npm run build-windows"
+  "name": "harness-cli",
+  "version": "1.0.0-alpha",
+  "author": "Luke Hertert @ldhertert",
+  "bin": {
+    "harness": "./bin/run"
   },
-  "author": "Luke Hertert",
-  "license": "ISC",
+  "bugs": "https://github.com/ldhertert/harness-automation/issues",
   "dependencies": {
-    "dotenv": "^8.2.0",
+    "@oclif/command": "*",
+    "@oclif/config": "*",
+    "@oclif/plugin-help": "*",
+    "axios": "^0.20.0",
+    "form-data": "^3.0.0",
     "glob": "^7.1.6",
     "isomorphic-git": "^1.7.4",
     "js-yaml": "^3.14.0",
-    "lodash": "^4.17.19",
+    "jszip": "^3.5.0",
+    "lodash": "^4.17.20",
     "minimatch": "^3.0.4",
-    "minimist": "^1.2.5",
-    "mkdirp": "^1.0.4"
-  },
-  "pkg": {
-    "scripts": "node_modules/isomorphic-git/http/node/*.*"
+    "tslib": "^2.0.1"
   },
   "devDependencies": {
-    "pkg": "^4.4.9"
-  }
+    "@oclif/dev-cli": "*",
+    "@oclif/test": "*",
+    "@types/chai": "*",
+    "@types/js-yaml": "^3.12.5",
+    "@types/mocha": "*",
+    "@types/node": "*",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
+    "chai": "*",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.8.1",
+    "eslint-config-oclif": "*",
+    "eslint-config-oclif-typescript": "*",
+    "eslint-plugin-unicorn": "^21.0.0",
+    "globby": "*",
+    "mocha": "*",
+    "nyc": "*",
+    "ts-node": "*",
+    "typescript": "^4.0.2"
+  },
+  "engines": {
+    "node": ">=12.18.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/ldhertert/harness-automation",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "harness",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "pkg": {
+    "scripts": "./lib/**/*.js"
+  },
+  "repository": "ldhertert/harness-automation",
+  "scripts": {
+    "lint": "eslint ./src",
+    "compile": "tsc",
+    "build": "npm run compile && npm run lint && oclif-dev readme",
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md",
+    "pkg-macos": "pkg . -t node12-macos-x64 -o ./dist/harness-macos-x64-$npm_package_version",
+    "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64-$npm_package_version",
+    "pkg-windows": "pkg . -t node12-win-x64 -o ./dist/harness-win-x64-$npm_package_version",
+    "pkg": "rm -rf ./dist && npm run build && npm run pkg-macos && npm run pkg-linux && npm run pkg-windows"
+  },
+  "types": "lib/index.d.ts"
 }

@@ -1,0 +1,45 @@
+{
+    "name": "Test template",
+    "sourceFiles": [],
+    "variables": [
+        {
+            "name": "applicationName",
+            "description": "",
+            "type": "String",
+            "required": true,
+            "defaultValue": "My new app"
+        },
+        {
+            "name": "serviceName",
+            "description": "",
+            "type": "String",
+            "required": true
+        }
+    ],
+    "steps": [
+        {
+            "name": "Get source files from https://github.com/ldhertert/luke-testing-harness.git",
+            "type": "FileSource",
+            "source": {
+                "sourceType": "Git",
+                "opts": {
+                    "repo": "https://github.com/ldhertert/luke-testing-harness.git"
+                }
+            },
+            "glob": "Setup/Applications/Plex/Services/ombi/**/*.yaml"
+        },
+        {
+            "name": "Rename Application",
+            "type": "RenameFile",
+            "search": "Setup/Applications/Plex/Services/ombi/",
+            "replace": "Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>/"
+        },
+        {
+            "name": "Set some value",
+            "type": "SetValue",
+            "path": "harnessApiVersion",
+            "value": "1.0",
+            "glob": "Setup/Applications/dfdsfd/Workflows/Plex Health Check.yaml"
+        }
+    ]
+}
