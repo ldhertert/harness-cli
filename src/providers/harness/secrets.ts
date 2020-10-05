@@ -3,7 +3,7 @@ import { UsageScope, DefaultUsageScope } from './types/scopes'
 
 export enum SecretType {
     Text = 'ENCRYPTED_TEXT',
-    File = 'ENCRYPTED_File',
+    File = 'ENCRYPTED_FILE',
     SSH = 'SSH_CREDENTIAL',
     WinRM = 'WINRM_CREDENTIAL',
 }
@@ -110,6 +110,13 @@ export class Secrets {
             }
         }`
 
+        let scope: UsageScope | undefined
+        if (options.scopedToAccount) {
+            scope = undefined
+        } else {
+            scope = options.usageScope || DefaultUsageScope
+        }
+
         const vars = {
             input: {
                 secretType: options.type || SecretType.Text,
@@ -117,7 +124,7 @@ export class Secrets {
                     name: options.name,
                     value: options.value,
                     secretManagerId: options.secretManager,
-                    usageScope: options.usageScope || DefaultUsageScope,
+                    usageScope: scope,
                     scopedToAccount: options.scopedToAccount || false,
                 },                
             },
@@ -138,6 +145,11 @@ export class Secrets {
             }
         }`
 
+        let scope = options.usageScope
+        if (options.scopedToAccount) {
+            scope = undefined
+        }
+
         const vars = {
             input: {
                 secretId: old.id,
@@ -146,7 +158,7 @@ export class Secrets {
                     name: options.name,
                     value: options.value,
                     secretManagerId: options.secretManager,
-                    usageScope: options.usageScope,
+                    usageScope: scope,
                     scopedToAccount: options.scopedToAccount,
                 },                
             },
