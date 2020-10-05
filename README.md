@@ -51,6 +51,7 @@ USAGE
 * [`harness application:get NAMEORID`](#harness-applicationget-nameorid)
 * [`harness application:list`](#harness-applicationlist)
 * [`harness application:update NAMEORID`](#harness-applicationupdate-nameorid)
+* [`harness cloud-provider:create-k8s NAME`](#harness-cloud-providercreate-k8s-name)
 * [`harness help [COMMAND]`](#harness-help-command)
 * [`harness secrets:create NAME VALUE`](#harness-secretscreate-name-value)
 * [`harness template:exec MANIFEST`](#harness-templateexec-manifest)
@@ -158,6 +159,35 @@ OPTIONS
 ```
 
 _See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/application/update.ts)_
+
+## `harness cloud-provider:create-k8s NAME`
+
+Create a new application
+
+```
+USAGE
+  $ harness cloud-provider:create-k8s NAME
+
+ARGUMENTS
+  NAME  The name of the application
+
+OPTIONS
+  --harnessAccountId=harnessAccountId                    (required) The Harness Account Id
+  --harnessApiKey=harnessApiKey                          (required) The Harness API Key
+
+  --inheritFromDelegate=inheritFromDelegate              If true, permissions are inherited from the delegate instead of
+                                                         being explicitly provided
+
+  --masterUrl=masterUrl                                  The Kubernetes master node URL. The easiest method to obtain
+                                                         the master URL is using kubectl: kubectl cluster-info
+
+  --serviceAccountTokenSecret=serviceAccountTokenSecret  The name or id of the secret that contains the service account
+                                                         token
+
+  --skipValidation
+```
+
+_See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-automation/blob/v0.0.0/src/commands/cloud-provider/create-k8s.ts)_
 
 ## `harness help [COMMAND]`
 

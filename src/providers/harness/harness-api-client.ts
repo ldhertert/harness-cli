@@ -4,6 +4,7 @@ import { Applications } from './applications'
 import { GitConnectors } from './git-connectors'
 import { Secrets } from './secrets'
 import { Environments } from './environments'
+import { CloudProviders } from './cloud-providers'
 
 export interface HarnessApiOptions {
     accountId: string,
@@ -21,6 +22,7 @@ export class Harness {
     connectors: { git: GitConnectors; };
     secrets: Secrets;
     environments: Environments
+    cloudProviders: CloudProviders
 
     constructor(options: HarnessApiOptions) {
         this.managerUrl = new URL(options.managerUrl || 'https://app.harness.io').origin
@@ -37,5 +39,6 @@ export class Harness {
             git: new GitConnectors(this.gql),
         }
         this.environments = new Environments(this.gql, this)
+        this.cloudProviders = new CloudProviders(this.gql)
     }
 }
