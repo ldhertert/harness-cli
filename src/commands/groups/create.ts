@@ -50,8 +50,8 @@ export default class GroupsCreate extends Command {
 
             // Replace all application filters with the provided application ids
             opts.permissions?.appPermissions
-                .filter(p => p.applications?.filterType === null)
-                .forEach(p => {
+                .filter((p: { applications: { filterType: null } }) => p.applications?.filterType === null)
+                .forEach((p: { applications: { appIds: string[] } }) => {
                     p.applications.appIds = appIds
                 })
         }

@@ -1,6 +1,6 @@
 {
   "name": "harness-cli",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha",
   "author": "Luke Hertert @ldhertert",
   "bin": {
     "harness": "./bin/run"
@@ -62,6 +62,9 @@
     "plugins": [
       "@oclif/plugin-help"
     ]
+  },
+  "pkg": {
+    "scripts": "./lib/**/*.js"
   },
   "repository": "ldhertert/harness-automation",
   "scripts": {

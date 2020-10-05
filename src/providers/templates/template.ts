@@ -81,6 +81,7 @@ export class Template {
             })
         _.defaults(context.vars, defaults)
 
+        // eslint-disable-next-line no-warning-comments
         // TODO: Evaluate any templatized variables
 
         // Perform template variable validation with computed variables values
