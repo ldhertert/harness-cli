@@ -8,6 +8,7 @@ import { CloudProviders } from './cloud-providers'
 import { Groups } from './groups'
 import { Users } from './users'
 import axios from 'axios'
+import { ConfigAsCode } from './config-as-code'
 
 export interface HarnessApiOptions {
     accountId: string,
@@ -23,10 +24,10 @@ const defaultManagerUrl = 'https://app.harness.io'
 export class Harness {
     managerUrl: string;
     accountId: string;
-    protected apiKey?: string;
-    protected username?: string;
-    protected password?: string;
-    protected bearerToken?: string;
+    apiKey?: string;
+    username?: string;
+    password?: string;
+    bearerToken?: string;
     client: GraphQLClient;
 
     applications: Applications;
@@ -36,6 +37,7 @@ export class Harness {
     cloudProviders: CloudProviders
     groups: Groups
     users: Users
+    configAsCode: ConfigAsCode
 
     constructor(options: HarnessApiOptions) {
         this.managerUrl = new URL(options.managerUrl || defaultManagerUrl).origin
@@ -65,6 +67,7 @@ export class Harness {
         this.cloudProviders = new CloudProviders(this.client)
         this.groups = new Groups(this.client)
         this.users = new Users(this.client)
+        this.configAsCode = new ConfigAsCode(this)
     }
 
     static async login(username: string, password: string, managerUrl?: string) {
@@ -112,5 +115,31 @@ export class Harness {
         }
 
         return new Harness(options)
+    }
+
+    async privateApiGet(path: string) {
+        const url = new URL(path, this.managerUrl)
+        url.searchParams.append('accountId', this.accountId)
+
+        const response = await axios.get(url.href, {
+            headers: {
+                Authorization: `Bearer ${this.bearerToken}`,
+            },
+        })
+        
+        return response.data
+    }
+
+    async privateApiPost(path: string, data: any, headers?: any) {
+        const url = new URL(path, this.managerUrl)
+        url.searchParams.append('accountId', this.accountId)
+
+        headers = headers || {}
+        headers.Authorization = `Bearer ${this.bearerToken}`
+        const response = await axios.post(url.href, data, {
+            headers: headers,
+        })
+        
+        return response.data
     }
 }

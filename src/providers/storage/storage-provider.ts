@@ -1,7 +1,4 @@
 import { File } from '../../util/filesystem'
-import { LocalStorageProvider, ConfigLocal } from './local-storage'
-import { GitStorageProvider, ConfigGit } from './git-storage'
-import { CredentialType, Credentials } from '../../util/config'
 
 export enum StorageType {
     Local = 'Local',
@@ -32,17 +29,4 @@ export interface StorageProvider {
     deleteFiles(pattern: string): Promise<void>;
 
     dispose(): Promise<void>;
-}
-
-export function getStorageProvider(ref: StorageProviderRef, credentials: Credentials[]): StorageProvider {
-    if (ref.sourceType.toLowerCase() === StorageType.Local.toLowerCase()) {
-        return new LocalStorageProvider(ref.opts as ConfigLocal)
-    }
-
-    if (ref.sourceType.toLowerCase() === StorageType.Git.toLowerCase()) {
-        const gitCredentials = credentials.filter(cred => cred.type === CredentialType.Git)
-        return new GitStorageProvider(ref.opts as ConfigGit, gitCredentials)
-    }
-
-    throw new Error('Unsupported storage provider.')
 }

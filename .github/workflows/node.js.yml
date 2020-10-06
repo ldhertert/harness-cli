@@ -26,21 +26,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build
-    #- name: Upload a Build Artifact
-    #  uses: actions/upload-artifact@v2.1.3
-    #  with:
-    #    name: harness-automation-linux-x64
-    #    path: dist/linux/harness-automation
-    #- name: Upload a Build Artifact
-    #  uses: actions/upload-artifact@v2.1.3
-    #  with:
-    #    name: harness-automation-macos-x64
-    #    path: dist/macos/harness-automation
-    #- name: Upload a Build Artifact
-    #  uses: actions/upload-artifact@v2.1.3
-    #  with:
-    #    name: harness-automation-windows-x64
-    #    path: dist/windows/harness-automation.exe
     # - name: Create Release
     #   id: create_release
     #   uses: actions/create-release@v1

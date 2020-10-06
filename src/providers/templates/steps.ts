@@ -1,8 +1,12 @@
-import { StorageProviderRef, getStorageProvider } from '../storage/storage-provider'
+import { StorageProviderRef, StorageProvider, StorageType } from '../storage/storage-provider'
 import { TemplateExecutionContext } from './template'
 import * as minimatch from 'minimatch'
 import _ = require('lodash');
 import { fromYaml, toYaml } from '../../util/objects'
+import { File } from '../../util/filesystem';
+import { Credentials, CredentialType } from '../../util/config';
+import { LocalStorageProvider, ConfigLocal } from '../storage/local-storage';
+import { GitStorageProvider, ConfigGit } from '../storage/git-storage';
 
 export enum StepType {
     FileSource = 'FileSource',
@@ -15,6 +19,19 @@ export enum StepType {
     RenderTemplate = 'RenderTemplate',
     GraphQL = 'GraphQL',
     ExecuteTemplate = 'ExecuteTemplate',
+}
+
+export function getStorageProvider(ref: StorageProviderRef, credentials: Credentials[]): StorageProvider {
+    if (ref.sourceType.toLowerCase() === StorageType.Local.toLowerCase()) {
+        return new LocalStorageProvider(ref.opts as ConfigLocal)
+    }
+
+    if (ref.sourceType.toLowerCase() === StorageType.Git.toLowerCase()) {
+        const gitCredentials = credentials.filter(cred => cred.type === CredentialType.Git)
+        return new GitStorageProvider(ref.opts as ConfigGit, gitCredentials)
+    }
+
+    throw new Error('Unsupported storage provider.')
 }
 
 export abstract class Step {
@@ -47,7 +64,7 @@ export class FileSourceStep extends Step {
         await storageProvider.init()
         const files = await storageProvider.getFiles(this.glob as string)
         
-        files.forEach(newFile => {
+        files.forEach((newFile: File) => {
             const existingFiles = context.workspace.filter(existingFile => newFile.path.toLowerCase() === existingFile.path.toLowerCase())
             if (existingFiles.length > 0) {
                 existingFiles.forEach(f => {

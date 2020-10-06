@@ -10,20 +10,24 @@
     "@oclif/command": "*",
     "@oclif/config": "*",
     "@oclif/plugin-help": "*",
+    "@types/traverse": "^0.6.32",
     "axios": "^0.20.0",
     "form-data": "^3.0.0",
     "glob": "^7.1.6",
     "isomorphic-git": "^1.7.4",
     "js-yaml": "^3.14.0",
+    "jsonpath": "^1.0.2",
     "jszip": "^3.5.0",
     "lodash": "^4.17.20",
     "minimatch": "^3.0.4",
+    "traverse": "^0.6.6",
     "tslib": "^2.0.1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "*",
     "@oclif/test": "*",
     "@types/chai": "*",
+    "@types/flat": "^5.0.1",
     "@types/js-yaml": "^3.12.5",
     "@types/mocha": "*",
     "@types/node": "*",
@@ -79,7 +83,7 @@
     "pkg-macos": "pkg . -t node12-macos-x64 -o ./dist/harness-macos-x64-$npm_package_version",
     "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64-$npm_package_version",
     "pkg-windows": "pkg . -t node12-win-x64 -o ./dist/harness-win-x64-$npm_package_version",
-    "pkg": "rm -rf ./dist && npm run build && npm run pkg-macos && npm run pkg-linux && npm run pkg-windows"
+    "pkg": "npm run pkg-macos && npm run pkg-linux && npm run pkg-windows"
   },
   "types": "lib/index.d.ts"
 }
