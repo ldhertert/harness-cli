@@ -14,6 +14,7 @@ export interface HarnessApiOptions {
     apiKey?: string,
     username?: string,
     password?: string,
+    bearerToken?: string,
     managerUrl?: string,
 }
 
@@ -23,6 +24,8 @@ export class Harness {
     managerUrl: string;
     accountId: string;
     protected apiKey?: string;
+    protected username?: string;
+    protected password?: string;
     protected bearerToken?: string;
     client: GraphQLClient;
 
@@ -38,9 +41,12 @@ export class Harness {
         this.managerUrl = new URL(options.managerUrl || defaultManagerUrl).origin
 
         this.apiKey = options.apiKey
+        this.username = options.username
+        this.password = options.password
+        this.bearerToken = options.bearerToken
         this.accountId = options.accountId
 
-        const headers: any = { }
+        const headers: any = { 'Content-Type': 'application/json' }
 
         if (this.apiKey) {
             headers['x-api-key'] = this.apiKey
@@ -70,12 +76,41 @@ export class Harness {
 
         return {
             token: response.data.resource.token,
-            defaultAccountId: response.data.resource.defaultAccountId,
+            defaultAccountId: response.data.resource.defaultAccountId as string,
             accounts: response.data.resource.accounts
                 .concat(response.data.resource.supportAccounts)
                 .map((a: { accountName: string; companyName: string; uuid: string }) => {
                     return { name: a.accountName, company: a.companyName, id: a.uuid }
                 }),
         }
+    }
+
+    static async fromUrl(url: string) {
+        const parsed = new URL(url)
+
+        const options: HarnessApiOptions = {
+            managerUrl: parsed.origin,
+            accountId: '',
+        }
+
+        const accountId = parsed.searchParams.get('accountId') 
+
+        if (parsed.username && !parsed.password) {
+            options.apiKey = decodeURIComponent(parsed.username)
+            if (!accountId) {
+                throw new Error('Account id is required when authenticating via API key')
+            }
+            options.accountId = accountId
+        } else if (parsed.username) {
+            options.username = decodeURIComponent(parsed.username)
+            options.password = decodeURIComponent(parsed.password)
+            const account = await Harness.login(options.username, options.password, options.managerUrl)
+            options.bearerToken = account.token
+            options.accountId = accountId || account.defaultAccountId
+        } else {
+            throw new Error('Either API key or username/password are required')
+        }
+
+        return new Harness(options)
     }
 }
