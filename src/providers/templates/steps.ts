@@ -7,6 +7,7 @@ import { File } from '../../util/filesystem';
 import { Credentials, CredentialType } from '../../util/config';
 import { LocalStorageProvider, ConfigLocal } from '../storage/local-storage';
 import { GitStorageProvider, ConfigGit } from '../storage/git-storage';
+import { HarnessStorageProvider, HarnessOptions } from '../storage/harness-api-storage';
 
 export enum StepType {
     FileSource = 'FileSource',
@@ -29,6 +30,10 @@ export function getStorageProvider(ref: StorageProviderRef, credentials: Credent
     if (ref.sourceType.toLowerCase() === StorageType.Git.toLowerCase()) {
         const gitCredentials = credentials.filter(cred => cred.type === CredentialType.Git)
         return new GitStorageProvider(ref.opts as ConfigGit, gitCredentials)
+    }
+
+    if (ref.sourceType.toLowerCase() === StorageType.Harness.toLowerCase()) {
+        return new HarnessStorageProvider(ref.opts as HarnessOptions)
     }
 
     throw new Error('Unsupported storage provider.')

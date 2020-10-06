@@ -46,7 +46,7 @@ export class Template {
         }
     }
 
-    public async execute(inputVars: any, destination: StorageProvider, credentials: Credentials[]): Promise<void> {
+    public async execute(inputVars: any, destination: StorageProvider, credentials: Credentials[]): Promise<TemplateExecutionContext> {
         // Create workspace
         const context: TemplateExecutionContext = {
             vars: {},
@@ -65,8 +65,9 @@ export class Template {
         console.log('Pushing changes to destination')
         await destination.storeFiles(context.workspace)
         await destination.dispose()
-
         // Validate success
+
+        return context
     }
 
     private processVariables(inputVars: any, context: TemplateExecutionContext): void{
