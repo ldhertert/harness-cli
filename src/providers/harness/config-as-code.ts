@@ -5,7 +5,7 @@ import { File } from '../../util/filesystem'
 import * as FormData from 'form-data'
 import JSZip = require('jszip');
 
-interface ConfigAsCodeFile {
+export interface ConfigAsCodeFile {
     path: string,
     contentUrl: string,
 }

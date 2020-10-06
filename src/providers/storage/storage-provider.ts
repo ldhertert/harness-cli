@@ -2,7 +2,8 @@ import { File } from '../../util/filesystem'
 
 export enum StorageType {
     Local = 'Local',
-    Git = 'Git'
+    Git = 'Git',
+    Harness = 'Harness'
 }
 
 export interface StorageProviderRef {
