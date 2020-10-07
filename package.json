@@ -80,9 +80,9 @@
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md",
-    "pkg-macos": "pkg . -t node12-macos-x64 -o ./dist/harness-macos-x64-$npm_package_version",
-    "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64-$npm_package_version",
-    "pkg-windows": "pkg . -t node12-win-x64 -o ./dist/harness-win-x64-$npm_package_version",
+    "pkg-macos": "pkg . -t node12-macos-x64 -o ./dist/harness-macos-x64",
+    "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64",
+    "pkg-windows": "pkg . -t node12-win-x64 -o ./dist/harness-win-x64",
     "pkg": "npm run pkg-macos && npm run pkg-linux && npm run pkg-windows"
   },
   "types": "lib/index.d.ts"
