@@ -19,7 +19,7 @@ Onboarding New App Team
 Steps
 -----
 
-* Manually Create new repository - https://github.com/ldhertert/harness-demo-application-backup
+* Manually Create new repository - `harness github:create-repo luke-hertert harness-test`
 * Secret already exists for my github account - githubPassword
 * Create git connector
     ```
@@ -29,7 +29,13 @@ Steps
         --username=ldhertert \
         --passwordSecret=githubPassword
     ```
-* Create github webhook - TODO
+* Create github webhook
+    ```
+    harness github:create-webhook \
+        --owner ldhertert \
+        --repo harness-demo-application-backup \
+        --gitConnector 'Harness Demo Backup'
+    ```
 * Create application
     ```
     harness application:create \

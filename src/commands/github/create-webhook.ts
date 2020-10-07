@@ -4,7 +4,7 @@ import { Harness } from '../../providers/harness/harness-api-client'
 import { CredentialType } from '../../util/config'
 
 export default class GithubRepoCreate extends Command {
-  static description = 'Create a new GitHub Repository in an Organization'
+  static description = 'Create a new webhook in a GitHub repo for a Harness git connector'
 
   static args = [
   ]

@@ -272,7 +272,7 @@ _See code: [src/commands/github/create-repo.ts](https://github.com/ldhertert/har
 
 ## `harness github:create-webhook`
 
-Create a new GitHub Repository in an Organization
+Create a new webhook in a GitHub repo for a Harness git connector
 
 ```
 USAGE
