@@ -34,11 +34,11 @@ harness-cli
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g harness-cli
+$ npm install -g @ldhertert/harness-cli
 $ harness COMMAND
 running command...
 $ harness (-v|--version|version)
-harness-cli/1.0.0-alpha darwin-x64 node-v12.18.3
+@ldhertert/harness-cli/0.9.0 darwin-x64 node-v12.18.3
 $ harness --help [COMMAND]
 USAGE
   $ harness COMMAND
@@ -95,7 +95,7 @@ OPTIONS
   --syncEnabled                        Whether or not git sync should be enabled
 ```
 
-_See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/application/create.ts)_
+_See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/application/create.ts)_
 
 ## `harness application:delete NAMEORID`
 
@@ -113,7 +113,7 @@ OPTIONS
   --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
-_See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/application/delete.ts)_
+_See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/application/delete.ts)_
 
 ## `harness application:get NAMEORID`
 
@@ -131,7 +131,7 @@ OPTIONS
   --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
-_See code: [src/commands/application/get.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/application/get.ts)_
+_See code: [src/commands/application/get.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/application/get.ts)_
 
 ## `harness application:list`
 
@@ -146,7 +146,7 @@ OPTIONS
   --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
-_See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/application/list.ts)_
+_See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/application/list.ts)_
 
 ## `harness application:update NAMEORID`
 
@@ -177,7 +177,7 @@ OPTIONS
                                        unchanged.
 ```
 
-_See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/application/update.ts)_
+_See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/application/update.ts)_
 
 ## `harness cloud-provider:create-k8s NAME`
 
@@ -206,7 +206,7 @@ OPTIONS
   --skipValidation
 ```
 
-_See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/cloud-provider/create-k8s.ts)_
+_See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/cloud-provider/create-k8s.ts)_
 
 ## `harness connectors:create-git NAME URL`
 
@@ -228,7 +228,7 @@ OPTIONS
   --username=username                  (required)
 ```
 
-_See code: [src/commands/connectors/create-git.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/connectors/create-git.ts)_
+_See code: [src/commands/connectors/create-git.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/connectors/create-git.ts)_
 
 ## `harness groups:create NAME`
 
@@ -254,7 +254,7 @@ OPTIONS
   --permissions=permissions                JSON encoded permissions object
 ```
 
-_See code: [src/commands/groups/create.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/groups/create.ts)_
+_See code: [src/commands/groups/create.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/groups/create.ts)_
 
 ## `harness groups:get NAMEORID`
 
@@ -272,7 +272,7 @@ OPTIONS
   --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
-_See code: [src/commands/groups/get.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/groups/get.ts)_
+_See code: [src/commands/groups/get.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/groups/get.ts)_
 
 ## `harness groups:list`
 
@@ -287,7 +287,7 @@ OPTIONS
   --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
-_See code: [src/commands/groups/list.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/groups/list.ts)_
+_See code: [src/commands/groups/list.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/groups/list.ts)_
 
 ## `harness help [COMMAND]`
 
@@ -345,7 +345,7 @@ OPTIONS
       (required) [default: ENCRYPTED_TEXT]
 ```
 
-_See code: [src/commands/secrets/create.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/secrets/create.ts)_
+_See code: [src/commands/secrets/create.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/secrets/create.ts)_
 
 ## `harness template:exec MANIFEST`
 
@@ -357,11 +357,15 @@ USAGE
 
 OPTIONS
   -v, --var=var
-  --dest=dest          (required)
-  --gitToken=gitToken  Token to use for git authentication
+  --accountId=accountId      (required) The Harness Account Id
+  --gitPassword=gitPassword  Password to use for git authentication
+  --gitUsername=gitUsername  Username to use for git authentication
+  --managerUrl=managerUrl    [default: https://app.harness.io] The Harness Manager URL
+  --password=password        (required) The Harness API Key
+  --username=username        (required) The Harness API Key
 ```
 
-_See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/template/exec.ts)_
+_See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/template/exec.ts)_
 
 ## `harness users:create EMAIL NAME`
 
@@ -381,7 +385,7 @@ OPTIONS
   --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
-_See code: [src/commands/users/create.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/users/create.ts)_
+_See code: [src/commands/users/create.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/users/create.ts)_
 
 ## `harness users:get USER`
 
@@ -399,7 +403,7 @@ OPTIONS
   --harnessApiKey=harnessApiKey        (required) The Harness API Key
 ```
 
-_See code: [src/commands/users/get.ts](https://github.com/ldhertert/harness-automation/blob/v1.0.0-alpha/src/commands/users/get.ts)_
+_See code: [src/commands/users/get.ts](https://github.com/ldhertert/harness-automation/blob/v0.9.0/src/commands/users/get.ts)_
 <!-- commandsstop -->
 * [`harness application:create NAME [DESCRIPTION]`](#harness-applicationcreate-name-description)
 * [`harness application:delete NAMEORID`](#harness-applicationdelete-nameorid)

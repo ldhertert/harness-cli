@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import { Template } from '../../providers/templates/template'
 import * as _ from 'lodash'
 import { Harness } from '../../providers/harness/harness-api-client'
+import { LocalStorageProvider } from '../../providers/storage/local-storage'
 
 export default class TemplateExec extends Command {
     static description = 'Apply steps defined in template manifest and send reults to target Harness account'
@@ -35,15 +36,22 @@ export default class TemplateExec extends Command {
         const vars = await this.processVariables(template, inputVars)
         this.log('Successfully proccessed variables')
 
-        const destination = new Harness({ 
-            url: flags.managerUrl,
-            accountId: flags.accountId,
-            username: flags.username,
-            password: flags.password,
-        })
-        await destination.init()
-        await template.execute(vars, destination)
-        // this.log(JSON.stringify(template, undefined, 4))
+        try {
+            const destination = new Harness({ 
+                url: flags.managerUrl,
+                accountId: flags.accountId,
+                username: flags.username,
+                password: flags.password,
+            })
+            await destination.init()
+            const result = await template.execute(vars, destination)
+            this.debug(JSON.stringify(result, undefined, 4))
+            // const localStorage = new LocalStorageProvider({ directory: './tmp' })
+            // await localStorage.storeFiles(result.workspace)
+            this.log('Success')
+        } catch (ex) {
+            this.error(JSON.stringify(ex, undefined, 4), { exit: 1 })
+        }
     }
 
     async parseTemplate(templateText: string) {

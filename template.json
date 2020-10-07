@@ -17,21 +17,49 @@
             "required": true
         }
     ],
-    "steps": [
+    "steps": [        
         {
-            "name": "Get source files from https://github.com/ldhertert/luke-testing-harness.git",
+            "name": "Copy files from source",
             "type": "FileSource",
             "source": {
-                "sourceType": "Harness"
+                "sourceType": "Harness",
+                "opts": {
+                    "accountId": "Sy3KVuK1SZy2Z7OLhbKlNg"
+                }
             },
-            "glob": "Setup/Applications/Plex/Services/ombi/Index.yaml"
+            "files": [
+                "Setup/Applications/Harness Demo Application/Services/order-service/**/*.yaml",
+                "Setup/Applications/Harness Demo Application/Environments/development/Index.yaml",
+                "Setup/Applications/Harness Demo Application/Environments/development/Infrastructure Definitions/GKE Dev Cluster.yaml",
+                "Setup/Applications/Harness Demo Application/Workflows/Dev Retail Application.yaml"
+            ]
         },
         {
-            "name": "Set some value",
+            "name": "Set development cloud provider name",
             "type": "SetValue",
-            "path": "helmVersion",
-            "value": "V2",
-            "glob": "Setup/Applications/Plex/Services/ombi/Index.yaml"
+            "file": "Setup/Applications/Harness Demo Application/Environments/development/Infrastructure Definitions/GKE Dev Cluster.yaml",
+            "path": "infrastructure[0].cloudProviderName",
+            "value": "harness-demo-backup-dev"
+        },  
+        {
+            "name": "Set dev variable overrides for order service",
+            "type": "SetValue",
+            "path": "variableOverrides",
+            "file": "Setup/Applications/Harness Demo Application/Environments/development/Index.yaml",
+            "value": []
+        }, 
+        {
+            "name": "Set development cloud provider name",
+            "type": "SetValue",
+            "path": "scopedServices",
+            "file": "Setup/Applications/Harness Demo Application/Environments/development/Infrastructure Definitions/GKE Dev Cluster.yaml",
+            "value": [ "order-service" ]
+        }, 
+        {
+            "name": "Rename application",
+            "type": "RenameFile",
+            "search": "Setup/Applications/Harness Demo Application/",
+            "replace": "Setup/Applications/Harness Demo Backup/"
         }
     ]
 }

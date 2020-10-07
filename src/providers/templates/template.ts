@@ -33,12 +33,19 @@ export class Template {
         
         this.steps = []
         for (const step of (inputObj.steps || [])) {
+            let stepFiles: string[] = step.files || []
+            if (step.file) {
+                stepFiles.push(step.file)
+            }
+            if (stepFiles.length === 0) {
+                stepFiles.push('**/*.yaml')
+            }
             if (step.type === StepType.FileSource) {
-                this.steps.push(new FileSourceStep(step.name, step.source, step.glob))
+                this.steps.push(new FileSourceStep(step.name, step.source, stepFiles))
             } else if (step.type === StepType.RenameFile) {
-                this.steps.push(new RenameFileStep(step.name, step.search, step.replace, step.glob))
+                this.steps.push(new RenameFileStep(step.name, step.search, step.replace, stepFiles))
             } else if (step.type === StepType.SetValue) {
-                this.steps.push(new SetValueStep(step.name, step.path, step.value, step.glob))
+                this.steps.push(new SetValueStep(step.name, step.path, step.value, stepFiles))
             }  else if (step.type === StepType.CreateApplication) {
                 this.steps.push(new CreateApplicationStep(step.name, step.applicationName))
             } else {

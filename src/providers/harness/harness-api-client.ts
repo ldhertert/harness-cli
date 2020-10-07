@@ -43,7 +43,7 @@ export class Harness {
 
     constructor(options?: HarnessApiOptions) {
         options = options || Config.Harness
-        
+
         this.managerUrl = new URL(options.url || defaultManagerUrl).origin
 
         this.apiKey = options.apiKey || Config.Harness.apiKey
@@ -146,6 +146,9 @@ export class Harness {
         const response = await axios.post(url.href, data, {
             headers: headers,
         })
+        if (response.data?.resource?.responseStatus === 'FAILED') {
+            throw response.data.resource
+        }
         
         return response.data
     }

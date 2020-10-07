@@ -24,11 +24,12 @@ export abstract class Step {
     name: string;
     description?: string;
     abstract type: StepType;
-    glob?: string;
+    files: string[];
     // condition?: unknown
 
-    public constructor(name: string) {
+    public constructor(name: string, files: string[]) {
         this.name = name
+        this.files = files
     }
 
     abstract async run(context: TemplateExecutionContext): Promise<void>
@@ -39,16 +40,18 @@ export class FileSourceStep extends Step {
 
     source: StorageProviderRef
 
-    public constructor(name: string, source: StorageProviderRef, glob?: string) {
-        super(name)
+    public constructor(name: string, source: StorageProviderRef, files: string[]) {
+        super(name, files)
         this.source = source
-        this.glob = glob || '**/*.yaml'
     }
 
     public async run(context: TemplateExecutionContext): Promise<void> {
         const storageProvider = getStorageProvider(this.source)
         await storageProvider.init()
-        const files = await storageProvider.getFiles(this.glob as string)
+        let files: File[] = []
+        for (const glob of this.files) {
+            files = files.concat(await storageProvider.getFiles(glob))
+        }
         
         files.forEach((newFile: File) => {
             const existingFiles = context.workspace.filter(existingFile => newFile.path.toLowerCase() === existingFile.path.toLowerCase())
@@ -69,15 +72,17 @@ export class RenameFileStep extends Step {
     replace: string;
     search: RegExp | string;
 
-    public constructor(name: string, search: RegExp | string, replace: string, glob?: string) {
-        super(name)
+    public constructor(name: string, search: RegExp | string, replace: string, files: string[]) {
+        super(name, files)
         this.search = search
         this.replace = replace
-        this.glob = glob || '**/*.yaml'
     }
 
     public async run(context: TemplateExecutionContext): Promise<void> {
-        const filesToProcess = context.workspace.filter(file => minimatch(file.path, this.glob as string))
+        let filesToProcess: File[] = []
+        for (const glob of this.files) {
+            filesToProcess = filesToProcess.concat(context.workspace.filter(file => minimatch(file.path, glob)))
+        }
         filesToProcess.forEach(file => {
             const newPath = _.template(this.replace)(context.vars)
             file.path = _.replace(file.path, this.search, newPath)
@@ -91,15 +96,17 @@ export class SetValueStep extends Step {
     path: string;
     value: any;
 
-    public constructor(name: string, path: string, value: any, glob?: string) {
-        super(name)
+    public constructor(name: string, path: string, value: any, files: string[]) {
+        super(name, files)
         this.path = path
         this.value = value
-        this.glob = glob || '**/*.yaml'
     }
 
     public async run(context: TemplateExecutionContext): Promise<void> {
-        const filesToProcess = context.workspace.filter(file => minimatch(file.path, this.glob as string))
+        let filesToProcess: File[] = []
+        for (const glob of this.files) {
+            filesToProcess = filesToProcess.concat(context.workspace.filter(file => minimatch(file.path, glob)))
+        }
         filesToProcess.forEach(file => {
             const obj = fromYaml(file.content)
             _.set(obj, this.path, this.value)
@@ -114,7 +121,7 @@ export class CreateApplicationStep extends Step {
     applicationName: string;
 
     public constructor(name: string, applicationName: string) {
-        super(name)
+        super(name, [])
         this.applicationName = applicationName
     }
 
