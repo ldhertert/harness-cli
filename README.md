@@ -2,8 +2,8 @@ harness-cli
 ===========
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/harness-cli.svg)](https://npmjs.org/package/harness-cli)
-[![Downloads/week](https://img.shields.io/npm/dw/harness-cli.svg)](https://npmjs.org/package/harness-cli)
+[![Version](https://img.shields.io/npm/v/harness-cli.svg)](https://npmjs.org/package/@ldhertert/harness-cli)
+[![Downloads/week](https://img.shields.io/npm/dw/harness-cli.svg)](https://npmjs.org/package/@ldhertert/harness-cli)
 [![License](https://img.shields.io/npm/l/harness-cli.svg)](https://github.com/ldhertert/harness-cli/blob/master/package.json)
 
 <!-- toc -->
