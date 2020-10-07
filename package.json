@@ -1,11 +1,11 @@
 {
   "name": "@ldhertert/harness-cli",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "author": "Luke Hertert @ldhertert",
   "bin": {
     "harness": "./bin/run"
   },
-  "bugs": "https://github.com/ldhertert/harness-automation/issues",
+  "bugs": "https://github.com/ldhertert/harness-cli/issues",
   "dependencies": {
     "@oclif/command": "*",
     "@oclif/config": "*",
@@ -55,7 +55,7 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/ldhertert/harness-automation",
+  "homepage": "https://github.com/ldhertert/harness-cli",
   "keywords": [
     "oclif"
   ],
@@ -71,7 +71,7 @@
   "pkg": {
     "scripts": "./lib/**/*.js"
   },
-  "repository": "ldhertert/harness-automation",
+  "repository": "ldhertert/harness-cli",
   "scripts": {
     "lint": "eslint ./src",
     "compile": "tsc",
