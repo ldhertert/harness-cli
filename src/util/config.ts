@@ -20,6 +20,7 @@ export class Config {
     public static Git: GitCredentials = {
         username: process.env.GIT_USERNAME,
         password: process.env.GIT_PASSWORD,
+        token: process.env.GIT_TOKEN,
         type: CredentialType.Git,
     }
 
