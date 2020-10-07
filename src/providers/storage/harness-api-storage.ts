@@ -72,6 +72,7 @@ export class HarnessStorageProvider implements StorageProvider {
         await this.storeFiles([file])
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     deleteFile(name: string): Promise<void> {
         throw new Error('Method not implemented.')
     }
@@ -87,6 +88,7 @@ export class HarnessStorageProvider implements StorageProvider {
         await this.harness?.configAsCode.uploadConfigAsCode(files)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async deleteFiles(pattern: string): Promise<void> {
         throw new Error('Not implemented')
     }

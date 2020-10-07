@@ -4,7 +4,6 @@ import * as minimatch from 'minimatch'
 import _ = require('lodash');
 import { fromYaml, toYaml, getStorageProvider } from '../../util/objects'
 import { File } from '../../util/filesystem'
-import { interpolate } from '../../util/strings'
 
 export enum StepType {
     FileSource = 'FileSource',
@@ -126,7 +125,7 @@ export class CreateApplicationStep extends Step {
     }
 
     run(context: TemplateExecutionContext): Promise<void> {
-        const name = interpolate(this.applicationName, context.vars)
+        const name = _.template(this.applicationName)(context.vars)
         console.log(name)
         return Promise.resolve()
     }

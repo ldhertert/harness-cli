@@ -9,7 +9,6 @@ import { Groups } from './groups'
 import { Users } from './users'
 import axios from 'axios'
 import { ConfigAsCode } from './config-as-code'
-import * as _ from 'lodash'
 import { Config } from '../../util/config'
 
 export interface HarnessApiOptions {

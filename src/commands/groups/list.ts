@@ -15,7 +15,6 @@ export default class GroupsList extends Command {
         const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
         await harness.init()
 
-
         const result = await harness.groups.list()
         this.log(JSON.stringify(result, undefined, 4))
     }

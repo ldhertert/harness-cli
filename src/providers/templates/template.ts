@@ -33,7 +33,7 @@ export class Template {
         
         this.steps = []
         for (const step of (inputObj.steps || [])) {
-            let stepFiles: string[] = step.files || []
+            const stepFiles: string[] = step.files || []
             if (step.file) {
                 stepFiles.push(step.file)
             }
