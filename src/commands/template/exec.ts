@@ -3,7 +3,8 @@ import * as fs from 'fs'
 import { Template } from '../../providers/templates/template'
 import * as _ from 'lodash'
 import { Harness } from '../../providers/harness/harness-api-client'
-import { LocalStorageProvider } from '../../providers/storage/local-storage'
+import * as yaml from 'js-yaml'
+import axios from 'axios'
 
 export default class TemplateExec extends Command {
     static description = 'Apply steps defined in template manifest and send reults to target Harness account'
@@ -18,7 +19,7 @@ export default class TemplateExec extends Command {
         gitPassword: flags.string({ env: 'GIT_PASSWORD', description: 'Password to use for git authentication' }),
     }
 
-    static args = [{ name: 'manifest', required: true }]
+    static args = [{ name: 'manifest', description: 'A template manifest in either YAML or JSON format.  Can be a local file or URL.', required: true }]
 
     async run() {
         const { args, flags } = this.parse(TemplateExec)
@@ -29,7 +30,7 @@ export default class TemplateExec extends Command {
             inputVars[parsed.key] = parsed.value
         }
 
-        const templateText = await fs.promises.readFile(args.manifest, { encoding: 'utf-8' })
+        const templateText = await this.loadTemplate(args.manifest)
         this.log(`Successfully loaded template from ${args.manifest}`)
         const template = await this.parseTemplate(templateText)
         this.log(`Successfully parsed template '${template.name}'`)
@@ -54,10 +55,35 @@ export default class TemplateExec extends Command {
         }
     }
 
+    async loadTemplate(path: string) {
+        try {
+            // try to parse as url
+            // eslint-disable-next-line no-new
+            new URL(path)
+            const response = await axios.get(path)
+            return response.data
+        } catch {}
+
+        try {
+            const templateText = await fs.promises.readFile(path, { encoding: 'utf-8' })
+            return templateText        
+        } catch {}
+
+        throw new Error(`Error loading template from ${path}`)
+    }
+
     async parseTemplate(templateText: string) {
-        const parsedTemplate = JSON.parse(templateText)
-        const template = new Template(parsedTemplate)
-        return template
+        let parsedTemplate: string
+        try {
+            parsedTemplate = JSON.parse(templateText)
+        } catch {
+            try {
+                parsedTemplate = yaml.load(templateText)
+            } catch {
+                throw new Error('Template is not valid JSON or YAML.')
+            }
+        }
+        return new Template(parsedTemplate)
     }
 
     async processVariables(template: Template, userVars: any) {
