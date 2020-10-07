@@ -42,6 +42,7 @@
     "globby": "*",
     "mocha": "*",
     "nyc": "*",
+    "pkg": "^4.4.9",
     "ts-node": "*",
     "typescript": "^4.0.2"
   },
