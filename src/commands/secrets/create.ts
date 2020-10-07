@@ -39,6 +39,7 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
       const { args, flags } = this.parse(SecretsCreate)
 
       const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+      await harness.init()
 
       const secret = await harness.secrets.create({ 
           name: args.name, 

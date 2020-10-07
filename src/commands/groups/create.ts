@@ -28,6 +28,7 @@ export default class GroupsCreate extends Command {
         const { args, flags } = this.parse(GroupsCreate)
 
         const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+        await harness.init()
 
         const opts: GroupOptions = {}
 

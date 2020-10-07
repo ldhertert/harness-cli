@@ -21,6 +21,7 @@ export default class GitConnectorCreate extends Command {
         const { args, flags } = this.parse(GitConnectorCreate)
 
         const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+        await harness.init()
 
         const secret = await harness.secrets.get(flags.passwordSecret)
         const result = await harness.connectors.git.create({

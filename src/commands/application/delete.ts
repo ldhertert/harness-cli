@@ -17,6 +17,7 @@ export default class ApplicationsDelete extends Command {
       const { args, flags } = this.parse(ApplicationsDelete)
 
       const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+      await harness.init()
 
       await harness.applications.delete(args.nameOrId)
       this.log(`Successfully deleted ${args.nameOrId}`)

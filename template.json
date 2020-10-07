@@ -13,6 +13,7 @@
             "name": "serviceName",
             "description": "",
             "type": "String",
+            "defaultValue": "My new service",
             "required": true
         }
     ],
@@ -21,25 +22,16 @@
             "name": "Get source files from https://github.com/ldhertert/luke-testing-harness.git",
             "type": "FileSource",
             "source": {
-                "sourceType": "Git",
-                "opts": {
-                    "repo": "https://github.com/ldhertert/luke-testing-harness.git"
-                }
+                "sourceType": "Harness"
             },
-            "glob": "Setup/Applications/Plex/Services/ombi/**/*.yaml"
-        },
-        {
-            "name": "Rename Application",
-            "type": "RenameFile",
-            "search": "Setup/Applications/Plex/Services/ombi/",
-            "replace": "Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>/"
+            "glob": "Setup/Applications/Plex/Services/ombi/Index.yaml"
         },
         {
             "name": "Set some value",
             "type": "SetValue",
-            "path": "harnessApiVersion",
-            "value": "1.0",
-            "glob": "Setup/Applications/dfdsfd/Workflows/Plex Health Check.yaml"
+            "path": "helmVersion",
+            "value": "V2",
+            "glob": "Setup/Applications/Plex/Services/ombi/Index.yaml"
         }
     ]
 }

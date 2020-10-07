@@ -9,6 +9,8 @@ import { Groups } from './groups'
 import { Users } from './users'
 import axios from 'axios'
 import { ConfigAsCode } from './config-as-code'
+import * as _ from 'lodash'
+import { Config } from '../../util/config'
 
 export interface HarnessApiOptions {
     accountId: string,
@@ -16,7 +18,7 @@ export interface HarnessApiOptions {
     username?: string,
     password?: string,
     bearerToken?: string,
-    managerUrl?: string,
+    url?: string,
 }
 
 const defaultManagerUrl = 'https://app.harness.io'
@@ -28,34 +30,40 @@ export class Harness {
     username?: string;
     password?: string;
     bearerToken?: string;
-    client: GraphQLClient;
+    
+    client!: GraphQLClient;
+    applications!: Applications;
+    connectors!: { git: GitConnectors; };
+    secrets!: Secrets;
+    environments!: Environments
+    cloudProviders!: CloudProviders
+    groups!: Groups
+    users!: Users
+    configAsCode!: ConfigAsCode
 
-    applications: Applications;
-    connectors: { git: GitConnectors; };
-    secrets: Secrets;
-    environments: Environments
-    cloudProviders: CloudProviders
-    groups: Groups
-    users: Users
-    configAsCode: ConfigAsCode
+    constructor(options?: HarnessApiOptions) {
+        options = options || Config.Harness
+        
+        this.managerUrl = new URL(options.url || defaultManagerUrl).origin
 
-    constructor(options: HarnessApiOptions) {
-        this.managerUrl = new URL(options.managerUrl || defaultManagerUrl).origin
+        this.apiKey = options.apiKey || Config.Harness.apiKey
+        this.username = options.username || Config.Harness.username
+        this.password = options.password || Config.Harness.password
+        this.accountId = options.accountId || Config.Harness.accountId
+    }
 
-        this.apiKey = options.apiKey
-        this.username = options.username
-        this.password = options.password
-        this.bearerToken = options.bearerToken
-        this.accountId = options.accountId
-
+    async init() {
         const headers: any = { 'Content-Type': 'application/json' }
-
         if (this.apiKey) {
             headers['x-api-key'] = this.apiKey
-        } else if (this.bearerToken) {
+        } else if (this.username && this.password) {
+            const account = await Harness.login(this.username, this.password, this.managerUrl)
+            this.bearerToken = account.token
             headers.authorization = `Bearer ${this.bearerToken}`
+        } else {
+            throw new Error('Either API Key or username/password are required')
         }
-        
+
         this.client = new GraphQLClient(`${this.managerUrl}/gateway/api/graphql?accountId=${this.accountId}`, headers)
 
         this.secrets = new Secrets(this.client)
@@ -92,7 +100,7 @@ export class Harness {
         const parsed = new URL(url)
 
         const options: HarnessApiOptions = {
-            managerUrl: parsed.origin,
+            url: parsed.origin,
             accountId: '',
         }
 
@@ -107,14 +115,13 @@ export class Harness {
         } else if (parsed.username) {
             options.username = decodeURIComponent(parsed.username)
             options.password = decodeURIComponent(parsed.password)
-            const account = await Harness.login(options.username, options.password, options.managerUrl)
-            options.bearerToken = account.token
-            options.accountId = accountId || account.defaultAccountId
         } else {
             throw new Error('Either API key or username/password are required')
         }
 
-        return new Harness(options)
+        const harness = new Harness(options)
+        await harness.init()
+        return harness
     }
 
     async privateApiGet(path: string) {

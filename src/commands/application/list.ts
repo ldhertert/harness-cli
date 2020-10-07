@@ -13,6 +13,7 @@ export default class ApplicationsList extends Command {
       const { flags } = this.parse(ApplicationsList)
 
       const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+      await harness.init()
 
       const apps = await harness.applications.list()
       this.log(JSON.stringify(apps, undefined, 4))

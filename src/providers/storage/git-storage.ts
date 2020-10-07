@@ -2,7 +2,6 @@ import { File } from '../../util/filesystem'
 import { LocalStorageProvider, ConfigLocal } from './local-storage'
 import { GitOptions, Git } from '../../util/git'
 import { StorageType, StorageProviderRef } from './storage-provider'
-import { GitCredentials } from '../../util/config'
 
 export interface ConfigGit extends ConfigLocal, GitOptions {
 }
@@ -10,8 +9,8 @@ export interface ConfigGit extends ConfigLocal, GitOptions {
 export class GitStorageProvider extends LocalStorageProvider {
     protected git: Git
 
-    constructor(options: GitOptions, credentials: GitCredentials[]) {
-        const git = new Git(options, credentials)
+    constructor(options: GitOptions) {
+        const git = new Git(options)
         const config = options as unknown as ConfigLocal
         config.directory = git.cwd
         super(config)

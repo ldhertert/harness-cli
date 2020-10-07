@@ -19,7 +19,8 @@ export default class UsersCreate extends Command {
         const { args, flags } = this.parse(UsersCreate)
 
         const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-
+        await harness.init()
+        
         const groupIds = []
         for (const group of flags.groups) {
             groupIds.push((await harness.groups.get(group)).id)   

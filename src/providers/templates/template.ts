@@ -1,9 +1,9 @@
 import { Variable } from './variables'
-import { Step, StepType, FileSourceStep, RenameFileStep, SetValueStep } from './steps'
+import { Step, StepType, FileSourceStep, RenameFileStep, SetValueStep, CreateApplicationStep } from './steps'
 import { File } from '../../util/filesystem'
 import * as _ from 'lodash'
-import { StorageProvider } from '../storage/storage-provider'
-import { Credentials } from '../../util/config'
+import { Harness } from '../harness/harness-api-client'
+import { HarnessStorageProvider } from '../storage/harness-api-storage'
 
 export interface TemplateRef {
     source: string
@@ -12,8 +12,7 @@ export interface TemplateRef {
 export interface TemplateExecutionContext {
     vars: any,
     workspace: File[],
-    outputs: any,
-    credentials: Credentials[]
+    outputs: any
 }
 
 export class Template {
@@ -40,19 +39,20 @@ export class Template {
                 this.steps.push(new RenameFileStep(step.name, step.search, step.replace, step.glob))
             } else if (step.type === StepType.SetValue) {
                 this.steps.push(new SetValueStep(step.name, step.path, step.value, step.glob))
+            }  else if (step.type === StepType.CreateApplication) {
+                this.steps.push(new CreateApplicationStep(step.name, step.applicationName))
             } else {
                 throw new Error('Invalid step type')
             }
         }
     }
 
-    public async execute(inputVars: any, destination: StorageProvider, credentials: Credentials[]): Promise<TemplateExecutionContext> {
+    public async execute(inputVars: any, destination: Harness): Promise<TemplateExecutionContext> {
         // Create workspace
         const context: TemplateExecutionContext = {
             vars: {},
             workspace: [],
             outputs: {},
-            credentials: credentials,
         }
 
         this.processVariables(inputVars, context)
@@ -61,10 +61,13 @@ export class Template {
         // Preview changes
 
         // Upsert yaml results
-        await destination.init()
-        console.log('Pushing changes to destination')
-        await destination.storeFiles(context.workspace)
-        await destination.dispose()
+        if (context.workspace.length > 0) {
+            console.log('Pushing changes to destination')
+            const destinationStorage = new HarnessStorageProvider(destination)
+            await destinationStorage.init()
+            await destinationStorage.storeFiles(context.workspace)
+            await destinationStorage.dispose()
+        }
         // Validate success
 
         return context

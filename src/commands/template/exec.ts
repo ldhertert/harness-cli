@@ -1,18 +1,20 @@
 import { Command, flags } from '@oclif/command'
 import * as fs from 'fs'
 import { Template } from '../../providers/templates/template'
-import { GitStorageProvider } from '../../providers/storage/git-storage'
-import { Credentials, CredentialType, GitCredentials } from '../../util/config'
-import { GitOptions } from '../../util/git'
 import * as _ from 'lodash'
+import { Harness } from '../../providers/harness/harness-api-client'
 
 export default class TemplateExec extends Command {
     static description = 'Apply steps defined in template manifest and send reults to target Harness account'
 
     static flags = {
         var: flags.string({ multiple: true, char: 'v' }),
-        dest: flags.string({ required: true }),
-        gitToken: flags.string({ env: 'GIT_TOKEN', description: 'Token to use for git authentication' }),
+        managerUrl: flags.string({ description: 'The Harness Manager URL', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
+        accountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT_ID' }),
+        username: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_USERNAME' }),
+        password: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_PASSWORD' }),
+        gitUsername: flags.string({ env: 'GIT_USERNAME', description: 'Username to use for git authentication' }),
+        gitPassword: flags.string({ env: 'GIT_PASSWORD', description: 'Password to use for git authentication' }),
     }
 
     static args = [{ name: 'manifest', required: true }]
@@ -33,11 +35,14 @@ export default class TemplateExec extends Command {
         const vars = await this.processVariables(template, inputVars)
         this.log('Successfully proccessed variables')
 
-        const credentials = await this.getCredentials(flags.gitToken)
-
-        const destination = await this.getDestination(flags.dest, credentials)
-
-        await template.execute(vars, destination, credentials)
+        const destination = new Harness({ 
+            url: flags.managerUrl,
+            accountId: flags.accountId,
+            username: flags.username,
+            password: flags.password,
+        })
+        await destination.init()
+        await template.execute(vars, destination)
         // this.log(JSON.stringify(template, undefined, 4))
     }
 
@@ -45,16 +50,6 @@ export default class TemplateExec extends Command {
         const parsedTemplate = JSON.parse(templateText)
         const template = new Template(parsedTemplate)
         return template
-    }
-
-    async getCredentials(gitToken?: string): Promise<Credentials[]> {
-        const gitHubToken: GitCredentials = {
-            type: CredentialType.Git,
-            token: gitToken,
-        }
-        return Promise.resolve([
-            gitHubToken,
-        ])
     }
 
     async processVariables(template: Template, userVars: any) {
@@ -68,16 +63,6 @@ export default class TemplateExec extends Command {
             }
         })
         return Promise.resolve(vars)
-    }
-
-    async getDestination(dest: string, credentials: Credentials[]) {
-        // this needs to not be hard coded either
-        const gitOptionsDest: GitOptions = {
-            repo: dest,
-            ref: 'master',
-        }
-        const destination = new GitStorageProvider(gitOptionsDest, credentials)
-        return destination
     }
 
     parseVar(str: string) {

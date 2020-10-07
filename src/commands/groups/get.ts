@@ -17,6 +17,7 @@ export default class GroupsGet extends Command {
         const { args, flags } = this.parse(GroupsGet)
 
         const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+        await harness.init()
 
         const result = await harness.groups.get(args.nameOrId)
         this.log(JSON.stringify(result, undefined, 4))

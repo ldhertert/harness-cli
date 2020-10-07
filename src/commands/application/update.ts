@@ -23,6 +23,7 @@ export default class ApplicationsUpdate extends Command {
       const { args, flags } = this.parse(ApplicationsUpdate)
 
       const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+      await harness.init()
 
       let gitSyncOptions: GitSyncOptions | undefined
       if (flags.syncEnabled && flags.gitConnector) {

@@ -8,7 +8,7 @@ export enum StorageType {
 
 export interface StorageProviderRef {
     sourceType: StorageType
-    opts: unknown
+    opts?: unknown
 }
 
 export interface StorageProvider {

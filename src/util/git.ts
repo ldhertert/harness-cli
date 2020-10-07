@@ -2,7 +2,7 @@ import * as git from 'isomorphic-git'
 import * as fs from 'fs'
 import { FileSystem } from './filesystem'
 import * as http from 'isomorphic-git/http/node'
-import { GitCredentials } from './config'
+import { Config } from './config'
 
 export interface GitOptions {
     repo: string;
@@ -39,7 +39,7 @@ export class Git {
 
     protected fs = new FileSystem();
 
-    constructor(opts: GitOptions, credentials?: GitCredentials[]) {
+    constructor(opts: GitOptions) {
         this.repo = opts.repo
         this.ref = opts.ref || 'master'
         this.cwd = opts.cwd || this.fs.mktemp()
@@ -47,23 +47,9 @@ export class Git {
         if (opts.auth) {
             this.auth = opts.auth
         } else {
-            const defaultCredentials = credentials?.filter(cred => cred.url === undefined)
-            const credentialMatches = credentials?.filter(cred => cred.url && this.repo.toLowerCase().startsWith(cred.url.toLowerCase()))
-            if (credentialMatches && credentialMatches.length > 0) {
-                this.auth = {
-                    username: credentialMatches[0].username,
-                    password: credentialMatches[0].password,
-                    token: credentialMatches[0].token,
-                }
-            } else if (defaultCredentials && defaultCredentials.length > 0) {
-                this.auth = {
-                    username: defaultCredentials[0].username,
-                    password: defaultCredentials[0].password,
-                    token: defaultCredentials[0].token,
-                }
-            } else {
-                console.log('matched nothing')
-                this.auth = {}
+            this.auth = {
+                username: Config.Git.username,
+                password: Config.Git.password,
             }
         }
         this.author = opts.author || {

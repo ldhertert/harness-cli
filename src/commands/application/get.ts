@@ -17,6 +17,7 @@ export default class ApplicationsGet extends Command {
       const { args, flags } = this.parse(ApplicationsGet)
 
       const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+      await harness.init()
 
       const app = await harness.applications.get(args.nameOrId)
       this.log(JSON.stringify(app, undefined, 4))

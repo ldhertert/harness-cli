@@ -17,6 +17,7 @@ export default class UsersGet extends Command {
         const { args, flags } = this.parse(UsersGet)
 
         const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+        await harness.init()
 
         const result = await harness.users.get(args.user)
         this.log(JSON.stringify(result, undefined, 4))

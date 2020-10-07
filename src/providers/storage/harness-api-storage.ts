@@ -1,25 +1,19 @@
 import { File } from '../../util/filesystem'
-import { Harness } from '../harness/harness-api-client'
+import { Harness, HarnessApiOptions } from '../harness/harness-api-client'
 import { StorageType, StorageProviderRef, StorageProvider } from './storage-provider'
 import * as glob from 'minimatch'
 import { ConfigAsCodeFile } from '../harness/config-as-code'
 import * as _ from 'lodash'
 
-export interface HarnessOptions {
-    managerUrl: string
-}
-
 export class HarnessStorageProvider implements StorageProvider {
-    protected managerUrl: string
     protected harness!: Harness
 
     type: StorageType
     initialized: boolean
-    options: HarnessOptions
+    options: HarnessApiOptions
     files: ConfigAsCodeFile[]
 
-    constructor(options: HarnessOptions) {
-        this.managerUrl = options.managerUrl
+    constructor(options: HarnessApiOptions) {
         this.options = options
         this.type = StorageType.Harness
         this.initialized = false
@@ -28,6 +22,14 @@ export class HarnessStorageProvider implements StorageProvider {
 
     getType(): StorageType {
         return this.type
+    }
+
+    async init(): Promise<boolean> {
+        this.harness = new Harness(this.options) 
+        await this.harness.init()
+        this.files = await this.harness.configAsCode.getTree()
+        this.initialized = true
+        return true
     }
 
     getConfig(): unknown {
@@ -74,18 +76,11 @@ export class HarnessStorageProvider implements StorageProvider {
         throw new Error('Method not implemented.')
     }
 
-    static createRef(opts: HarnessOptions): StorageProviderRef {
+    static createRef(opts: HarnessApiOptions): StorageProviderRef {
         return {
             sourceType: StorageType.Harness,
             opts: opts,
         }
-    }
-
-    async init(): Promise<boolean> {
-        this.harness = await Harness.fromUrl(this.managerUrl)
-        this.files = await this.harness.configAsCode.getTree()
-        this.initialized = true
-        return true
     }
 
     async storeFiles(files: File[]): Promise<void> {

@@ -22,6 +22,7 @@ export default class CloudProviderCreateK8s extends Command {
         const { args, flags } = this.parse(CloudProviderCreateK8s)
 
         const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
+        await harness.init()
 
         let options: K8sCloudProviderOptions
 
