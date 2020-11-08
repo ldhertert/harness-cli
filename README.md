@@ -213,10 +213,10 @@ ARGUMENTS
   NAME  The repository name
 
 OPTIONS
-  --baseUrl=baseUrl          (required) [default: https://api.github.com] The Github API base url
-  --description=description  A description of the application
-  --private                  Whether or not to make the repository private
-  --token=token              (required) The GitHub token for authentication
+  --baseUrl=baseUrl                       (required) [default: https://api.github.com] The Github API base url
+  --description=description               A description of the application
+  --token=token                           (required) The GitHub token for authentication
+  --visibility=(private|public|internal)  [default: private] Visibility settings for the repository
 ```
 
 _See code: [src/commands/github/create-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.3/src/commands/github/create-repo.ts)_

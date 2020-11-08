@@ -1,6 +1,12 @@
 import { Octokit } from '@octokit/rest'
 import { GitCredentials } from '../util/config'
 
+export enum RepoVisibility {
+    PRIVATE = 'private',
+    PUBLIC = 'public',
+    INTERNAL = 'internal',
+}
+
 export class Github {
     client: any
 
@@ -12,13 +18,13 @@ export class Github {
         })
     }
 
-    async createRepo(org: string, name: string, description?: string, isPrivate?: boolean) {
+    async createRepo(org: string, name: string, description?: string, visibility?: RepoVisibility) {
         await this.client.repos.createInOrg({ 
             org, 
             name,
             description,
-            private: isPrivate,
-            // visibility: 'public',
+            private: visibility === RepoVisibility.PRIVATE,
+            visibility: visibility || RepoVisibility.PRIVATE,
             // team_id: undefined,
 
         })
