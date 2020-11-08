@@ -7,6 +7,7 @@ export abstract class BaseCommand extends Command {
     static flags = {
         debug: flags.boolean({ hidden: true, description: 'Print debug logs to stdout.' }),
         jsonpath: flags.string({ hidden: true, description: 'Apply jsonpath expression to output prior to printing' }),
+        managerUrl: flags.string({ description: 'The Harness Manager URL.  Can also be set via HARNESS_MANAGER_URL environment variable', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
         harnessAccountId: flags.string({ description: 'The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment variable.', env: 'HARNESS_ACCOUNT' }),
         harnessApiKey: flags.string({ description: 'The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.', env: 'HARNESS_API_KEY' }),
     }

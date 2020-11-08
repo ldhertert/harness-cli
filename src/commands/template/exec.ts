@@ -1,8 +1,8 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand as Command } from '../base-command'
 import * as fs from 'fs'
 import { Template } from '../../providers/templates/template'
 import * as _ from 'lodash'
-import { Harness } from '../../providers/harness/harness-api-client'
 import * as yaml from 'js-yaml'
 import axios from 'axios'
 
@@ -10,13 +10,10 @@ export default class TemplateExec extends Command {
     static description = 'Apply steps defined in template manifest and send reults to target Harness account'
 
     static flags = {
+        ...Command.flags,
         var: flags.string({ multiple: true, char: 'v' }),
-        managerUrl: flags.string({ description: 'The Harness Manager URL', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
-        accountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT_ID' }),
-        username: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_USERNAME' }),
-        password: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_PASSWORD' }),
-        gitUsername: flags.string({ env: 'GIT_USERNAME', description: 'Username to use for git authentication' }),
-        gitPassword: flags.string({ env: 'GIT_PASSWORD', description: 'Password to use for git authentication' }),
+        // gitUsername: flags.string({ env: 'GIT_USERNAME', description: 'Username to use for git authentication' }),
+        // gitPassword: flags.string({ env: 'GIT_PASSWORD', description: 'Password to use for git authentication' }),
     }
 
     static args = [{ name: 'manifest', description: 'A template manifest in either YAML or JSON format.  Can be a local file or URL.', required: true }]
@@ -38,15 +35,10 @@ export default class TemplateExec extends Command {
         this.log('Successfully proccessed variables')
 
         try {
-            const destination = new Harness({ 
-                url: flags.managerUrl,
-                accountId: flags.accountId,
-                username: flags.username,
-                password: flags.password,
-            })
-            await destination.init()
-            const result = await template.execute(vars, destination)
-            this.debug(JSON.stringify(result, undefined, 4))
+            const harness = await this.getHarnessClient()
+
+            const result = await template.execute(vars, harness)
+            this.debug(result)
             // const localStorage = new LocalStorageProvider({ directory: './tmp' })
             // await localStorage.storeFiles(result.workspace)
             this.log('Success')
