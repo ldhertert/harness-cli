@@ -26,7 +26,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build
-    - run: npm run pkg
+    - name: Publish NPM
+      run: npm publish
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Create binaries
+      run: npm run pkg
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
