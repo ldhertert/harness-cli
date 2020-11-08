@@ -1,25 +1,24 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { BaseCommand as Command } from '../base-command'
 
 export default class ApplicationsDelete extends Command {
-  static description = 'Delete an application'
+    static aliases = ['app:delete', 'apps:delete', 'applications:delete', 'application:delete']
 
-  static args = [
-      { name: 'nameOrId', description: 'The current name or id of the application', required: true },
-  ]
+    static description = 'Delete an application'
 
-  static flags = {
-      harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-      harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
-  }
+    static args = [
+        { name: 'nameOrId', description: 'The current name or id of the application', required: true },
+    ]
 
-  async run() {
-      const { args, flags } = this.parse(ApplicationsDelete)
+    static flags = {
+        ...Command.flags,
+    }
 
-      const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-      await harness.init()
+    async run() {
+        const { args } = this.parse(ApplicationsDelete)
+        const harness = await this.getHarnessClient()
 
-      await harness.applications.delete(args.nameOrId)
-      this.log(`Successfully deleted ${args.nameOrId}`)
-  }
+        await harness.applications.delete(args.nameOrId)
+
+        this.log(`Successfully deleted ${args.nameOrId}`)
+    }
 }
