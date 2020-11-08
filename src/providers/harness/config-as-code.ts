@@ -31,7 +31,8 @@ export class ConfigAsCode {
     }
 
     async getFileContent(file: ConfigAsCodeFile): Promise<File> {
-        const content = await this.harness.privateApiGet(file.contentUrl)
+        const path = `/gateway/api/setup-as-code/yaml/yaml-content?yamlFilePath=${encodeURIComponent(file.path)}`
+        const content = await this.harness.privateApiGet(path)
         return {
             path: file.path,
             content: content.resource.yaml,

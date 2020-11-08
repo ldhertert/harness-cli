@@ -126,11 +126,15 @@ export class Harness {
     async privateApiGet(path: string) {
         const url = new URL(path, this.managerUrl)
         url.searchParams.append('accountId', this.accountId)
+        const headers: any = {}
+        if (this.bearerToken) {
+            headers.Authorization = `Bearer ${this.bearerToken}`
+        } else if (this.apiKey) {
+            headers['x-api-key'] = this.apiKey
+        }
 
         const response = await axios.get(url.href, {
-            headers: {
-                Authorization: `Bearer ${this.bearerToken}`,
-            },
+            headers: headers,
         })
         
         return response.data
@@ -141,7 +145,11 @@ export class Harness {
         url.searchParams.append('accountId', this.accountId)
 
         headers = headers || {}
-        headers.Authorization = `Bearer ${this.bearerToken}`
+        if (this.bearerToken) {
+            headers.Authorization = `Bearer ${this.bearerToken}`
+        } else if (this.apiKey) {
+            headers['x-api-key'] = this.apiKey
+        }
         const response = await axios.post(url.href, data, {
             headers: headers,
         })
