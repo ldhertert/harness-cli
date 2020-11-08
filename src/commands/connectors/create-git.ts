@@ -1,5 +1,5 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { flags } from '@oclif/command'
+import { BaseCommand as Command } from '../base-command'
 
 export default class GitConnectorCreate extends Command {
     static description = 'Create git connector'
@@ -10,18 +10,16 @@ export default class GitConnectorCreate extends Command {
     ]
 
     static flags = {
-        username: flags.string({ required: true }),
-        passwordSecret: flags.string({ required: true }),
-        branch: flags.string({ }),
-        harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-        harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
+        ...Command.flags,
+        username: flags.string({ description: 'The username to be used for git authentication', required: true }),
+        passwordSecret: flags.string({ description: 'The name or id of the secret that contains the password to be used for git authentication', required: true }),
+        branch: flags.string({ description: 'The git branch name', default: 'master' }),
     }
 
     async run() {
         const { args, flags } = this.parse(GitConnectorCreate)
 
-        const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-        await harness.init()
+        const harness = await this.getHarnessClient()
 
         const secret = await harness.secrets.get(flags.passwordSecret)
         const result = await harness.connectors.git.create({
@@ -31,6 +29,6 @@ export default class GitConnectorCreate extends Command {
             passwordSecretId: secret.id,
             branch: flags.branch,
         })
-        this.log(JSON.stringify(result, undefined, 4))
+        this.log(result)
     }
 }

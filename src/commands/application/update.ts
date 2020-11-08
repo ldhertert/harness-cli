@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
-import { GitSyncOptions } from '../../providers/harness/applications'
 import { BaseCommand as Command } from '../base-command'
+import { GitSyncOptions } from '../../providers/harness/applications'
 
 export default class ApplicationsUpdate extends Command {
     static aliases = ['app:update', 'apps:update', 'applications:update', 'application:update']

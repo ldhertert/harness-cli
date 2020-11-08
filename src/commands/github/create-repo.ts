@@ -11,7 +11,7 @@ export default class GithubRepoCreate extends Command {
   ]
 
   static flags = {
-      token: flags.string({ description: 'The GitHub token for authentication', required: true, env: 'GITHUB_TOKEN' }),
+      token: flags.string({ description: 'The GitHub token for authentication.  This can also be set via the environment variable GITHUB_TOKEN.', required: true, env: 'GITHUB_TOKEN' }),
       description: flags.string({ description: 'A description of the application' }),
       baseUrl: flags.string({ description: 'The Github API base url', default: 'https://api.github.com', required: true }),
       visibility: flags.enum<RepoVisibility>({ options: [RepoVisibility.PRIVATE, RepoVisibility.PUBLIC, RepoVisibility.INTERNAL], description: 'Visibility settings for the repository', default: RepoVisibility.PRIVATE }),
