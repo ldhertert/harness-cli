@@ -1,7 +1,8 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { BaseCommand as Command } from '../base-command'
+import { flags } from '@oclif/command'
 import { UsageScope, AppEnvScope, FilterType, EnvFilterType } from '../../providers/harness/types/scopes'
 import { SecretType } from '../../providers/harness/secrets'
+import { Harness } from '../../providers/harness/harness-api-client'
 
 export default class SecretsCreate extends Command {
   static description = 'Create a new secret'
@@ -12,6 +13,7 @@ export default class SecretsCreate extends Command {
   ]
 
   static flags = {
+      ...Command.flags,
       accountScope: flags.boolean({ description: 'Scope this secret to the account for use in delegate profiles', exclusive: ['scope']}),
       scope: flags.string({
           description: `
@@ -31,15 +33,12 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
       }),
       // secret manager
       type: flags.enum({ options: [SecretType.Text], required: true, default: SecretType.Text }),
-      harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-      harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
   }
 
   async run() {
       const { args, flags } = this.parse(SecretsCreate)
 
-      const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-      await harness.init()
+      const harness = await this.getHarnessClient()
 
       const secret = await harness.secrets.create({ 
           name: args.name, 
@@ -48,7 +47,7 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
           usageScope: await this.parseUsageScope(flags.scope, harness),
           scopedToAccount: flags.accountScope,
       })
-      this.log(JSON.stringify(secret, undefined, 4))
+      this.log(secret)
   }
 
   async parseUsageScope(scopes: string[], harness: Harness) {

@@ -3,6 +3,8 @@ import { GroupOptions } from '../../providers/harness/groups'
 import { BaseCommand as Command } from '../base-command'
 
 export default class GroupsCreate extends Command {
+    static aliases = ['group:create', 'groups:create']
+
     static description = 'Create a new user group. Note - not all functionality has been implemented yet'
 
     static args = [

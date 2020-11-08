@@ -1,8 +1,7 @@
-import { flags } from '@oclif/command'
 import { BaseCommand as Command } from '../base-command'
-import { Harness } from '../../providers/harness/harness-api-client'
 
 export default class GroupsGet extends Command {
+    static aliases = ['group:get', 'groups:get']
     static description = 'Get user groups'
 
     static args = [

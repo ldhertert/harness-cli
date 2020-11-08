@@ -1,6 +1,8 @@
 import { BaseCommand as Command } from '../base-command'
 
 export default class GroupsList extends Command {
+    static aliases = ['group:list', 'groups:list']
+
     static description = 'List User groups'
 
     static flags = {

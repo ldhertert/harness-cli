@@ -1,7 +1,9 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { flags } from '@oclif/command'
+import { BaseCommand as Command } from '../base-command'
 
 export default class UsersCreate extends Command {
+    static aliases = ['user:create', 'users:create']
+
     static description = 'Create user'
 
     static args = [
@@ -10,16 +12,14 @@ export default class UsersCreate extends Command {
     ]
 
     static flags = {
+        ...Command.flags,
         groups: flags.string({ multiple: true }),
-        harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-        harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
     }
 
     async run() {
         const { args, flags } = this.parse(UsersCreate)
 
-        const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-        await harness.init()
+        const harness = await this.getHarnessClient()
         
         const groupIds = []
         for (const group of flags.groups) {
@@ -27,6 +27,6 @@ export default class UsersCreate extends Command {
         }
 
         const result = await harness.users.create(args.email, args.name, groupIds)
-        this.log(JSON.stringify(result, undefined, 4))
+        this.log(result)
     }
 }
