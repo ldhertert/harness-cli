@@ -26,10 +26,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build
-    - name: Publish NPM
-      run: npm publish
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    # This is breaking for some reason
+    # - name: Publish NPM
+    #  run: npm publish
+    #  env:
+    #    NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Create binaries
       run: npm run pkg
     - name: Create Release
