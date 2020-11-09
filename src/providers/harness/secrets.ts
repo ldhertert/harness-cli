@@ -9,7 +9,7 @@ export enum SecretType {
 }
 
 export interface CreateSecretOptions {
-    secretManager?: string,
+    secretManager: string,
     value: string,
     name: string,
     type?: SecretType,

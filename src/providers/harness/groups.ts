@@ -113,8 +113,12 @@ export class Groups {
             try {
                 const byIdResult = await this.getById(idOrName)
                 return byIdResult
-            } catch {
-                throw new Error(`Resource not found with name or ID '${idOrName}'`)
+            } catch (err) {
+                let message = 'Unknown error'
+                if (err.errors) {
+                    message = err.errors.map((e: { message: string; }) => '\t' + e.message).join('\n')
+                }
+                throw new Error(`Error fetching group '${idOrName}':\n ${message}`)
             }
         }
     }
@@ -166,5 +170,23 @@ export class Groups {
         
         const result = await this.client.execute(query, vars)
         return result
+    }
+
+    async delete(idOrName: string) {
+        const old = await this.get(idOrName)
+        const query = `
+        mutation ($input: DeleteUserGroupInput!) {
+            result: deleteUserGroup(input: $input) {     
+                clientMutationId           
+            }
+        }`
+
+        const vars = { 
+            input: {
+                userGroupId: old.id,
+            },
+        }
+
+        await this.client.execute(query, vars)
     }
 }

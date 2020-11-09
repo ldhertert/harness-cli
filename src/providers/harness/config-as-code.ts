@@ -21,6 +21,11 @@ export class ConfigAsCode {
         const root = await this.harness.privateApiGet('/gateway/api/setup-as-code/yaml/directory')
         let yaml = this.getYamlNodes(root)
 
+        // For some reason the applications folder is not getting populated with children when authenticating with api key
+        //const applications = await this.harness.applications.list()
+        //const appNodes = applications.map(a => { 
+        //    return { appId: a.id }
+        //})
         const appNodes = _.filter(traverse(root).nodes(), n => n && n.shortClassName === 'Application' && n.appId)
         for (const node of appNodes) {
             const app = await this.harness.privateApiGet(`/gateway/api/setup-as-code/yaml/application?appId=${node.appId}`)
@@ -31,11 +36,18 @@ export class ConfigAsCode {
     }
 
     async getFileContent(file: ConfigAsCodeFile): Promise<File> {
-        const content = await this.harness.privateApiGet(file.contentUrl)
+        const path = `/gateway/api/setup-as-code/yaml/yaml-content?yamlFilePath=${file.path.replace(' ', '%20')}`
+        const content = await this.harness.privateApiGet(path)
         return {
             path: file.path,
             content: content.resource.yaml,
         }
+    }
+
+    async delete(files: ConfigAsCodeFile[]) {
+        const path = `gateway/api/setup-as-code/yaml/delete-entities?filePaths=${files.map(f => f.path.replace(' ', '%20')).join(',')}`
+        const response = await this.harness.privateApiDelete(path)
+        return response.resource
     }
 
     private getYamlNodes(apiResponse: any) {
@@ -54,16 +66,35 @@ export class ConfigAsCode {
         })
     }
 
-    async uploadConfigAsCode(files: File[]) {
+    async uploadConfigAsCodeZip(files: File[]) {
         const zip = new JSZip()
         files.forEach(f => zip.file(f.path, f.content))
 
         const data = new FormData()
         data.append('file', zip.generateNodeStream())
     
-        const response = await this.harness.privateApiPost('/gateway/api/setup-as-code/yaml/upsert-entities', data, {
-            ...data.getHeaders(),
-        })
-        return response.data
+        try {
+            const response = await this.harness.privateApiPost('/gateway/api/setup-as-code/yaml/upsert-entities', data, {
+                ...data.getHeaders(),
+            })
+            return response
+        } catch (err) {
+            return err
+        }        
+    }
+
+    async upsertFile(file: File) {
+        const data = new FormData()
+        data.append('yamlContent', file.content)
+    
+        try {
+            const response = await this.harness.privateApiPost(`/gateway/api/setup-as-code/yaml/upsert-entity?yamlFilePath=${file.path}`, data, {
+                ...data.getHeaders(),
+                accept: 'application/json, text/plain, */*',
+            })
+            return response
+        } catch (err) {
+            return err
+        }        
     }
 }

@@ -136,4 +136,22 @@ export class Users {
         const result = await this.client.execute(query, vars)
         return result.data.result.resource
     } 
+
+    async delete(idNameOrEmail: string) {
+        const old = await this.get(idNameOrEmail)
+        const query = `
+        mutation ($input: DeleteUserInput!) {
+            result: deleteUser(input: $input) {     
+                clientMutationId           
+            }
+        }`
+
+        const vars = { 
+            input: {
+                id: old.id,
+            },
+        }
+
+        await this.client.execute(query, vars)
+    }
 }

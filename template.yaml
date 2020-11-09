@@ -11,45 +11,52 @@ variables:
     type: String
     defaultValue: My new service
     required: true
-
+  - name: chartVersion
+    description: "Helm chart version"
+    type: String
+    required: true
 steps:
   - name: Copy files from source
     type: FileSource
     source:
       sourceType: Harness
-      opts:
-        accountId: Sy3KVuK1SZy2Z7OLhbKlNg
+      # opts:
+      #   accountId: Sy3KVuK1SZy2Z7OLhbKlNg
     files:
-      - Setup/Applications/Harness Demo Application/Services/order-service/**/*.yaml
-      - Setup/Applications/Harness Demo Application/Environments/development/Index.yaml
-      - Setup/Applications/Harness Demo Application/Environments/development/Infrastructure
-        Definitions/GKE Dev Cluster.yaml
-      - Setup/Applications/Harness Demo Application/Workflows/Dev Retail Application.yaml
-      
-  - name: Set development cloud provider name
-    type: SetValue
-    file:
-      Setup/Applications/Harness Demo Application/Environments/development/Infrastructure
-      Definitions/GKE Dev Cluster.yaml
-    path: infrastructure[0].cloudProviderName
-    value: harness-demo-backup-dev
+      - Setup/Applications/Cluster Bootstrapping/Services/prometheus/**/*.yaml
+  # - name: Set development cloud provider name
+  #   type: SetValue
+  #   file:
+  #     Setup/Applications/Harness Demo Application/Environments/development/Infrastructure
+  #     Definitions/GKE Dev Cluster.yaml
+  #   path: infrastructure[0].cloudProviderName
+  #   value: harness-demo-backup-dev
 
-  - name: Set dev variable overrides for order service
-    type: SetValue
-    path: variableOverrides
-    file: Setup/Applications/Harness Demo Application/Environments/development/Index.yaml
-    value: []
+  # - name: Set dev variable overrides for order service
+  #   type: SetValue
+  #   path: variableOverrides
+  #   file: Setup/Applications/Harness Demo Application/Environments/development/Index.yaml
+  #   value: []
 
-  - name: Set development cloud provider name
-    type: SetValue
-    path: scopedServices
-    file:
-      Setup/Applications/Harness Demo Application/Environments/development/Infrastructure
-      Definitions/GKE Dev Cluster.yaml
-    value:
-      - order-service
-
+  # - name: Set development cloud provider name
+  #   type: SetValue
+  #   path: scopedServices
+  #   file:
+  #     Setup/Applications/Harness Demo Application/Environments/development/Infrastructure
+  #     Definitions/GKE Dev Cluster.yaml
+  #   value:
+  #     - order-service
   - name: Rename application
     type: RenameFile
-    search: Setup/Applications/Harness Demo Application/
-    replace: Setup/Applications/Harness Demo Backup/
+    search: Setup/Applications/Cluster Bootstrapping/
+    replace: Setup/Applications/<%= applicationName %>/
+  - name: Rename service
+    type: RenameFile
+    search: Setup/Applications/<%= applicationName %>/Services/prometheus
+    replace: Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>
+  - name: Set chart version
+    type: SetValue
+    path: helmChartConfig.chartVersion
+    file: Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>/Manifests/Index.yaml
+    value: <%= chartVersion %>    
+

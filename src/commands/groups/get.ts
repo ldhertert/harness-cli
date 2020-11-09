@@ -1,25 +1,27 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { BaseCommand as Command } from '../../base-command'
+import { flags } from '@oclif/command'
 
 export default class GroupsGet extends Command {
-    static description = 'Get user groups'
-
-    static args = [
-        { name: 'nameOrId', description: 'The name or id of the user group', required: true },
-    ]
+    static aliases = ['group:get', 'groups:get']
+    static description = 'Get user group'
 
     static flags = {
-        harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-        harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
+        ...Command.flags,
+        name: flags.string({ description: 'The name of the group', char: 'n', exclusive: ['id'] }),
+        id: flags.string({ description: 'The id of the group' }),
     }
 
     async run() {
-        const { args, flags } = this.parse(GroupsGet)
+        const { flags } = this.parse(GroupsGet)
 
-        const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-        await harness.init()
+        const harness = await this.getHarnessClient()
 
-        const result = await harness.groups.get(args.nameOrId)
-        this.log(JSON.stringify(result, undefined, 4))
+        const nameOrId = flags.name || flags.id
+        if (!nameOrId) {
+            this.error('Either name or id is required.')
+        }
+
+        const result = await harness.groups.get(nameOrId)
+        this.log(result)
     }
 }

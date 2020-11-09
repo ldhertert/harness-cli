@@ -74,4 +74,64 @@ export class CloudProviders {
         const result = await this.client.execute(query, vars)
         return result
     }
+
+    async get(idOrName: string) {
+        try {
+            const byNameResult = await this.getByName(idOrName)
+            return byNameResult
+        } catch {
+            try {
+                const byIdResult = await this.getById(idOrName)
+                return byIdResult
+            } catch {
+                throw new Error(`Cloud provider not found with name or ID '${idOrName}'`)
+            }
+        }
+    }
+
+    private async getById(id: string) {
+        const query = `
+        query ($id: String!) {
+            result: cloudProvider(cloudProviderId: $id) {
+                ${this.fields}
+            }
+        }`
+
+        const vars = { id }
+
+        const result = await this.client.execute(query, vars)
+        return result.data.result
+    }
+
+    private async getByName(name: string) {
+        const query = `
+        query ($name: String!) {
+            result: cloudProviderByName(name: $name) {
+                ${this.fields}
+            }
+        }`
+
+        const vars = { name }
+
+        const result = await this.client.execute(query, vars)
+        return result.data.result
+    }
+
+    async delete(idOrName: string) {
+        const resource = await this.get(idOrName)
+        const query = `
+        mutation ($input: DeleteCloudProviderInput!) {
+            result: deleteCloudProvider(input: $input) {     
+                clientMutationId           
+            }
+        }`
+
+        const vars = {
+            input: {
+                cloudProviderId: resource.id,
+            },
+        }
+
+        await this.client.execute(query, vars)
+    }
 }

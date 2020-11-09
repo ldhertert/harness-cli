@@ -1,28 +1,25 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { flags } from '@oclif/command'
+import { BaseCommand as Command } from '../../base-command'
 import { K8sClusterDetailsType, K8sCloudProviderOptions } from '../../providers/harness/cloud-providers'
 
 export default class CloudProviderCreateK8s extends Command {
+    static aliases = ['cloud-provider:create-k8s', 'cloud-providers:create-k8s']
+
     static description = 'Create a new application'
 
-    static args = [
-        { name: 'name', description: 'The name of the application', required: true },
-    ]
-
     static flags = {
+        ...Command.flags,
+        name: flags.string({ description: 'The name of the cloud provider', required: true, char: 'n' }),
         inheritFromDelegate: flags.string({ description: 'If true, permissions are inherited from the delegate instead of being explicitly provided', exclusive: ['masterUrl'] }),
         masterUrl: flags.string({ description: 'The Kubernetes master node URL. The easiest method to obtain the master URL is using kubectl: kubectl cluster-info', dependsOn: ['serviceAccountTokenSecret'] }),
         serviceAccountTokenSecret: flags.string({ description: 'The name or id of the secret that contains the service account token' }),
         skipValidation: flags.boolean({ description: '', default: false }),
-        harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-        harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
     }
 
     async run() {
-        const { args, flags } = this.parse(CloudProviderCreateK8s)
+        const { flags } = this.parse(CloudProviderCreateK8s)
 
-        const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-        await harness.init()
+        const harness = await this.getHarnessClient()
 
         let options: K8sCloudProviderOptions
 
@@ -49,7 +46,7 @@ export default class CloudProviderCreateK8s extends Command {
             throw new Error('Either inherit from delegate or master url is required')
         }
 
-        const result = await harness.cloudProviders.create(args.name, options)
-        this.log(JSON.stringify(result, undefined, 4))
+        const result = await harness.cloudProviders.create(flags.name, options)
+        this.log(result)
     }
 }

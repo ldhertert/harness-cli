@@ -13,11 +13,14 @@ export class HarnessStorageProvider implements StorageProvider {
     options: HarnessApiOptions
     files: ConfigAsCodeFile[]
 
-    constructor(options: HarnessApiOptions) {
+    constructor(options: HarnessApiOptions, harnessClient?: Harness) {
         this.options = options
         this.type = StorageType.Harness
         this.initialized = false
         this.files = []
+        if (harnessClient) {
+            this.harness = harnessClient
+        }
     }
 
     getType(): StorageType {
@@ -25,8 +28,10 @@ export class HarnessStorageProvider implements StorageProvider {
     }
 
     async init(): Promise<boolean> {
-        this.harness = new Harness(this.options) 
-        await this.harness.init()
+        if (!this.harness) {
+            this.harness = new Harness(this.options) 
+            await this.harness.init()
+        }
         this.files = await this.harness.configAsCode.getTree()
         this.initialized = true
         return true
@@ -69,12 +74,11 @@ export class HarnessStorageProvider implements StorageProvider {
     }
 
     async storeFile(file: File): Promise<void> {
-        await this.storeFiles([file])
+        return this.harness.configAsCode.upsertFile(file)
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    deleteFile(name: string): Promise<void> {
-        throw new Error('Method not implemented.')
+    async deleteFile(path: string) {
+        return this.deleteFiles(path)
     }
 
     static createRef(opts: HarnessApiOptions): StorageProviderRef {
@@ -84,13 +88,14 @@ export class HarnessStorageProvider implements StorageProvider {
         }
     }
 
-    async storeFiles(files: File[]): Promise<void> {
-        await this.harness?.configAsCode.uploadConfigAsCode(files)
+    async storeFiles(files: File[]) {
+        return this.harness.configAsCode.uploadConfigAsCodeZip(files)
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async deleteFiles(pattern: string): Promise<void> {
-        throw new Error('Not implemented')
+    async deleteFiles(pattern: string) {
+        const files = this.files.filter(f => glob(f.path, pattern || ''))
+        const result = await this.harness.configAsCode.delete(files)
+        return result
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function

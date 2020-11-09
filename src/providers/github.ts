@@ -28,6 +28,8 @@ export class Github {
             // team_id: undefined,
 
         })
+
+        this.client.repos.remo
     }
 
     async listRepos(org: string, type: string) {
@@ -44,6 +46,13 @@ export class Github {
                 // eslint-disable-next-line camelcase
                 content_type: 'json',
             },
+        })
+    }
+
+    async deleteRepo(owner: string, repo: string) {
+        await this.client.repos.delete({
+            owner,
+            repo,
         })
     }
 }

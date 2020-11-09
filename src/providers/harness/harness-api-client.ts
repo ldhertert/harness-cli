@@ -7,20 +7,26 @@ import { Environments } from './environments'
 import { CloudProviders } from './cloud-providers'
 import { Groups } from './groups'
 import { Users } from './users'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const axiosRateLimit = require('axios-rate-limit')
 import { ConfigAsCode } from './config-as-code'
 import { Config } from '../../util/config'
+import { SecretManagers } from './secret-managers'
 
 export interface HarnessApiOptions {
     accountId: string,
     apiKey?: string,
     username?: string,
     password?: string,
+    managerUrl?: string,
     bearerToken?: string,
     url?: string,
+    rateLimit?: boolean,
 }
 
 const defaultManagerUrl = 'https://app.harness.io'
+let http = axios.create()
 
 export class Harness {
     managerUrl: string;
@@ -34,6 +40,7 @@ export class Harness {
     applications!: Applications;
     connectors!: { git: GitConnectors; };
     secrets!: Secrets;
+    secretManagers!: SecretManagers
     environments!: Environments
     cloudProviders!: CloudProviders
     groups!: Groups
@@ -49,6 +56,11 @@ export class Harness {
         this.username = options.username || Config.Harness.username
         this.password = options.password || Config.Harness.password
         this.accountId = options.accountId || Config.Harness.accountId
+
+        if (options.rateLimit) {
+            // I think i'd rather use https://www.npmjs.com/package/bottleneck instead
+            http = axiosRateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 }) as AxiosInstance
+        }
     }
 
     async init() {
@@ -66,6 +78,7 @@ export class Harness {
         this.client = new GraphQLClient(`${this.managerUrl}/gateway/api/graphql?accountId=${this.accountId}`, headers)
 
         this.secrets = new Secrets(this.client)
+        this.secretManagers = new SecretManagers(this.client)
         this.applications = new Applications(this.client)
         this.connectors = {
             git: new GitConnectors(this.client),
@@ -82,7 +95,7 @@ export class Harness {
             authorization: 'Basic ' + Buffer.from(username + ':' + password).toString('base64'),
         }
         
-        const response = await axios.post(`${new URL(managerUrl || defaultManagerUrl).origin}/gateway/api/users/login`, data)
+        const response = await http.post(`${new URL(managerUrl || defaultManagerUrl).origin}/gateway/api/users/login`, data)
 
         return {
             token: response.data.resource.token,
@@ -123,14 +136,17 @@ export class Harness {
         return harness
     }
 
-    async privateApiGet(path: string) {
+    async privateApiGet(path: string) {    
         const url = new URL(path, this.managerUrl)
         url.searchParams.append('accountId', this.accountId)
-
-        const response = await axios.get(url.href, {
-            headers: {
-                Authorization: `Bearer ${this.bearerToken}`,
-            },
+        const headers: any = {}
+        if (this.bearerToken) {
+            headers.Authorization = `Bearer ${this.bearerToken}`
+        } else if (this.apiKey) {
+            headers['x-api-key'] = this.apiKey
+        }
+        const response = await http.get(url.href, {
+            headers: headers,
         })
         
         return response.data
@@ -141,14 +157,34 @@ export class Harness {
         url.searchParams.append('accountId', this.accountId)
 
         headers = headers || {}
-        headers.Authorization = `Bearer ${this.bearerToken}`
-        const response = await axios.post(url.href, data, {
+        if (this.bearerToken) {
+            headers.Authorization = `Bearer ${this.bearerToken}`
+        } else if (this.apiKey) {
+            headers['x-api-key'] = this.apiKey
+        }
+        const response = await http.post(url.href, data, {
             headers: headers,
         })
         if (response.data?.resource?.responseStatus === 'FAILED') {
             throw response.data.resource
         }
         
+        return response.data
+    }
+
+    async privateApiDelete(path: string) {
+        const url = new URL(path, this.managerUrl)
+        url.searchParams.append('accountId', this.accountId)
+        const headers: any = {}
+        if (this.bearerToken) {
+            headers.Authorization = `Bearer ${this.bearerToken}`
+        } else if (this.apiKey) {
+            headers['x-api-key'] = this.apiKey
+        }
+
+        const response = await http.delete(url.href, {
+            headers: headers,
+        })
         return response.data
     }
 }

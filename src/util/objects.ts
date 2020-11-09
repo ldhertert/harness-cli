@@ -4,6 +4,8 @@ import { LocalStorageProvider, ConfigLocal } from '../providers/storage/local-st
 import { GitStorageProvider, ConfigGit } from '../providers/storage/git-storage'
 import { HarnessStorageProvider } from '../providers/storage/harness-api-storage'
 import { HarnessApiOptions } from '../providers/harness/harness-api-client'
+import { TemplateExecutionContext } from '../providers/templates/template'
+import * as _ from 'lodash'
 
 export function fromYaml(yaml: string): any {
     return YAML.safeLoad(yaml)
@@ -14,7 +16,7 @@ export function toYaml(obj: any): string {
     return YAML.safeDump(obj)
 }
 
-export function getStorageProvider(ref: StorageProviderRef): StorageProvider {
+export function getStorageProvider(ref: StorageProviderRef, context: TemplateExecutionContext): StorageProvider {
     if (ref.sourceType.toLowerCase() === StorageType.Local.toLowerCase()) {
         return new LocalStorageProvider(ref.opts as ConfigLocal)
     }
@@ -24,7 +26,8 @@ export function getStorageProvider(ref: StorageProviderRef): StorageProvider {
     }
 
     if (ref.sourceType.toLowerCase() === StorageType.Harness.toLowerCase()) {
-        return new HarnessStorageProvider(ref.opts as HarnessApiOptions)
+        const opts = _.defaults({}, context.defaultCredentials.harness, ref.opts as HarnessApiOptions)
+        return new HarnessStorageProvider(opts as HarnessApiOptions)
     }
 
     throw new Error('Unsupported storage provider.')

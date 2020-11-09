@@ -1,15 +1,15 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { flags } from '@oclif/command'
 import { GroupOptions } from '../../providers/harness/groups'
+import { BaseCommand as Command } from '../../base-command'
 
 export default class GroupsCreate extends Command {
+    static aliases = ['group:create', 'groups:create']
+
     static description = 'Create a new user group. Note - not all functionality has been implemented yet'
 
-    static args = [
-        { name: 'name', description: 'The name of the group', required: true },
-    ]
-
     static flags = {
+        ...Command.flags,
+        name: flags.string({ description: 'The name of the group', required: true, char: 'n' }),
         permissions: flags.string({ description: 'JSON encoded permissions object' }),
         copyPermissionFrom: flags.string({ description: 'Copy permissions from an existing group.', exclusive: ['permissions']}),
         applicationScope: flags.string({ description: 'An application id or name.  This will replace any Application Restrictions with the provided applications.  Multiple values are allowed', multiple: true }),
@@ -20,15 +20,12 @@ export default class GroupsCreate extends Command {
         sendMailToNewMembers: flags.boolean({}),
         slackChannel: flags.string({}),
         slackWebhook: flags.string({}), */
-        harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-        harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
     }
 
     async run() {
-        const { args, flags } = this.parse(GroupsCreate)
+        const { flags } = this.parse(GroupsCreate)
 
-        const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-        await harness.init()
+        const harness = await this.getHarnessClient()
 
         const opts: GroupOptions = {}
 
@@ -59,7 +56,7 @@ export default class GroupsCreate extends Command {
 
         // this.log(JSON.stringify(opts, undefined, 4))
 
-        const result = await harness.groups.create(args.name, opts)
-        this.log(JSON.stringify(result, undefined, 4))
+        const result = await harness.groups.create(flags.name, opts)
+        this.log(result)
     }
 }

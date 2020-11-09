@@ -1,25 +1,29 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { BaseCommand as Command } from '../../base-command'
+import { flags } from '@oclif/command'
 
 export default class UsersGet extends Command {
-    static description = 'Get users'
+    static aliases = ['user:get', 'users:get']
 
-    static args = [
-        { name: 'user', description: 'The email, name, or id of the user', required: true },
-    ]
+    static description = 'Get user by email/name/id'
 
     static flags = {
-        harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-        harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
+        ...Command.flags,
+        name: flags.string({ description: 'The name of the user', char: 'n', exclusive: ['id', 'email'] }),
+        id: flags.string({ description: 'The id of the user', exclusive: ['name', 'email'] }),
+        email: flags.string({ description: 'The email of the user', exclusive: ['name', 'id'] }),
     }
 
     async run() {
-        const { args, flags } = this.parse(UsersGet)
+        const { flags } = this.parse(UsersGet)
 
-        const harness = new Harness({ accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-        await harness.init()
+        const harness = await this.getHarnessClient()
 
-        const result = await harness.users.get(args.user)
-        this.log(JSON.stringify(result, undefined, 4))
+        const userRef = flags.name || flags.id || flags.email
+        if (!userRef) {
+            this.error('Email, id, or name is required.')
+        }
+
+        const result = await harness.users.get(userRef)
+        this.log(result)
     }
 }

@@ -1,21 +1,18 @@
-import { Command, flags } from '@oclif/command'
-import { Harness } from '../../providers/harness/harness-api-client'
+import { BaseCommand } from '../../base-command'
 
-export default class ApplicationsList extends Command {
+export default class ApplicationsList extends BaseCommand {
+  static aliases = ['app:list', 'apps:list', 'applications:list', 'application:list']
+
   static description = 'List Applications'
 
   static flags = {
-      harnessAccountId: flags.string({ description: 'The Harness Account Id', required: true, env: 'HARNESS_ACCOUNT' }),
-      harnessApiKey: flags.string({ description: 'The Harness API Key', required: true, env: 'HARNESS_API_KEY' }),
+      ...BaseCommand.flags,
   }
 
   async run() {
-      const { flags } = this.parse(ApplicationsList)
-
-      const harness = new Harness({accountId: flags.harnessAccountId, apiKey: flags.harnessApiKey })
-      await harness.init()
+      const harness = await this.getHarnessClient()
 
       const apps = await harness.applications.list()
-      this.log(JSON.stringify(apps, undefined, 4))
+      this.log(apps)
   }
 }
