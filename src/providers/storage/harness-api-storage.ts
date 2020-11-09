@@ -74,7 +74,7 @@ export class HarnessStorageProvider implements StorageProvider {
     }
 
     async storeFile(file: File): Promise<void> {
-        await this.storeFiles([file])
+        return this.harness.configAsCode.upsertFile(file)
     }
 
     async deleteFile(path: string) {
@@ -89,7 +89,7 @@ export class HarnessStorageProvider implements StorageProvider {
     }
 
     async storeFiles(files: File[]): Promise<void> {
-        await this.harness?.configAsCode.uploadConfigAsCode(files)
+        return this.harness.configAsCode.uploadConfigAsCodeZip(files)
     }
 
     async deleteFiles(pattern: string) {

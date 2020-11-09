@@ -22,12 +22,11 @@ export interface HarnessApiOptions {
     managerUrl?: string,
     bearerToken?: string,
     url?: string,
+    rateLimit?: boolean,
 }
 
 const defaultManagerUrl = 'https://app.harness.io'
-
-// I think i'd rather use https://www.npmjs.com/package/bottleneck instead
-const http = axiosRateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 }) as AxiosInstance
+let http = axios.create()
 
 export class Harness {
     managerUrl: string;
@@ -57,6 +56,11 @@ export class Harness {
         this.username = options.username || Config.Harness.username
         this.password = options.password || Config.Harness.password
         this.accountId = options.accountId || Config.Harness.accountId
+
+        if (options.rateLimit) {
+            // I think i'd rather use https://www.npmjs.com/package/bottleneck instead
+            http = axiosRateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 }) as AxiosInstance
+        }
     }
 
     async init() {
@@ -132,7 +136,7 @@ export class Harness {
         return harness
     }
 
-    async privateApiGet(path: string) {
+    async privateApiGet(path: string) {    
         const url = new URL(path, this.managerUrl)
         url.searchParams.append('accountId', this.accountId)
         const headers: any = {}
@@ -141,7 +145,6 @@ export class Harness {
         } else if (this.apiKey) {
             headers['x-api-key'] = this.apiKey
         }
-
         const response = await http.get(url.href, {
             headers: headers,
         })

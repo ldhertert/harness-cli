@@ -66,16 +66,35 @@ export class ConfigAsCode {
         })
     }
 
-    async uploadConfigAsCode(files: File[]) {
+    async uploadConfigAsCodeZip(files: File[]) {
         const zip = new JSZip()
         files.forEach(f => zip.file(f.path, f.content))
 
         const data = new FormData()
         data.append('file', zip.generateNodeStream())
     
-        const response = await this.harness.privateApiPost('/gateway/api/setup-as-code/yaml/upsert-entities', data, {
-            ...data.getHeaders(),
-        })
-        return response.data
+        try {
+            const response = await this.harness.privateApiPost('/gateway/api/setup-as-code/yaml/upsert-entities', data, {
+                ...data.getHeaders(),
+            })
+            return response
+        } catch (err) {
+            return err
+        }        
+    }
+
+    async upsertFile(file: File) {
+        const data = new FormData()
+        data.append('yamlContent', file.content)
+    
+        try {
+            const response = await this.harness.privateApiPost(`/gateway/api/setup-as-code/yaml/upsert-entity?yamlFilePath=${file.path}`, data, {
+                ...data.getHeaders(),
+                accept: 'application/json, text/plain, */*',
+            })
+            return response
+        } catch (err) {
+            return err
+        }        
     }
 }

@@ -58,14 +58,14 @@ harness groups:get --name testing-group
 
 echo "Config as code stuff"
 harness config:list
-harness config:get --path "Setup/Defaults.yaml" --raw
-harness config:update --path "Setup/Defaults.yaml" --content "
-harnessApiVersion: '1.0'                                    
-type: APPLICATION_DEFAULTS
-defaults:
-- name: dfdsaf
-  value: dsfasdf"
-# harness config:delete --path "Setup/Tags.yaml"
+harness config:get --path "Setup/Applications/Cluster Bootstrapping/Services/prometheus/Index.yaml"
+harness config:create --path 'Setup/Applications/Plex/Services/ombi/Manifests/Files/templates/Test.yaml' --content '# testing'
+harness config:delete --path 'Setup/Applications/Plex/Services/ombi/Manifests/Files/templates/Test.yaml'
+harness config:update --path "Setup/Applications/Cluster Bootstrapping/Services/prometheus/Index.yaml" --content "harnessApiVersion: '1.0'
+type: SERVICE
+artifactType: DOCKER
+deploymentType: HELM
+helmVersion: V3"
 
 ### Clean up ###
 
