@@ -77,10 +77,11 @@ OPTIONS
 * [`harness application:get`](#harness-applicationget)
 * [`harness application:list`](#harness-applicationlist)
 * [`harness application:update`](#harness-applicationupdate)
+* [`harness autocomplete [SHELL]`](#harness-autocomplete-shell)
 * [`harness cloud-provider:create-k8s`](#harness-cloud-providercreate-k8s)
 * [`harness cloud-provider:delete`](#harness-cloud-providerdelete)
 * [`harness cloud-provider:get`](#harness-cloud-providerget)
-* [`harness config-as-code:delete [FILE]`](#harness-config-as-codedelete-file)
+* [`harness config-as-code:delete`](#harness-config-as-codedelete)
 * [`harness config-as-code:get`](#harness-config-as-codeget)
 * [`harness config-as-code:list-files`](#harness-config-as-codelist-files)
 * [`harness config-as-code:upsert`](#harness-config-as-codeupsert)
@@ -208,6 +209,29 @@ ALIASES
 
 _See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/update.ts)_
 
+## `harness autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ harness autocomplete [SHELL]
+
+ARGUMENTS
+  SHELL  shell type
+
+OPTIONS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+EXAMPLES
+  $ harness autocomplete
+  $ harness autocomplete bash
+  $ harness autocomplete zsh
+  $ harness autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.2.0/src/commands/autocomplete/index.ts)_
+
 ## `harness cloud-provider:create-k8s`
 
 Create a new application
@@ -273,18 +297,20 @@ ALIASES
 
 _See code: [src/commands/cloud-provider/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/cloud-provider/get.ts)_
 
-## `harness config-as-code:delete [FILE]`
+## `harness config-as-code:delete`
 
-describe the command here
+Delete a config as code file at the given path
 
 ```
 USAGE
-  $ harness config-as-code:delete [FILE]
+  $ harness config-as-code:delete
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  --path=path  (required) The file path to delete.  Glob patterns are supported.
+
+ALIASES
+  $ harness config:delete
+  $ harness config-as-code:delete
 ```
 
 _See code: [src/commands/config-as-code/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/delete.ts)_
@@ -304,7 +330,6 @@ OPTIONS
                matching the provided path.
 
 ALIASES
-  $ harness cac:get
   $ harness config:get
   $ harness config-as-code:get
 ```
@@ -320,7 +345,6 @@ USAGE
   $ harness config-as-code:list-files
 
 ALIASES
-  $ harness cac:list
   $ harness config:list
   $ harness config-as-code:list-files
 ```

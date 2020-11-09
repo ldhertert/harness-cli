@@ -7,8 +7,10 @@
   },
   "bugs": "https://github.com/ldhertert/harness-cli/issues",
   "dependencies": {
+    "-": "0.0.1",
     "@oclif/command": "*",
     "@oclif/config": "*",
+    "@oclif/plugin-autocomplete": "^0.2.0",
     "@oclif/plugin-help": "*",
     "@octokit/rest": "^18.0.6",
     "@types/traverse": "^0.6.32",
@@ -66,7 +68,8 @@
     "commands": "./lib/commands",
     "bin": "harness",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-autocomplete"
     ]
   },
   "pkg": {
