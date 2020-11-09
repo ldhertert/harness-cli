@@ -68,6 +68,8 @@ export class Template {
                     apiKey: destination.apiKey,
                     accountId: destination.accountId,
                     managerUrl: destination.managerUrl,
+                    username: destination.username,
+                    password: destination.password,
                 },
             },
         }
@@ -82,7 +84,11 @@ export class Template {
             console.log('Pushing changes to destination')
             const destinationStorage = new HarnessStorageProvider(destination)
             await destinationStorage.init()
-            await destinationStorage.storeFiles(context.workspace)
+            context.outputs.pushFilesResult = await destinationStorage.storeFiles(context.workspace)
+            if (context.outputs.pushFilesResult.responseStatus === 'FAILED') {
+                throw new Error('Error pushing files to destination.\n' + JSON.stringify(context.outputs.pushFilesResult, undefined, 4))
+            }
+            
             await destinationStorage.dispose()
         }
         // Validate success

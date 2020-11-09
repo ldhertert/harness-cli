@@ -107,8 +107,10 @@ export class SetValueStep extends Step {
 
     public async run(context: TemplateExecutionContext): Promise<void> {
         let filesToProcess: File[] = []
+        this.value = _.template(this.value)(context.vars)
         for (const glob of this.files) {
-            filesToProcess = filesToProcess.concat(context.workspace.filter(file => minimatch(file.path, glob)))
+            const templatedGlob = _.template(glob)(context.vars)
+            filesToProcess = filesToProcess.concat(context.workspace.filter(file => minimatch(file.path, templatedGlob)))
         }
         filesToProcess.forEach(file => {
             const obj = fromYaml(file.content)

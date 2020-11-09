@@ -88,7 +88,7 @@ export class HarnessStorageProvider implements StorageProvider {
         }
     }
 
-    async storeFiles(files: File[]): Promise<void> {
+    async storeFiles(files: File[]) {
         return this.harness.configAsCode.uploadConfigAsCodeZip(files)
     }
 

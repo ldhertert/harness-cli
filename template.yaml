@@ -11,7 +11,10 @@ variables:
     type: String
     defaultValue: My new service
     required: true
-
+  - name: chartVersion
+    description: "Helm chart version"
+    type: String
+    required: true
 steps:
   - name: Copy files from source
     type: FileSource
@@ -43,7 +46,6 @@ steps:
   #     Definitions/GKE Dev Cluster.yaml
   #   value:
   #     - order-service
-
   - name: Rename application
     type: RenameFile
     search: Setup/Applications/Cluster Bootstrapping/
@@ -52,3 +54,9 @@ steps:
     type: RenameFile
     search: Setup/Applications/<%= applicationName %>/Services/prometheus
     replace: Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>
+  - name: Set chart version
+    type: SetValue
+    path: helmChartConfig.chartVersion
+    file: Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>/Manifests/Index.yaml
+    value: <%= chartVersion %>    
+
