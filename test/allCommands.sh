@@ -1,6 +1,13 @@
 #!/bin/bash  
 set -e
+
+# Import vars from .env file.  See comment below for an example of manual variable setting
 export $(grep -v '^#' .env | xargs)
+# export GITHUB_TOKEN=xxxx
+# export HARNESS_ACCOUNT=xxxx
+# export HARNESS_API_KEY=xxxx
+# export HARNESS_USERNAME=xxxx
+# export HARNESS_PASSWORD=xxxx
 
 export HARNESS_CLI_SILENT='true'
 

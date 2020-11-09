@@ -37,6 +37,8 @@ There are two options for installation.
 
 # Usage
 
+Examples of command usage can be found [here](test/allCommands.sh)
+
 ```sh-session
 $ export HARNESS_ACCOUNT='xxxxxx'
 $ export HARNESS_API_KEY='xxxxxx'
@@ -125,7 +127,7 @@ ALIASES
   $ harness application:create
 ```
 
-_See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/create.ts)_
+_See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/application/create.ts)_
 
 ## `harness application:delete`
 
@@ -145,7 +147,7 @@ ALIASES
   $ harness application:delete
 ```
 
-_See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/delete.ts)_
+_See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/application/delete.ts)_
 
 ## `harness application:get`
 
@@ -165,7 +167,7 @@ ALIASES
   $ harness application:get
 ```
 
-_See code: [src/commands/application/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/get.ts)_
+_See code: [src/commands/application/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/application/get.ts)_
 
 ## `harness application:list`
 
@@ -182,7 +184,7 @@ ALIASES
   $ harness application:list
 ```
 
-_See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/list.ts)_
+_See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/application/list.ts)_
 
 ## `harness application:update`
 
@@ -207,7 +209,7 @@ ALIASES
   $ harness application:update
 ```
 
-_See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/update.ts)_
+_See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/application/update.ts)_
 
 ## `harness autocomplete [SHELL]`
 
@@ -259,7 +261,7 @@ ALIASES
   $ harness cloud-providers:create-k8s
 ```
 
-_See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/cloud-provider/create-k8s.ts)_
+_See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/cloud-provider/create-k8s.ts)_
 
 ## `harness cloud-provider:delete`
 
@@ -277,7 +279,7 @@ ALIASES
   $ harness cloud-providers:delete
 ```
 
-_See code: [src/commands/cloud-provider/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/cloud-provider/delete.ts)_
+_See code: [src/commands/cloud-provider/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/cloud-provider/delete.ts)_
 
 ## `harness cloud-provider:get`
 
@@ -295,7 +297,7 @@ ALIASES
   $ harness cloud-providers:get
 ```
 
-_See code: [src/commands/cloud-provider/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/cloud-provider/get.ts)_
+_See code: [src/commands/cloud-provider/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/cloud-provider/get.ts)_
 
 ## `harness config-as-code:delete`
 
@@ -306,14 +308,20 @@ USAGE
   $ harness config-as-code:delete
 
 OPTIONS
-  --path=path  (required) The file path to delete.  Glob patterns are supported.
+  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
+
+  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+
+  --path=path                        (required) The file path to delete.  Glob patterns are supported.
 
 ALIASES
   $ harness config:delete
   $ harness config-as-code:delete
 ```
 
-_See code: [src/commands/config-as-code/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/delete.ts)_
+_See code: [src/commands/config-as-code/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/config-as-code/delete.ts)_
 
 ## `harness config-as-code:get`
 
@@ -324,17 +332,23 @@ USAGE
   $ harness config-as-code:get
 
 OPTIONS
-  --path=path  (required) The file path(s) to fetch contents for. Glob patterns are supported.
+  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
 
-  --raw        Output raw YAML content instead of a JSON array.  This is only supported when there is a single file
-               matching the provided path.
+  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+
+  --path=path                        (required) The file path(s) to fetch contents for. Glob patterns are supported.
+
+  --raw                              Output raw YAML content instead of a JSON array.  This is only supported when there
+                                     is a single file matching the provided path.
 
 ALIASES
   $ harness config:get
   $ harness config-as-code:get
 ```
 
-_See code: [src/commands/config-as-code/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/get.ts)_
+_See code: [src/commands/config-as-code/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/config-as-code/get.ts)_
 
 ## `harness config-as-code:list-files`
 
@@ -344,12 +358,19 @@ List file tree for config-as-code
 USAGE
   $ harness config-as-code:list-files
 
+OPTIONS
+  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
+
+  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+
 ALIASES
   $ harness config:list
   $ harness config-as-code:list-files
 ```
 
-_See code: [src/commands/config-as-code/list-files.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/list-files.ts)_
+_See code: [src/commands/config-as-code/list-files.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/config-as-code/list-files.ts)_
 
 ## `harness config-as-code:upsert`
 
@@ -360,8 +381,15 @@ USAGE
   $ harness config-as-code:upsert
 
 OPTIONS
-  --content=content  (required) The YAML content
-  --path=path        (required) The file path
+  --content=content                  (required) The YAML content
+
+  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
+
+  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+
+  --path=path                        (required) The file path
 
 ALIASES
   $ harness config:upsert
@@ -372,7 +400,7 @@ ALIASES
   $ harness config-as-code:update
 ```
 
-_See code: [src/commands/config-as-code/upsert.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/upsert.ts)_
+_See code: [src/commands/config-as-code/upsert.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/config-as-code/upsert.ts)_
 
 ## `harness connectors:create-git`
 
@@ -397,7 +425,7 @@ ALIASES
   $ harness connectors:create-git
 ```
 
-_See code: [src/commands/connectors/create-git.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/connectors/create-git.ts)_
+_See code: [src/commands/connectors/create-git.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/connectors/create-git.ts)_
 
 ## `harness connectors:delete`
 
@@ -416,7 +444,7 @@ ALIASES
   $ harness connectors:delete
 ```
 
-_See code: [src/commands/connectors/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/connectors/delete.ts)_
+_See code: [src/commands/connectors/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/connectors/delete.ts)_
 
 ## `harness github:create-repo`
 
@@ -438,7 +466,7 @@ OPTIONS
   --visibility=(private|public|internal)  [default: private] Visibility settings for the repository
 ```
 
-_See code: [src/commands/github/create-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/github/create-repo.ts)_
+_See code: [src/commands/github/create-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/github/create-repo.ts)_
 
 ## `harness github:create-webhook`
 
@@ -458,7 +486,7 @@ OPTIONS
                                variable GITHUB_TOKEN.
 ```
 
-_See code: [src/commands/github/create-webhook.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/github/create-webhook.ts)_
+_See code: [src/commands/github/create-webhook.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/github/create-webhook.ts)_
 
 ## `harness github:delete-repo`
 
@@ -477,7 +505,7 @@ OPTIONS
                      GITHUB_TOKEN.
 ```
 
-_See code: [src/commands/github/delete-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/github/delete-repo.ts)_
+_See code: [src/commands/github/delete-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/github/delete-repo.ts)_
 
 ## `harness groups:create`
 
@@ -502,7 +530,7 @@ ALIASES
   $ harness groups:create
 ```
 
-_See code: [src/commands/groups/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/groups/create.ts)_
+_See code: [src/commands/groups/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/groups/create.ts)_
 
 ## `harness groups:delete`
 
@@ -521,7 +549,7 @@ ALIASES
   $ harness groups:delete
 ```
 
-_See code: [src/commands/groups/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/groups/delete.ts)_
+_See code: [src/commands/groups/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/groups/delete.ts)_
 
 ## `harness groups:get`
 
@@ -540,7 +568,7 @@ ALIASES
   $ harness groups:get
 ```
 
-_See code: [src/commands/groups/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/groups/get.ts)_
+_See code: [src/commands/groups/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/groups/get.ts)_
 
 ## `harness groups:list`
 
@@ -555,7 +583,7 @@ ALIASES
   $ harness groups:list
 ```
 
-_See code: [src/commands/groups/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/groups/list.ts)_
+_See code: [src/commands/groups/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/groups/list.ts)_
 
 ## `harness help [COMMAND]`
 
@@ -616,7 +644,7 @@ ALIASES
   $ harness secrets:create
 ```
 
-_See code: [src/commands/secrets/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/secrets/create.ts)_
+_See code: [src/commands/secrets/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/secrets/create.ts)_
 
 ## `harness secrets:delete`
 
@@ -636,7 +664,7 @@ ALIASES
   $ harness secrets:delete
 ```
 
-_See code: [src/commands/secrets/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/secrets/delete.ts)_
+_See code: [src/commands/secrets/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/secrets/delete.ts)_
 
 ## `harness template:exec`
 
@@ -647,12 +675,22 @@ USAGE
   $ harness template:exec
 
 OPTIONS
-  -v, --var=var        Set a variable specified within the template.  Format is --var "templateVar=My Value"
-  --dryRun             Executes all template steps but does not push result to destination
-  --manifest=manifest  (required) A template manifest in either YAML or JSON format.  Can be a local file or URL.
+  -v, --var=var                      Set a variable specified within the template.  Format is --var "templateVar=My
+                                     Value"
+
+  --dryRun                           Executes all template steps but does not push result to destination
+
+  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
+
+  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
+                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+
+  --manifest=manifest                (required) A template manifest in either YAML or JSON format.  Can be a local file
+                                     or URL.
 ```
 
-_See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/template/exec.ts)_
+_See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/template/exec.ts)_
 
 ## `harness users:create`
 
@@ -672,7 +710,7 @@ ALIASES
   $ harness users:create
 ```
 
-_See code: [src/commands/users/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/users/create.ts)_
+_See code: [src/commands/users/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/users/create.ts)_
 
 ## `harness users:delete`
 
@@ -692,7 +730,7 @@ ALIASES
   $ harness users:delete
 ```
 
-_See code: [src/commands/users/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/users/delete.ts)_
+_See code: [src/commands/users/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/users/delete.ts)_
 
 ## `harness users:get`
 
@@ -712,7 +750,7 @@ ALIASES
   $ harness users:get
 ```
 
-_See code: [src/commands/users/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/users/get.ts)_
+_See code: [src/commands/users/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/users/get.ts)_
 
 ## `harness users:list`
 
@@ -727,7 +765,7 @@ ALIASES
   $ harness users:list
 ```
 
-_See code: [src/commands/users/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/users/list.ts)_
+_See code: [src/commands/users/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.5/src/commands/users/list.ts)_
 <!-- commandsstop -->
 
 Development
@@ -745,4 +783,17 @@ Update autogenerated portions of the README
 
   ```
   npx oclif-dev readme
+  ```
+
+Releasing
+  
+1) Update changelog
+2) Bump version number in package.json
+3) Run `npx oclif-dev readme`
+4) Commit changes
+5) Tag the commit `git tag -a v1.x.x`
+6) Push wiht tags `git push origin --tags`
+  
+
+  ```
   ```

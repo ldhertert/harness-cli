@@ -18,15 +18,33 @@ export interface TemplateExecutionContext {
     }
 }
 
+/**
+ * A template manifest that includes variables, inline source files, and transformation steps
+ */
 export class Template {
+    /** The template name */
     name: string
+
+    /** A description for the template */
     description?: string
+
+    /** The version number of this template */
     templateVersion?: string
-    schemaVersion?: string
+
+    // schemaVersion?: string
+
+    /** The template author */
     author?: string
-    parentTemplate?: TemplateRef
+
+    // parentTemplate?: TemplateRef
+
+    /** Inline definition of source files to be included in the template execution */
     sourceFiles: File[]
+
+    /** Input variables that a user can define/override at template execution time */
     variables: Variable[]
+
+    /** A list of steps that will be executed sequentially to import source files from external sources and transform source files */
     steps: Step[]
 
     public constructor(inputObj: any) {

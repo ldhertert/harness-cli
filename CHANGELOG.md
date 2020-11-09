@@ -1,3 +1,10 @@
+0.9.5 (November 9, 2020)
+------------------------
+
+* This release contains many breaking changes to the CLI command signatures.  Many parameters have been moved from positional arguments to flags, and some parameter names have changed. 
+* Added new commands, including loading/updating/deleting config as code
+* Improved documentation
+
 0.9.4 (November 8, 2020)
 ------------------------
 
