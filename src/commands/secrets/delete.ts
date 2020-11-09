@@ -6,7 +6,6 @@ export default class SecretsDelete extends Command {
     static aliases = ['secret:delete', 'secrets:delete']
     static description = 'Delete a secret'
 
-
     static flags = {
         ...Command.flags,
         name: flags.string({ description: 'The name of the secret', char: 'n', exclusive: ['id'] }),

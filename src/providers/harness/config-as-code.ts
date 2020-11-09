@@ -22,10 +22,10 @@ export class ConfigAsCode {
         let yaml = this.getYamlNodes(root)
 
         // For some reason the applications folder is not getting populated with children when authenticating with api key
-        //const applications = await this.harness.applications.list()
-        //const appNodes = applications.map(a => { 
+        // const applications = await this.harness.applications.list()
+        // const appNodes = applications.map(a => { 
         //    return { appId: a.id }
-        //})
+        // })
         const appNodes = _.filter(traverse(root).nodes(), n => n && n.shortClassName === 'Application' && n.appId)
         for (const node of appNodes) {
             const app = await this.harness.privateApiGet(`/gateway/api/setup-as-code/yaml/application?appId=${node.appId}`)
