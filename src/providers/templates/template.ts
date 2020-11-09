@@ -2,7 +2,7 @@ import { Variable } from './variables'
 import { Step, StepType, FileSourceStep, RenameFileStep, SetValueStep, CreateApplicationStep } from './steps'
 import { File } from '../../util/filesystem'
 import * as _ from 'lodash'
-import { Harness } from '../harness/harness-api-client'
+import { Harness, HarnessApiOptions } from '../harness/harness-api-client'
 import { HarnessStorageProvider } from '../storage/harness-api-storage'
 
 export interface TemplateRef {
@@ -10,9 +10,12 @@ export interface TemplateRef {
 }
 
 export interface TemplateExecutionContext {
-    vars: any,
-    workspace: File[],
+    vars: any
+    workspace: File[]
     outputs: any
+    defaultCredentials: {
+        harness: HarnessApiOptions
+    }
 }
 
 export class Template {
@@ -54,12 +57,19 @@ export class Template {
         }
     }
 
-    public async execute(inputVars: any, destination: Harness): Promise<TemplateExecutionContext> {
+    public async execute(inputVars: any, destination: Harness, dryRun = false): Promise<TemplateExecutionContext> {
         // Create workspace
         const context: TemplateExecutionContext = {
             vars: {},
             workspace: [],
             outputs: {},
+            defaultCredentials: {
+                harness: {
+                    apiKey: destination.apiKey,
+                    accountId: destination.accountId,
+                    managerUrl: destination.managerUrl,
+                },
+            },
         }
 
         this.processVariables(inputVars, context)
@@ -68,7 +78,7 @@ export class Template {
         // Preview changes
 
         // Upsert yaml results
-        if (context.workspace.length > 0) {
+        if (!dryRun && context.workspace.length > 0) {
             console.log('Pushing changes to destination')
             const destinationStorage = new HarnessStorageProvider(destination)
             await destinationStorage.init()

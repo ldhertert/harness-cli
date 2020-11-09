@@ -31,6 +31,16 @@ harness groups:create testing-group --silent && echo 'Created user group'
 harness groups:get testing-group --silent && echo 'Got user group by name'
 harness groups:delete testing-group --silent && echo 'Delete user group by name'
 
+harness template:exec ./template.yaml --var applicationName=testing-app-renamed --var serviceName=prometheus --dryRun --debug
+
+harness config:list
+harness config:update --path "Setup/Defaults.yaml" --content "harnessApiVersion: '1.0'                                    
+type: APPLICATION_DEFAULTS
+defaults:
+- name: dfdsaf
+  value: dsfasdf3"
+harness config:delete --path "Setup/Tags.yaml"
+
 ### Clean up ###
 
 harness cloud-providers:delete test-k8s-cp --silent && echo 'Deleted cloud provider'

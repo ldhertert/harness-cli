@@ -7,7 +7,9 @@ import { Environments } from './environments'
 import { CloudProviders } from './cloud-providers'
 import { Groups } from './groups'
 import { Users } from './users'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const axiosRateLimit = require('axios-rate-limit')
 import { ConfigAsCode } from './config-as-code'
 import { Config } from '../../util/config'
 import { SecretManagers } from './secret-managers'
@@ -17,11 +19,15 @@ export interface HarnessApiOptions {
     apiKey?: string,
     username?: string,
     password?: string,
+    managerUrl?: string,
     bearerToken?: string,
     url?: string,
 }
 
 const defaultManagerUrl = 'https://app.harness.io'
+
+// I think i'd rather use https://www.npmjs.com/package/bottleneck instead
+const http = axiosRateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 }) as AxiosInstance
 
 export class Harness {
     managerUrl: string;
@@ -85,7 +91,7 @@ export class Harness {
             authorization: 'Basic ' + Buffer.from(username + ':' + password).toString('base64'),
         }
         
-        const response = await axios.post(`${new URL(managerUrl || defaultManagerUrl).origin}/gateway/api/users/login`, data)
+        const response = await http.post(`${new URL(managerUrl || defaultManagerUrl).origin}/gateway/api/users/login`, data)
 
         return {
             token: response.data.resource.token,
@@ -136,7 +142,7 @@ export class Harness {
             headers['x-api-key'] = this.apiKey
         }
 
-        const response = await axios.get(url.href, {
+        const response = await http.get(url.href, {
             headers: headers,
         })
         
@@ -153,13 +159,29 @@ export class Harness {
         } else if (this.apiKey) {
             headers['x-api-key'] = this.apiKey
         }
-        const response = await axios.post(url.href, data, {
+        const response = await http.post(url.href, data, {
             headers: headers,
         })
         if (response.data?.resource?.responseStatus === 'FAILED') {
             throw response.data.resource
         }
         
+        return response.data
+    }
+
+    async privateApiDelete(path: string) {
+        const url = new URL(path, this.managerUrl)
+        url.searchParams.append('accountId', this.accountId)
+        const headers: any = {}
+        if (this.bearerToken) {
+            headers.Authorization = `Bearer ${this.bearerToken}`
+        } else if (this.apiKey) {
+            headers['x-api-key'] = this.apiKey
+        }
+
+        const response = await http.delete(url.href, {
+            headers: headers,
+        })
         return response.data
     }
 }

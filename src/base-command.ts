@@ -1,16 +1,16 @@
 import Command, { flags } from '@oclif/command'
 import * as _ from 'lodash'
-import { Harness } from '../providers/harness/harness-api-client'
+import { Harness } from './providers/harness/harness-api-client'
 import {Input, OutputArgs, OutputFlags } from '@oclif/parser'
 
 export abstract class BaseCommand extends Command {
     static flags = {
-        debug: flags.boolean({ hidden: true, description: 'Print debug logs to stdout.' }),
+        debug: flags.boolean({ hidden: true, description: 'Print debug logs to stdout.', env: 'HARNESS_CLI_DEBUG' }),
         jsonpath: flags.string({ hidden: true, description: 'Apply jsonpath expression to output prior to printing' }),
-        managerUrl: flags.string({ description: 'The Harness Manager URL.  Can also be set via HARNESS_MANAGER_URL environment variable', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
-        harnessAccountId: flags.string({ description: 'The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment variable.', env: 'HARNESS_ACCOUNT' }),
-        harnessApiKey: flags.string({ description: 'The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.', env: 'HARNESS_API_KEY' }),
-        silent: flags.boolean({ description: 'Supress stdout logging', default: false, char: 's' }),
+        managerUrl: flags.string({ hidden: true, description: 'The Harness Manager URL.  Can also be set via HARNESS_MANAGER_URL environment variable', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
+        harnessAccountId: flags.string({ hidden: true, description: 'The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment variable.', env: 'HARNESS_ACCOUNT' }),
+        harnessApiKey: flags.string({ hidden: true, description: 'The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.', env: 'HARNESS_API_KEY' }),
+        silent: flags.boolean({ hidden: true, description: 'Supress stdout logging', default: false, char: 's', env: 'HARNESS_CLI_SILENT' }),
     }
 
     context!: {

@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import { BaseCommand as Command } from '../base-command'
+import { BaseCommand as Command } from '../../base-command'
 import * as fs from 'fs'
 import { Template } from '../../providers/templates/template'
 import * as _ from 'lodash'
@@ -11,15 +11,15 @@ export default class TemplateExec extends Command {
 
     static flags = {
         ...Command.flags,
-        var: flags.string({ multiple: true, char: 'v' }),
+        manifest: flags.string({ description: 'A template manifest in either YAML or JSON format.  Can be a local file or URL.', required: true }),
+        var: flags.string({ description: 'Set a variable specified within the template.  Format is --var "templateVar=My Value"', multiple: true, char: 'v' }),
+        dryRun: flags.boolean({ description: 'Executes all template steps but does not push result to destination', default: false }),
         // gitUsername: flags.string({ env: 'GIT_USERNAME', description: 'Username to use for git authentication' }),
         // gitPassword: flags.string({ env: 'GIT_PASSWORD', description: 'Password to use for git authentication' }),
     }
 
-    static args = [{ name: 'manifest', description: 'A template manifest in either YAML or JSON format.  Can be a local file or URL.', required: true }]
-
     async run() {
-        const { args, flags } = this.parse(TemplateExec)
+        const { flags } = this.parse(TemplateExec)
 
         const inputVars: any = { }
         for (const v of flags.var || []) {
@@ -27,8 +27,8 @@ export default class TemplateExec extends Command {
             inputVars[parsed.key] = parsed.value
         }
 
-        const templateText = await this.loadTemplate(args.manifest)
-        this.log(`Successfully loaded template from ${args.manifest}`)
+        const templateText = await this.loadTemplate(flags.manifest)
+        this.log(`Successfully loaded template from ${flags.manifest}`)
         const template = await this.parseTemplate(templateText)
         this.log(`Successfully parsed template '${template.name}'`)
         const vars = await this.processVariables(template, inputVars)
@@ -43,7 +43,8 @@ export default class TemplateExec extends Command {
             // await localStorage.storeFiles(result.workspace)
             this.log('Success')
         } catch (ex) {
-            this.error(JSON.stringify(ex, undefined, 4), { exit: 1 })
+            this.error(ex)
+            // this.error(JSON.stringify(ex, undefined, 4), { exit: 1 })
         }
     }
 

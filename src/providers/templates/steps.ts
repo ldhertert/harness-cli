@@ -45,7 +45,7 @@ export class FileSourceStep extends Step {
     }
 
     public async run(context: TemplateExecutionContext): Promise<void> {
-        const storageProvider = getStorageProvider(this.source)
+        const storageProvider = getStorageProvider(this.source, context)
         await storageProvider.init()
         let files: File[] = []
         for (const glob of this.files) {
@@ -83,8 +83,12 @@ export class RenameFileStep extends Step {
             filesToProcess = filesToProcess.concat(context.workspace.filter(file => minimatch(file.path, glob)))
         }
         filesToProcess.forEach(file => {
-            const newPath = _.template(this.replace)(context.vars)
-            file.path = _.replace(file.path, this.search, newPath)
+            let templatedSearch = this.search
+            const templatedReplace = _.template(this.replace)(context.vars)
+            if (typeof templatedSearch === 'string') {
+                templatedSearch = _.template(templatedSearch)(context.vars)
+            }
+            file.path = _.replace(file.path, templatedSearch, templatedReplace)
         })
         return Promise.resolve()
     }

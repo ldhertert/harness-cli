@@ -1,24 +1,29 @@
-import { BaseCommand as Command } from '../base-command'
+import { BaseCommand as Command } from '../../base-command'
+import { flags } from '@oclif/command'
 
 export default class UsersDelete extends Command {
     static aliases = ['user:delete', 'users:delete']
 
     static description = 'Delete user by email/name/id'
 
-    static args = [
-        { name: 'user', description: 'The email, name, or id of the user', required: true },
-    ]
-
     static flags = {
         ...Command.flags,
+        name: flags.string({ description: 'The name of the user', char: 'n', exclusive: ['id', 'email'] }),
+        id: flags.string({ description: 'The id of the user', exclusive: ['name', 'email'] }),
+        email: flags.string({ description: 'The email of the user', exclusive: ['name', 'id'] }),
     }
 
     async run() {
-        const { args } = this.parse(UsersDelete)
+        const { flags } = this.parse(UsersDelete)
 
         const harness = await this.getHarnessClient()
 
-        await harness.users.delete(args.user)
+        const userRef = flags.name || flags.id || flags.email
+        if (!userRef) {
+            this.error('Email, id, or name is required.')
+        }
+
+        await harness.users.delete(userRef)
         this.log('Successfully deleted user')
     }
 }

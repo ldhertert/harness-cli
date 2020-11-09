@@ -1,24 +1,29 @@
-import { BaseCommand as Command } from '../base-command'
+import { BaseCommand as Command } from '../../base-command'
+import { flags } from '@oclif/command'
 
 export default class UsersGet extends Command {
     static aliases = ['user:get', 'users:get']
 
     static description = 'Get user by email/name/id'
 
-    static args = [
-        { name: 'user', description: 'The email, name, or id of the user', required: true },
-    ]
-
     static flags = {
         ...Command.flags,
+        name: flags.string({ description: 'The name of the user', char: 'n', exclusive: ['id', 'email'] }),
+        id: flags.string({ description: 'The id of the user', exclusive: ['name', 'email'] }),
+        email: flags.string({ description: 'The email of the user', exclusive: ['name', 'id'] }),
     }
 
     async run() {
-        const { args } = this.parse(UsersGet)
+        const { flags } = this.parse(UsersGet)
 
         const harness = await this.getHarnessClient()
 
-        const result = await harness.users.get(args.user)
+        const userRef = flags.name || flags.id || flags.email
+        if (!userRef) {
+            this.error('Email, id, or name is required.')
+        }
+
+        const result = await harness.users.get(userRef)
         this.log(result)
     }
 }

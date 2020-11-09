@@ -1,23 +1,27 @@
-import { BaseCommand as Command } from '../base-command'
+import { BaseCommand as Command } from '../../base-command'
+import { flags } from '@oclif/command'
 
 export default class GroupsGet extends Command {
     static aliases = ['group:get', 'groups:get']
     static description = 'Get user group'
 
-    static args = [
-        { name: 'nameOrId', description: 'The name or id of the user group', required: true },
-    ]
-
     static flags = {
         ...Command.flags,
+        name: flags.string({ description: 'The name of the group', char: 'n', exclusive: ['id'] }),
+        id: flags.string({ description: 'The id of the group' }),
     }
 
     async run() {
-        const { args } = this.parse(GroupsGet)
+        const { flags } = this.parse(GroupsGet)
 
         const harness = await this.getHarnessClient()
 
-        const result = await harness.groups.get(args.nameOrId)
+        const nameOrId = flags.name || flags.id
+        if (!nameOrId) {
+            this.error('Either name or id is required.')
+        }
+
+        const result = await harness.groups.get(nameOrId)
         this.log(result)
     }
 }

@@ -1,4 +1,4 @@
-import { BaseCommand as Command } from '../base-command'
+import { BaseCommand as Command } from '../../base-command'
 
 export default class UsersList extends Command {
     static aliases = ['user:list', 'users:list']

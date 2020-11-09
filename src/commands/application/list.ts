@@ -1,4 +1,4 @@
-import { BaseCommand } from '../base-command'
+import { BaseCommand } from '../../base-command'
 
 export default class ApplicationsList extends BaseCommand {
   static aliases = ['app:list', 'apps:list', 'applications:list', 'application:list']

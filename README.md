@@ -5,72 +5,53 @@ harness-cli
 [![Downloads/week](https://img.shields.io/npm/dw/@ldhertert/harness-cli.svg)](https://npmjs.org/package/@ldhertert/harness-cli)
 [![License](https://img.shields.io/npm/l/@ldhertert/harness-cli.svg)](https://github.com/ldhertert/harness-cli/blob/master/package.json)
 
-<!-- toc -->
+* [Overview](#overview)
+* [Disclaimers](#disclaimers)
+* [Installation](#installation)
 * [Usage](#usage)
 * [Commands](#commands)
-<!-- tocstop -->
+
+Overview
+========
+
+This tool has been designed to simplify common automation tasks for administration of the Harness platform.  The primary focus initially is
+on streamlining common app team onboarding tasks, such as creating applications, user groups, and bootstrapping default pipeline resources.  These tasks leverage the Harness GraphQL API as well as Harness Config as Code. There are also commands for interacting with common platforms that Harness customers interact with in tandem with Harness, such as Github and Kubernetes.
+
+Disclaimers
+===========
+
+* Not an official Harness product... 
+* This product is not supported by the Harness Customer Support team.  If you have any problems or questions please open a [new issue](https://github.com/ldhertert/harness-cli/issues/new)
+* This is definitely a work in progress.  Not all API's have been implemented as CLI commands, and for the ones that have been, some functionality/permutations have not yet been implemented.  If there is something missing that you need, please open a [new issue](https://github.com/ldhertert/harness-cli/issues/new) or, even better, open a pull request.
+
+Installation
+============
+
+There are two options for installation.  
+
+1) There are standalone binaries available for linux, macos, and windows on the [releases page](https://github.com/ldhertert/harness-cli/releases). 
+2) [NPM package](https://npmjs.org/package/@ldhertert/harness-cli).  Note: NodeJS v12 or required.
+    ```
+    npm install -g @ldhertert/harness-cli
+    ```
 
 # Usage
-<!-- usage -->
+
 ```sh-session
-$ npm install -g @ldhertert/harness-cli
-$ harness COMMAND
+$ export HARNESS_ACCOUNT='xxxxxx'
+$ export HARNESS_API_KEY='xxxxxx'
+$ harness applications:list
 running command...
 $ harness (-v|--version|version)
-@ldhertert/harness-cli/0.9.4 darwin-x64 node-v12.18.3
 $ harness --help [COMMAND]
-USAGE
-  $ harness COMMAND
-...
 ```
-<!-- usagestop -->
 
-# Commands
-<!-- commands -->
-* [`harness application:create NAME [DESCRIPTION]`](#harness-applicationcreate-name-description)
-* [`harness application:delete NAMEORID`](#harness-applicationdelete-nameorid)
-* [`harness application:get NAMEORID`](#harness-applicationget-nameorid)
-* [`harness application:list`](#harness-applicationlist)
-* [`harness application:update NAMEORID`](#harness-applicationupdate-nameorid)
-* [`harness base-command`](#harness-base-command)
-* [`harness cloud-provider:create-k8s NAME`](#harness-cloud-providercreate-k8s-name)
-* [`harness cloud-provider:delete NAMEORID`](#harness-cloud-providerdelete-nameorid)
-* [`harness cloud-provider:get NAMEORID`](#harness-cloud-providerget-nameorid)
-* [`harness connectors:create-git NAME URL`](#harness-connectorscreate-git-name-url)
-* [`harness connectors:delete NAMEORID`](#harness-connectorsdelete-nameorid)
-* [`harness github:create-repo ORG NAME`](#harness-githubcreate-repo-org-name)
-* [`harness github:create-webhook ORG NAME`](#harness-githubcreate-webhook-org-name)
-* [`harness github:delete-repo [FILE]`](#harness-githubdelete-repo-file)
-* [`harness groups:create NAME`](#harness-groupscreate-name)
-* [`harness groups:delete NAMEORID`](#harness-groupsdelete-nameorid)
-* [`harness groups:get NAMEORID`](#harness-groupsget-nameorid)
-* [`harness groups:list`](#harness-groupslist)
-* [`harness help [COMMAND]`](#harness-help-command)
-* [`harness secrets:create NAME VALUE`](#harness-secretscreate-name-value)
-* [`harness secrets:delete NAMEORID`](#harness-secretsdelete-nameorid)
-* [`harness template:exec MANIFEST`](#harness-templateexec-manifest)
-* [`harness users:create EMAIL NAME`](#harness-userscreate-email-name)
-* [`harness users:delete USER`](#harness-usersdelete-user)
-* [`harness users:get USER`](#harness-usersget-user)
-* [`harness users:list`](#harness-userslist)
+## Global options
 
-## `harness application:create NAME [DESCRIPTION]`
-
-Create a new Harness application
+The following options are available across all commands, but for brevity have been exclused from the individual command documentation. 
 
 ```
-USAGE
-  $ harness application:create NAME [DESCRIPTION]
-
-ARGUMENTS
-  NAME         The name of the application
-  DESCRIPTION  A description of the application
-
 OPTIONS
-  -s, --silent                         Supress stdout logging
-  --branch=branch                      The branch name to use for git sync
-  --gitConnector=gitConnector          The name or id of the git connector to use for git sync
-
   --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
                                        variable.
 
@@ -79,7 +60,62 @@ OPTIONS
   --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
                                        HARNESS_MANAGER_URL environment variable
 
-  --syncEnabled                        Whether or not git sync should be enabled
+  -s, --silent                         Supress stdout logging. Can also be set via
+                                       HARNESS_CLI_SILENT environment variable
+
+  --debug                              Print debug logs to stdout. Can also be set via
+                                       HARNESS_CLI_DEBUG environment variable
+
+  --help                               Display help for a command                                      
+```
+
+
+# Commands
+<!-- commands -->
+* [`harness application:create`](#harness-applicationcreate)
+* [`harness application:delete`](#harness-applicationdelete)
+* [`harness application:get`](#harness-applicationget)
+* [`harness application:list`](#harness-applicationlist)
+* [`harness application:update`](#harness-applicationupdate)
+* [`harness cloud-provider:create-k8s`](#harness-cloud-providercreate-k8s)
+* [`harness cloud-provider:delete`](#harness-cloud-providerdelete)
+* [`harness cloud-provider:get`](#harness-cloud-providerget)
+* [`harness config-as-code:delete [FILE]`](#harness-config-as-codedelete-file)
+* [`harness config-as-code:get`](#harness-config-as-codeget)
+* [`harness config-as-code:list-files`](#harness-config-as-codelist-files)
+* [`harness config-as-code:upsert`](#harness-config-as-codeupsert)
+* [`harness connectors:create-git`](#harness-connectorscreate-git)
+* [`harness connectors:delete`](#harness-connectorsdelete)
+* [`harness github:create-repo`](#harness-githubcreate-repo)
+* [`harness github:create-webhook`](#harness-githubcreate-webhook)
+* [`harness github:delete-repo`](#harness-githubdelete-repo)
+* [`harness groups:create`](#harness-groupscreate)
+* [`harness groups:delete`](#harness-groupsdelete)
+* [`harness groups:get`](#harness-groupsget)
+* [`harness groups:list`](#harness-groupslist)
+* [`harness help [COMMAND]`](#harness-help-command)
+* [`harness secrets:create`](#harness-secretscreate)
+* [`harness secrets:delete`](#harness-secretsdelete)
+* [`harness template:exec`](#harness-templateexec)
+* [`harness users:create`](#harness-userscreate)
+* [`harness users:delete`](#harness-usersdelete)
+* [`harness users:get`](#harness-usersget)
+* [`harness users:list`](#harness-userslist)
+
+## `harness application:create`
+
+Create a new Harness application
+
+```
+USAGE
+  $ harness application:create
+
+OPTIONS
+  -n, --name=name              (required) The name of the application
+  --branch=branch              The branch name to use for git sync. Defaults to "master" if sync is enabled.
+  --description=description    A description of the application
+  --gitConnector=gitConnector  The name or id of the git connector to use for git sync.
+  --syncEnabled                Whether or not git sync should be enabled
 
 ALIASES
   $ harness app:create
@@ -90,27 +126,16 @@ ALIASES
 
 _See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/create.ts)_
 
-## `harness application:delete NAMEORID`
+## `harness application:delete`
 
 Delete an application
 
 ```
 USAGE
-  $ harness application:delete NAMEORID
-
-ARGUMENTS
-  NAMEORID  The current name or id of the application
+  $ harness application:delete
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --nameOrId=nameOrId  (required) The name or id of the application
 
 ALIASES
   $ harness app:delete
@@ -121,27 +146,16 @@ ALIASES
 
 _See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/delete.ts)_
 
-## `harness application:get NAMEORID`
+## `harness application:get`
 
 Get an application
 
 ```
 USAGE
-  $ harness application:get NAMEORID
-
-ARGUMENTS
-  NAMEORID  The name or id of the application
+  $ harness application:get
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --nameOrId=nameOrId  (required) The name or id of the application
 
 ALIASES
   $ harness app:get
@@ -160,17 +174,6 @@ List Applications
 USAGE
   $ harness application:list
 
-OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
-
 ALIASES
   $ harness app:list
   $ harness apps:list
@@ -180,38 +183,21 @@ ALIASES
 
 _See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/list.ts)_
 
-## `harness application:update NAMEORID`
+## `harness application:update`
 
 Update an application
 
 ```
 USAGE
-  $ harness application:update NAMEORID
-
-ARGUMENTS
-  NAMEORID  The current name or id of the application
+  $ harness application:update
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-  --branch=branch                      The branch name to use for git sync
-
-  --description=description            The new description of the application. If omitted, the value will remain
-                                       unchanged.
-
-  --gitConnector=gitConnector          The name or id of the git connector to use for git sync
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
-
-  --name=name                          The new name of the application.  If omitted, the value will remain unchanged.
-
-  --syncEnabled                        Whether or not git sync should be enabled. If omitted, the value will remain
-                                       unchanged.
+  -n, --nameOrId=nameOrId      (required) The current name or id of the application
+  --branch=branch              The branch name to use for git sync
+  --description=description    The new description of the application. If omitted, the value will remain unchanged.
+  --gitConnector=gitConnector  The name or id of the git connector to use for git sync
+  --newName=newName            The new name of the application.  If omitted, the value will remain unchanged.
+  --syncEnabled                Whether or not git sync should be enabled. If omitted, the value will remain unchanged.
 
 ALIASES
   $ harness app:update
@@ -222,51 +208,19 @@ ALIASES
 
 _See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/application/update.ts)_
 
-## `harness base-command`
-
-```
-USAGE
-  $ harness base-command
-
-OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
-```
-
-_See code: [src/commands/base-command.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/base-command.ts)_
-
-## `harness cloud-provider:create-k8s NAME`
+## `harness cloud-provider:create-k8s`
 
 Create a new application
 
 ```
 USAGE
-  $ harness cloud-provider:create-k8s NAME
-
-ARGUMENTS
-  NAME  The name of the application
+  $ harness cloud-provider:create-k8s
 
 OPTIONS
-  -s, --silent                                           Supress stdout logging
-
-  --harnessAccountId=harnessAccountId                    The Harness Account Id.  Can also be set via HARNESS_ACCOUNT
-                                                         environment variable.
-
-  --harnessApiKey=harnessApiKey                          The Harness API Key. Can also be set via HARNESS_API_KEY
-                                                         environment variable.
+  -n, --name=name                                        (required) The name of the cloud provider
 
   --inheritFromDelegate=inheritFromDelegate              If true, permissions are inherited from the delegate instead of
                                                          being explicitly provided
-
-  --managerUrl=managerUrl                                [default: https://app.harness.io] The Harness Manager URL.  Can
-                                                         also be set via HARNESS_MANAGER_URL environment variable
 
   --masterUrl=masterUrl                                  The Kubernetes master node URL. The easiest method to obtain
                                                          the master URL is using kubectl: kubectl cluster-info
@@ -283,27 +237,16 @@ ALIASES
 
 _See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/cloud-provider/create-k8s.ts)_
 
-## `harness cloud-provider:delete NAMEORID`
+## `harness cloud-provider:delete`
 
 Delete cloud provider
 
 ```
 USAGE
-  $ harness cloud-provider:delete NAMEORID
-
-ARGUMENTS
-  NAMEORID  The name or id of the cloud provider
+  $ harness cloud-provider:delete
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --nameOrId=nameOrId  (required) The name or id of the cloud provider
 
 ALIASES
   $ harness cloud-provider:delete
@@ -312,27 +255,16 @@ ALIASES
 
 _See code: [src/commands/cloud-provider/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/cloud-provider/delete.ts)_
 
-## `harness cloud-provider:get NAMEORID`
+## `harness cloud-provider:get`
 
 Get cloud provider
 
 ```
 USAGE
-  $ harness cloud-provider:get NAMEORID
-
-ARGUMENTS
-  NAMEORID  The name or id of the cloud provider
+  $ harness cloud-provider:get
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --nameOrId=nameOrId  (required) The name or id of the cloud provider
 
 ALIASES
   $ harness cloud-provider:get
@@ -341,34 +273,100 @@ ALIASES
 
 _See code: [src/commands/cloud-provider/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/cloud-provider/get.ts)_
 
-## `harness connectors:create-git NAME URL`
+## `harness config-as-code:delete [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ harness config-as-code:delete [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/config-as-code/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/delete.ts)_
+
+## `harness config-as-code:get`
+
+Fetch file contents based on path
+
+```
+USAGE
+  $ harness config-as-code:get
+
+OPTIONS
+  --path=path  (required) The file path(s) to fetch contents for. Glob patterns are supported.
+
+  --raw        Output raw YAML content instead of a JSON array.  This is only supported when there is a single file
+               matching the provided path.
+
+ALIASES
+  $ harness cac:get
+  $ harness config:get
+  $ harness config-as-code:get
+```
+
+_See code: [src/commands/config-as-code/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/get.ts)_
+
+## `harness config-as-code:list-files`
+
+List file tree for config-as-code
+
+```
+USAGE
+  $ harness config-as-code:list-files
+
+ALIASES
+  $ harness cac:list
+  $ harness config:list
+  $ harness config-as-code:list-files
+```
+
+_See code: [src/commands/config-as-code/list-files.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/list-files.ts)_
+
+## `harness config-as-code:upsert`
+
+Create or update a config as code file at the given path
+
+```
+USAGE
+  $ harness config-as-code:upsert
+
+OPTIONS
+  --content=content  (required) The YAML content
+  --path=path        (required) The file path
+
+ALIASES
+  $ harness config:upsert
+  $ harness config-as-code:upsert
+  $ harness config:create
+  $ harness config-as-code:create
+  $ harness config:update
+  $ harness config-as-code:update
+```
+
+_See code: [src/commands/config-as-code/upsert.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/config-as-code/upsert.ts)_
+
+## `harness connectors:create-git`
 
 Create git connector
 
 ```
 USAGE
-  $ harness connectors:create-git NAME URL
-
-ARGUMENTS
-  NAME  The name of the user
-  URL   The url for the repository
+  $ harness connectors:create-git
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-  --branch=branch                      [default: master] The git branch name
+  -n, --name=name                  (required) The name of the connector
+  -n, --url=url                    (required) The url for the repository
+  --branch=branch                  [default: master] The git branch name
 
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
+  --passwordSecret=passwordSecret  (required) The name or id of the secret that contains the password to be used for git
+                                   authentication
 
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
-
-  --passwordSecret=passwordSecret      (required) The name or id of the secret that contains the password to be used for
-                                       git authentication
-
-  --username=username                  (required) The username to be used for git authentication
+  --username=username              (required) The username to be used for git authentication
 
 ALIASES
   $ harness connector:create-git
@@ -377,27 +375,17 @@ ALIASES
 
 _See code: [src/commands/connectors/create-git.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/connectors/create-git.ts)_
 
-## `harness connectors:delete NAMEORID`
+## `harness connectors:delete`
 
 Delete connector
 
 ```
 USAGE
-  $ harness connectors:delete NAMEORID
-
-ARGUMENTS
-  NAMEORID  The name or id of the connector
+  $ harness connectors:delete
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --name=name  The name of the connector
+  --id=id          The id of the connector
 
 ALIASES
   $ harness connector:delete
@@ -406,21 +394,19 @@ ALIASES
 
 _See code: [src/commands/connectors/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/connectors/delete.ts)_
 
-## `harness github:create-repo ORG NAME`
+## `harness github:create-repo`
 
 Create a new GitHub Repository in an Organization
 
 ```
 USAGE
-  $ harness github:create-repo ORG NAME
-
-ARGUMENTS
-  ORG   The Github Organization
-  NAME  The repository name
+  $ harness github:create-repo
 
 OPTIONS
-  --baseUrl=baseUrl                       (required) [default: https://api.github.com] The Github API base url
+  --baseUrl=baseUrl                       [default: https://api.github.com] The Github API base url
   --description=description               A description of the application
+  --org=org                               (required) The Github organization
+  --repo=repo                             (required) The repository name
 
   --token=token                           (required) The GitHub token for authentication.  This can also be set via the
                                           environment variable GITHUB_TOKEN.
@@ -430,80 +416,60 @@ OPTIONS
 
 _See code: [src/commands/github/create-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/github/create-repo.ts)_
 
-## `harness github:create-webhook ORG NAME`
+## `harness github:create-webhook`
 
 Create a new webhook in a GitHub repo for a Harness git connector
 
 ```
 USAGE
-  $ harness github:create-webhook ORG NAME
-
-ARGUMENTS
-  ORG   The Github Organization
-  NAME  The repository name
+  $ harness github:create-webhook
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-  --baseUrl=baseUrl                    (required) [default: https://api.github.com] The Github API base url
-  --gitConnector=gitConnector          (required) The name or id of the Harness git connector
+  --baseUrl=baseUrl            [default: https://api.github.com] The Github API base url
+  --gitConnector=gitConnector  (required) The name or id of the Harness git connector
+  --org=org                    (required) The Github organization
+  --repo=repo                  (required) The repository name
 
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
-
-  --token=token                        (required) The GitHub token for authentication.  This can also be set via the
-                                       environment variable GITHUB_TOKEN.
+  --token=token                (required) The GitHub token for authentication.  This can also be set via the environment
+                               variable GITHUB_TOKEN.
 ```
 
 _See code: [src/commands/github/create-webhook.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/github/create-webhook.ts)_
 
-## `harness github:delete-repo [FILE]`
+## `harness github:delete-repo`
 
-describe the command here
+Delete a GitHub Repository in an Organization
 
 ```
 USAGE
-  $ harness github:delete-repo [FILE]
+  $ harness github:delete-repo
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  --baseUrl=baseUrl  [default: https://api.github.com] The Github API base url
+  --org=org          (required) The Github organization
+  --repo=repo        (required) The repository name
+
+  --token=token      (required) The GitHub token for authentication.  This can also be set via the environment variable
+                     GITHUB_TOKEN.
 ```
 
 _See code: [src/commands/github/delete-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/github/delete-repo.ts)_
 
-## `harness groups:create NAME`
+## `harness groups:create`
 
 Create a new user group. Note - not all functionality has been implemented yet
 
 ```
 USAGE
-  $ harness groups:create NAME
-
-ARGUMENTS
-  NAME  The name of the group
+  $ harness groups:create
 
 OPTIONS
-  -s, --silent                             Supress stdout logging
+  -n, --name=name                          (required) The name of the group
 
   --applicationScope=applicationScope      An application id or name.  This will replace any Application Restrictions
                                            with the provided applications.  Multiple values are allowed
 
   --copyPermissionFrom=copyPermissionFrom  Copy permissions from an existing group.
-
-  --harnessAccountId=harnessAccountId      The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                           variable.
-
-  --harnessApiKey=harnessApiKey            The Harness API Key. Can also be set via HARNESS_API_KEY environment
-                                           variable.
-
-  --managerUrl=managerUrl                  [default: https://app.harness.io] The Harness Manager URL.  Can also be set
-                                           via HARNESS_MANAGER_URL environment variable
 
   --permissions=permissions                JSON encoded permissions object
 
@@ -514,27 +480,17 @@ ALIASES
 
 _See code: [src/commands/groups/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/groups/create.ts)_
 
-## `harness groups:delete NAMEORID`
+## `harness groups:delete`
 
 Delete user group
 
 ```
 USAGE
-  $ harness groups:delete NAMEORID
-
-ARGUMENTS
-  NAMEORID  The name or id of the user group
+  $ harness groups:delete
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --name=name  The name of the group
+  --id=id          The id of the group
 
 ALIASES
   $ harness group:delete
@@ -543,27 +499,17 @@ ALIASES
 
 _See code: [src/commands/groups/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/groups/delete.ts)_
 
-## `harness groups:get NAMEORID`
+## `harness groups:get`
 
 Get user group
 
 ```
 USAGE
-  $ harness groups:get NAMEORID
-
-ARGUMENTS
-  NAMEORID  The name or id of the user group
+  $ harness groups:get
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --name=name  The name of the group
+  --id=id          The id of the group
 
 ALIASES
   $ harness group:get
@@ -579,17 +525,6 @@ List User groups
 ```
 USAGE
   $ harness groups:list
-
-OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
 
 ALIASES
   $ harness group:list
@@ -615,34 +550,23 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 
-## `harness secrets:create NAME VALUE`
+## `harness secrets:create`
 
 Create a new secret
 
 ```
 USAGE
-  $ harness secrets:create NAME VALUE
-
-ARGUMENTS
-  NAME   The name of the secret
-  VALUE  The value of the secret
+  $ harness secrets:create
 
 OPTIONS
-  -s, --silent
-      Supress stdout logging
+  -n, --name=name
+      (required) The name of the secret
+
+  -v, --value=value
+      (required) The value of the secret
 
   --accountScope
       Scope this secret to the account for use in delegate profiles
-
-  --harnessAccountId=harnessAccountId
-      The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment variable.
-
-  --harnessApiKey=harnessApiKey
-      The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl
-      [default: https://app.harness.io] The Harness Manager URL.  Can also be set via HARNESS_MANAGER_URL environment 
-      variable
 
   --scope=scope
       [default: ALL_APPS::PROD_ENVS,ALL_APPS::NON_PROD_ENVS] 
@@ -670,29 +594,18 @@ ALIASES
 
 _See code: [src/commands/secrets/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/secrets/create.ts)_
 
-## `harness secrets:delete NAMEORID`
+## `harness secrets:delete`
 
 Delete a secret
 
 ```
 USAGE
-  $ harness secrets:delete NAMEORID
-
-ARGUMENTS
-  NAMEORID  The name or id of the secret
+  $ harness secrets:delete
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
-
-  --type=(ENCRYPTED_TEXT)              (required) [default: ENCRYPTED_TEXT]
+  -n, --name=name          The name of the secret
+  --id=id                  The id of the secret
+  --type=(ENCRYPTED_TEXT)  (required) [default: ENCRYPTED_TEXT]
 
 ALIASES
   $ harness secret:delete
@@ -701,55 +614,34 @@ ALIASES
 
 _See code: [src/commands/secrets/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/secrets/delete.ts)_
 
-## `harness template:exec MANIFEST`
+## `harness template:exec`
 
 Apply steps defined in template manifest and send reults to target Harness account
 
 ```
 USAGE
-  $ harness template:exec MANIFEST
-
-ARGUMENTS
-  MANIFEST  A template manifest in either YAML or JSON format.  Can be a local file or URL.
+  $ harness template:exec
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-  -v, --var=var
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -v, --var=var        Set a variable specified within the template.  Format is --var "templateVar=My Value"
+  --dryRun             Executes all template steps but does not push result to destination
+  --manifest=manifest  (required) A template manifest in either YAML or JSON format.  Can be a local file or URL.
 ```
 
 _See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/template/exec.ts)_
 
-## `harness users:create EMAIL NAME`
+## `harness users:create`
 
 Create user
 
 ```
 USAGE
-  $ harness users:create EMAIL NAME
-
-ARGUMENTS
-  EMAIL  The email of the user
-  NAME   The name of the user
+  $ harness users:create
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-  --group=group                        [default: ] The name or id of a Harness group
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -e, --email=email  (required) The email of the user
+  -n, --name=name    (required) The name of the user
+  --group=group      [default: ] The name or id of a Harness group
 
 ALIASES
   $ harness user:create
@@ -758,27 +650,18 @@ ALIASES
 
 _See code: [src/commands/users/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/users/create.ts)_
 
-## `harness users:delete USER`
+## `harness users:delete`
 
 Delete user by email/name/id
 
 ```
 USAGE
-  $ harness users:delete USER
-
-ARGUMENTS
-  USER  The email, name, or id of the user
+  $ harness users:delete
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --name=name  The name of the user
+  --email=email    The email of the user
+  --id=id          The id of the user
 
 ALIASES
   $ harness user:delete
@@ -787,27 +670,18 @@ ALIASES
 
 _See code: [src/commands/users/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/users/delete.ts)_
 
-## `harness users:get USER`
+## `harness users:get`
 
 Get user by email/name/id
 
 ```
 USAGE
-  $ harness users:get USER
-
-ARGUMENTS
-  USER  The email, name, or id of the user
+  $ harness users:get
 
 OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+  -n, --name=name  The name of the user
+  --email=email    The email of the user
+  --id=id          The id of the user
 
 ALIASES
   $ harness user:get
@@ -824,17 +698,6 @@ List users
 USAGE
   $ harness users:list
 
-OPTIONS
-  -s, --silent                         Supress stdout logging
-
-  --harnessAccountId=harnessAccountId  The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment
-                                       variable.
-
-  --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
-
-  --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
-
 ALIASES
   $ harness user:list
   $ harness users:list
@@ -842,3 +705,20 @@ ALIASES
 
 _See code: [src/commands/users/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.4/src/commands/users/list.ts)_
 <!-- commandsstop -->
+
+Development
+===========
+
+## Common tasks
+
+Generate new command
+
+  ```
+  npx oclif command applications:create
+  ```
+
+Update autogenerated portions of the README
+
+  ```
+  npx oclif-dev readme
+  ```

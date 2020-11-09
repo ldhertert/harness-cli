@@ -1,4 +1,4 @@
-import { BaseCommand as Command } from '../base-command'
+import { BaseCommand as Command } from '../../base-command'
 import { flags } from '@oclif/command'
 import { UsageScope, AppEnvScope, FilterType, EnvFilterType } from '../../providers/harness/types/scopes'
 import { SecretType } from '../../providers/harness/secrets'
@@ -8,13 +8,10 @@ export default class SecretsCreate extends Command {
     static aliases = ['secret:create', 'secrets:create']
     static description = 'Create a new secret'
 
-    static args = [
-        { name: 'name', description: 'The name of the secret', required: true },
-        { name: 'value', description: 'The value of the secret', required: true },
-    ]
-
     static flags = {
         ...Command.flags,
+        name: flags.string({ description: 'The name of the secret', required: true, char: 'n' }),
+        value: flags.string({ description: 'The value of the secret', required: true, char: 'v' }),
         accountScope: flags.boolean({ description: 'Scope this secret to the account for use in delegate profiles', exclusive: ['scope'] }),
         scope: flags.string({
             description: `
@@ -37,13 +34,13 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
     }
 
     async run() {
-        const { args, flags } = this.parse(SecretsCreate)
+        const { flags } = this.parse(SecretsCreate)
 
         const harness = await this.getHarnessClient()
 
         const secret = await harness.secrets.create({
-            name: args.name,
-            value: args.value,
+            name: flags.name,
+            value: flags.value,
             type: flags.type,
             usageScope: await this.parseUsageScope(flags.scope, harness),
             scopedToAccount: flags.accountScope,

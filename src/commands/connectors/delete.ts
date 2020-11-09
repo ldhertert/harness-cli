@@ -1,23 +1,26 @@
-import { BaseCommand as Command } from '../base-command'
+import { BaseCommand as Command } from '../../base-command'
+import { flags } from '@oclif/command'
 
 export default class ConnectorDelete extends Command {
   static aliases = ['connector:delete', 'connectors:delete']
   static description = 'Delete connector'
 
-  static args = [
-      { name: 'nameOrId', description: 'The name or id of the connector', required: true },
-  ]
-
   static flags = {
       ...Command.flags,
+      name: flags.string({ description: 'The name of the connector', char: 'n', exclusive: ['id'] }),
+      id: flags.string({ description: 'The id of the connector' }),
   }
 
   async run() {
-      const { args } = this.parse(ConnectorDelete)
+      const { flags } = this.parse(ConnectorDelete)
 
       const harness = await this.getHarnessClient()
 
-      await harness.connectors.git.delete(args.nameOrId)
+      const nameOrId = flags.name || flags.id
+      if (!nameOrId) {
+          this.error('Either name or id is required.')
+      }
+      await harness.connectors.git.delete(nameOrId)
       this.log('Successfully deleted connector')
   }
 }

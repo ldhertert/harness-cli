@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import { BaseCommand as Command } from '../base-command'
+import { BaseCommand as Command } from '../../base-command'
 import { GitSyncOptions } from '../../providers/harness/applications'
 
 export default class ApplicationsUpdate extends Command {
@@ -7,13 +7,10 @@ export default class ApplicationsUpdate extends Command {
 
     static description = 'Update an application'
 
-    static args = [
-        { name: 'nameOrId', description: 'The current name or id of the application', required: true },
-    ]
-
     static flags = {
         ...Command.flags,
-        name: flags.string({ description: 'The new name of the application.  If omitted, the value will remain unchanged.' }),
+        nameOrId: flags.string({ description: 'The current name or id of the application', required: true, char: 'n' }),
+        newName: flags.string({ description: 'The new name of the application.  If omitted, the value will remain unchanged.' }),
         description: flags.string({ description: 'The new description of the application. If omitted, the value will remain unchanged.' }),
         syncEnabled: flags.boolean({ description: 'Whether or not git sync should be enabled. If omitted, the value will remain unchanged.', dependsOn: ['gitConnector'] }),
         gitConnector: flags.string({ description: 'The name or id of the git connector to use for git sync' }),
@@ -21,7 +18,7 @@ export default class ApplicationsUpdate extends Command {
     }
 
     async run() {
-        const { args, flags } = this.parse(ApplicationsUpdate)
+        const { flags } = this.parse(ApplicationsUpdate)
 
         const harness = await this.getHarnessClient()
 
@@ -35,7 +32,7 @@ export default class ApplicationsUpdate extends Command {
             }
         }
 
-        const applications = await harness.applications.update(args.nameOrId, flags.name, flags.description, gitSyncOptions)
+        const applications = await harness.applications.update(flags.nameOrId, flags.newName, flags.description, gitSyncOptions)
         this.log(applications)
     }
 }
