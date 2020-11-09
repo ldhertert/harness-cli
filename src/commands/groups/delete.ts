@@ -1,8 +1,8 @@
 import { BaseCommand as Command } from '../base-command'
 
-export default class GroupsGet extends Command {
-    static aliases = ['group:get', 'groups:get']
-    static description = 'Get user group'
+export default class GroupsDelete extends Command {
+    static aliases = ['group:delete', 'groups:delete']
+    static description = 'Delete user group'
 
     static args = [
         { name: 'nameOrId', description: 'The name or id of the user group', required: true },
@@ -13,11 +13,11 @@ export default class GroupsGet extends Command {
     }
 
     async run() {
-        const { args } = this.parse(GroupsGet)
+        const { args } = this.parse(GroupsDelete)
 
         const harness = await this.getHarnessClient()
 
-        const result = await harness.groups.get(args.nameOrId)
-        this.log(result)
+        await harness.groups.delete(args.nameOrId)
+        this.log('Successfully deleted group')
     }
 }

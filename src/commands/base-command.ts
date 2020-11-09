@@ -10,6 +10,7 @@ export abstract class BaseCommand extends Command {
         managerUrl: flags.string({ description: 'The Harness Manager URL.  Can also be set via HARNESS_MANAGER_URL environment variable', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
         harnessAccountId: flags.string({ description: 'The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment variable.', env: 'HARNESS_ACCOUNT' }),
         harnessApiKey: flags.string({ description: 'The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.', env: 'HARNESS_API_KEY' }),
+        silent: flags.boolean({ description: 'Supress stdout logging', default: false, char: 's' }),
     }
 
     context!: {
@@ -30,6 +31,10 @@ export abstract class BaseCommand extends Command {
     };
 
     log(message: any) {
+        if (this.context.flags.silent) {
+            return
+        }
+
         if (message && _.isObject(message)) {
             console.log(JSON.stringify(message, undefined, 4))
         } else {

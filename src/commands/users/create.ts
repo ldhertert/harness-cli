@@ -13,7 +13,7 @@ export default class UsersCreate extends Command {
 
     static flags = {
         ...Command.flags,
-        groups: flags.string({ multiple: true }),
+        group: flags.string({ description: 'The name or id of a Harness group', multiple: true, default: [] }),
     }
 
     async run() {
@@ -22,7 +22,8 @@ export default class UsersCreate extends Command {
         const harness = await this.getHarnessClient()
         
         const groupIds = []
-        for (const group of flags.groups) {
+        this.log(flags.group)
+        for (const group of flags.group) {
             groupIds.push((await harness.groups.get(group)).id)   
         }
 

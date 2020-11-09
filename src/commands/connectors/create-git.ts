@@ -2,6 +2,7 @@ import { flags } from '@oclif/command'
 import { BaseCommand as Command } from '../base-command'
 
 export default class GitConnectorCreate extends Command {
+    static aliases = ['connector:create-git', 'connectors:create-git']
     static description = 'Create git connector'
 
     static args = [

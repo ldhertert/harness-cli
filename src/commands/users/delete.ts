@@ -1,9 +1,9 @@
 import { BaseCommand as Command } from '../base-command'
 
-export default class UsersGet extends Command {
-    static aliases = ['user:get', 'users:get']
+export default class UsersDelete extends Command {
+    static aliases = ['user:delete', 'users:delete']
 
-    static description = 'Get user by email/name/id'
+    static description = 'Delete user by email/name/id'
 
     static args = [
         { name: 'user', description: 'The email, name, or id of the user', required: true },
@@ -14,11 +14,11 @@ export default class UsersGet extends Command {
     }
 
     async run() {
-        const { args } = this.parse(UsersGet)
+        const { args } = this.parse(UsersDelete)
 
         const harness = await this.getHarnessClient()
 
-        const result = await harness.users.get(args.user)
-        this.log(result)
+        await harness.users.delete(args.user)
+        this.log('Successfully deleted user')
     }
 }

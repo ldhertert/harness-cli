@@ -10,6 +10,7 @@ import { Users } from './users'
 import axios from 'axios'
 import { ConfigAsCode } from './config-as-code'
 import { Config } from '../../util/config'
+import { SecretManagers } from './secret-managers'
 
 export interface HarnessApiOptions {
     accountId: string,
@@ -34,6 +35,7 @@ export class Harness {
     applications!: Applications;
     connectors!: { git: GitConnectors; };
     secrets!: Secrets;
+    secretManagers!: SecretManagers
     environments!: Environments
     cloudProviders!: CloudProviders
     groups!: Groups
@@ -66,6 +68,7 @@ export class Harness {
         this.client = new GraphQLClient(`${this.managerUrl}/gateway/api/graphql?accountId=${this.accountId}`, headers)
 
         this.secrets = new Secrets(this.client)
+        this.secretManagers = new SecretManagers(this.client)
         this.applications = new Applications(this.client)
         this.connectors = {
             git: new GitConnectors(this.client),
