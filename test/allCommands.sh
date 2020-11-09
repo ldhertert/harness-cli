@@ -2,50 +2,78 @@
 set -e
 export $(grep -v '^#' .env | xargs)
 
-harness secret:create test-github-token-secret "${GITHUB_TOKEN}" --secretManager eWxcSyuVSpiPzXTjsMvxyw --silent \
-    && echo "Created github token secret"
+export HARNESS_CLI_SILENT='true'
 
-harness github:create-repo luke-hertert test-suite-repo
+echo "Creating secret"
+harness secret:create --name test-github-token-secret --value "${GITHUB_TOKEN}" --secretManager eWxcSyuVSpiPzXTjsMvxyw
 
-harness connectors:create-git test-github https://github.com/luke-hertert/test-suite-repo.git \
+echo "Creating github repo"
+harness github:create-repo --org luke-hertert --repo test-suite-repo
+
+echo "Creating git connector"
+harness connectors:create-git \
+    --name test-github \
+    --url https://github.com/luke-hertert/test-suite-repo.git \
     --username ldhertert \
-    --passwordSecret test-github-token-secret \
-    --silent \
-    && echo "Created git connector"
+    --passwordSecret test-github-token-secret
 
-harness apps:list --silent && echo 'Listed applications'
-harness apps:create testing-app --syncEnabled --gitConnector test-github --silent && echo 'Created new application'
-harness apps:get testing-app --silent && echo 'Got application by name'
-harness apps:update testing-app --name testing-app-renamed --silent && echo 'Updated application'
 
-harness github:create-webhook luke-hertert test-suite-repo --gitConnector test-github --silent && echo 'Set up github webhook'
+echo "Listing apps"
+harness apps:list
 
-harness cloud-providers:create-k8s test-k8s-cp --inheritFromDelegate 'plex' --skipValidation --silent && echo 'Created cloud provider'
-harness cloud-providers:get test-k8s-cp --silent && echo 'Got cloud provider by name'
+echo "Creating app"
+harness apps:create --name testing-app --syncEnabled --gitConnector test-github
 
-harness users:create luke.hertert+cli-testing@harness.io 'CLI Testing' --silent && echo 'Created user'
-harness users:list --silent && echo 'Listed users'
-harness users:get luke.hertert+cli-testing@harness.io --silent && echo 'Got user by email'
+echo "Getting app"
+harness apps:get --nameOrId testing-app
 
-harness groups:create testing-group --silent && echo 'Created user group'
-harness groups:get testing-group --silent && echo 'Got user group by name'
-harness groups:delete testing-group --silent && echo 'Delete user group by name'
+echo "Updating app"
+harness apps:update --nameOrId testing-app --newName testing-app-renamed
 
-harness template:exec ./template.yaml --var applicationName=testing-app-renamed --var serviceName=prometheus --dryRun --debug
+echo "Creating github webhook"
+harness github:create-webhook --org luke-hertert --repo test-suite-repo --gitConnector test-github
 
+echo "Creating k8s cloud provider"
+harness cloud-providers:create-k8s --name test-k8s-cp --inheritFromDelegate 'plex' --skipValidation
+
+echo "Getting k8s cloud provider"
+harness cloud-providers:get --nameOrId test-k8s-cp
+
+echo "Creating user"
+harness users:create --email luke.hertert+cli-testing@harness.io --name 'CLI Testing'
+
+echo "Listing users"
+harness users:list
+
+echo "Getting user"
+harness users:get --email luke.hertert+cli-testing@harness.io
+
+echo "Creating group"
+harness groups:create --name testing-group
+
+echo "Getting group"
+harness groups:get --name testing-group
+
+# harness template:exec ./template.yaml --var applicationName=testing-app-renamed --var serviceName=prometheus --dryRun --debug
+
+echo "Config as code stuff"
 harness config:list
-harness config:update --path "Setup/Defaults.yaml" --content "harnessApiVersion: '1.0'                                    
+harness config:get --path "Setup/Defaults.yaml" --raw
+harness config:update --path "Setup/Defaults.yaml" --content "
+harnessApiVersion: '1.0'                                    
 type: APPLICATION_DEFAULTS
 defaults:
 - name: dfdsaf
-  value: dsfasdf3"
-harness config:delete --path "Setup/Tags.yaml"
+  value: dsfasdf"
+# harness config:delete --path "Setup/Tags.yaml"
 
 ### Clean up ###
 
-harness cloud-providers:delete test-k8s-cp --silent && echo 'Deleted cloud provider'
-harness users:delete luke.hertert+cli-testing@harness.io --silent && echo 'Deleted user'
-harness apps:delete testing-app-renamed --silent && echo 'Deleted application'
-harness connectors:delete test-github --silent && echo 'Deleted git connector'
-harness secret:delete test-github-token-secret --silent && echo 'Deleted github token secret'
-harness github:delete-repo luke-hertert test-suite-repo --silent && echo 'Deleted github repo'
+echo "Cleaning up"
+harness cloud-providers:delete --nameOrId test-k8s-cp
+harness users:delete --email luke.hertert+cli-testing@harness.io
+harness groups:delete --name testing-group
+harness apps:delete --nameOrId testing-app-renamed
+harness connectors:delete --name test-github
+harness secret:delete --name test-github-token-secret
+harness github:delete-repo --org luke-hertert --repo test-suite-repo

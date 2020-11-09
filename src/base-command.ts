@@ -70,6 +70,9 @@ export abstract class BaseCommand extends Command {
             },
         }
 
+        // For some reason, HARNESS_CLI_SILENT is not being respected
+        this.context.flags.silent = !this.context.flags.debug && (this.context.flags.silent || process.env.HARNESS_CLI_SILENT === 'true')
+
         this.debug(flags)
     }
 
