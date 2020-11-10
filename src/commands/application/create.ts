@@ -18,7 +18,6 @@ export default class ApplicationsCreate extends BaseCommand {
 
     async run() {
         const { flags } = this.parse(ApplicationsCreate)
-
         const harness = await this.getHarnessClient()
 
         let gitSyncOptions: GitSyncOptions | undefined

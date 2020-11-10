@@ -10,14 +10,15 @@ export enum StepType {
     FileSource = 'FileSource',
     RenameFile = 'RenameFile',
     SetValue = 'SetValue',
+    HarnessCLICommand = 'HarnessCLICommand',
     CreateApplication = 'CreateApplication',
-    RegexReplace = 'RegexReplace',
-    RunContainer = 'RunContainer',
-    JSONPatch = 'JSONPatch',
-    DeleteFile = 'DeleteFile',
-    RenderTemplate = 'RenderTemplate',
-    GraphQL = 'GraphQL',
-    ExecuteTemplate = 'ExecuteTemplate',
+    // RegexReplace = 'RegexReplace',
+    // RunContainer = 'RunContainer',
+    // JSONPatch = 'JSONPatch',
+    // DeleteFile = 'DeleteFile',
+    // RenderTemplate = 'RenderTemplate',
+    // GraphQL = 'GraphQL',
+    // ExecuteTemplate = 'ExecuteTemplate',
 }
 
 function renderTemplate(original: string | any, context: TemplateExecutionContext) {
@@ -141,22 +142,6 @@ export class SetValueStep extends Step {
             _.set(obj, this.path, this.value)
             file.content = toYaml(obj)
         })
-        return Promise.resolve()
-    }
-}
-
-export class CreateApplicationStep extends Step {
-    type = StepType.CreateApplication
-    applicationName: string;
-
-    public constructor(name: string, applicationName: string) {
-        super(name, [])
-        this.applicationName = applicationName
-    }
-
-    run(context: TemplateExecutionContext): Promise<void> {
-        const name = renderTemplate(this.applicationName, context)
-        console.log(name)
         return Promise.resolve()
     }
 }

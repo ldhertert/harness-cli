@@ -103,11 +103,15 @@ sourceFiles:
 
 # Steps
 
-There are two high level step types currently implemented - a file source step that fetches source files and adds them to the execution workspace, and transformational step types that take the current workspace and modifies it in some way.
+There are three high level step types currently implemented:
+
+1) File source step that fetches source files and adds them to the execution workspace
+2) Transformational step types that take the current workspace and modifies it in some way.
+3) Steps that run Harness CLI commands
 
 * `name` (required)
 * `description`
-* `type` (required) - `FileSource`, `RenameFile`, `SetValue` are the only currently supported step types
+* `type` (required) - `FileSource`, `RenameFile`, `SetValue`, and `HarnessCLICommand` are the foundational step types
 * `files` - This field acts as a filter for which files should be processed.  In a file source step, it will impact which files should be added to the workspace.  In the transformational steps, it will filter which workspace files should be processed by the step.  It is an array, and can be a concrete path or a glob pattern.  The specified value will be processed by the template engine prior to execution.
 * `condition` - Condition for execution.  This is not currently implemented
 
@@ -196,7 +200,7 @@ steps:
 
 Options:
 
-* `directory`: The directory on the local machine that the repo should be checked out to.  Defaults to a temp directory
+* `directory`: The directory on the local machine that contains source files. (required)
 
 Example:
 
@@ -276,4 +280,26 @@ steps:
     path: helmChartConfig.chartVersion
     file: Setup/Applications/<%= vars.applicationName %>/Services/<%= vars.serviceName %>/Manifests/Index.yaml
     value: <%= vars.chartVersion %>           
+```
+
+## HarnessCLICommand Step
+
+Execute a Harness CLI command.  Harness credentials are set by default based on the destination configuration.
+
+Options: 
+
+* `type`: `HarnessCLICommand`
+* `command`: The Harness CLI command to run (i.e. `secrets:create`)
+* `agrs`: Key/Value pairs for the flags you wish to pass to the command
+* `debug`: true/false based on if you want to run in debug mode
+
+Example:
+
+```yaml
+steps:
+  - name: Get Application
+    type: HarnessCLICommand
+    command: apps:get
+    args:
+      nameOrId: Plex
 ```

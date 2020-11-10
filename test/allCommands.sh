@@ -64,6 +64,8 @@ harness groups:get --name testing-group
 # harness template:exec --manifest ./test/template-manifests/git-files.yaml \
 #    --var githubUsername=ldhertert --var "githubPassword=${GITHUB_TOKEN}"
 
+# harness template:exec --manifest ./test/template-manifests/cv-demo.yaml --dryRun --debug
+
 harness template:exec --manifest ./test/template-manifests/template.yaml \
     --var applicationName=testing-app-renamed \
     --var serviceName=prometheus2 \

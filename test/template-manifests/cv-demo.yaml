@@ -1,0 +1,17 @@
+name: Import cv-demo application
+description: See https://github.com/wings-software/cv-demo for more information
+variables:
+  - name: repoUrl
+    defaultValue: https://github.com/ldhertert/luke-testing-harness.git
+  - name: githubUsername
+  - name: githubPassword
+
+steps:
+  - name: Import files from git repo https://github.com/wings-software/cv-demo.git   
+    type: FileSource
+    source:
+      sourceType: Git
+      opts:
+        repo: https://github.com/wings-software/cv-demo.git      
+    files:
+      - "**/*.yaml"

@@ -1,0 +1,14 @@
+name: Run CLI command
+
+steps:
+  - name: Get Application
+    type: HarnessCLICommand
+    command: apps:get
+    debug: true
+    args:
+      nameOrId: Plex
+  - name: Create Application
+    type: CreateApplication
+    applicationName: template step 3
+    gitConnector: luke-testing-harness
+    debug: true

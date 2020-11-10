@@ -1,9 +1,11 @@
 import { Variable } from './variables'
-import { Step, StepType, FileSourceStep, RenameFileStep, SetValueStep, CreateApplicationStep } from './steps'
+import { Step, StepType, FileSourceStep, RenameFileStep, SetValueStep } from './steps'
 import { File } from '../../util/filesystem'
 import * as _ from 'lodash'
 import { Harness } from '../harness/harness-api-client'
 import { HarnessStorageProvider } from '../storage/harness-api-storage'
+import { RunHarnessCLICommand } from './steps/run-harness-cli-command'
+import { CreateApplicationStep } from './steps/create-application'
 
 export interface TemplateRef {
     source: string
@@ -65,7 +67,9 @@ export class Template {
             } else if (step.type === StepType.SetValue) {
                 this.steps.push(new SetValueStep(step.name, step.path, step.value, stepFiles))
             }  else if (step.type === StepType.CreateApplication) {
-                this.steps.push(new CreateApplicationStep(step.name, step.applicationName))
+                this.steps.push(new CreateApplicationStep(step.name, step))
+            }  else if (step.type === StepType.HarnessCLICommand) {
+                this.steps.push(new RunHarnessCLICommand(step.name, { command: step.command, args: step.args, silent: step.silent, debug: step.debug }))
             } else {
                 throw new Error('Invalid step type')
             }
