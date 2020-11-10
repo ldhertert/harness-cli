@@ -14,9 +14,17 @@ A template file can be defined in either JSON or YAML, and can either be a local
 * `variables` - An array of variables that a user can provide at template execution time which can be referenced within each step
 * `steps` - An array of steps that will be executed sequentially that either fetch files and add them to the current execution context, transform files within the current execution context, or perhaps might take some sort of external action.
 
+You can view example templates [here](../test/template-manifests).
+
 # Template Execution
 
-Inputs: user provided variables, Harness credentials for destination, dry run
+## Inputs
+
+* User provided variables
+* Harness credentials for destination
+* Is dry run
+
+## Execution process overview
 
 * Load template - Read from file or url, parse from JSON or YAML into object
 * Parse template - Convert into object from JSON or YAML
@@ -28,6 +36,8 @@ Inputs: user provided variables, Harness credentials for destination, dry run
 * Take all files in workspace at and upsert via Harness config as code API (if this is not a dry run)
 
 # Execution Context
+
+The execution context is the internal state that is passed from step to step, and eventually is pushed to the destination.
 
 * `vars` - Object representing the combination of user provided values and template defautls
 * `workspace` - An array of objects that contain a path and YAML content
@@ -64,13 +74,11 @@ At template initialization time, a variable named `destination` is populated wit
 {
     "vars": {
         "destination": {
-            {
-                "apiKey": "",
-                "accountId": "",
-                "managerUrl": "",
-                "username": "",
-                "password": ""
-            }
+          "apiKey": "",
+          "accountId": "",
+          "managerUrl": "",
+          "username": "",
+          "password": ""
         }
     }
 }
