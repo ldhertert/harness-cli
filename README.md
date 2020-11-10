@@ -11,7 +11,7 @@ harness-cli
 * [Usage](#usage)
 * [Commands](#commands)
 *  Additional Documentation
-  * [Template syntax and capabilities](docs/Templates.md)
+    * [Template syntax and capabilities](docs/Templates.md)
 
 Overview
 ========
