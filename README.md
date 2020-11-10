@@ -20,7 +20,6 @@ on streamlining common app team onboarding tasks, such as creating applications,
 Disclaimers
 ===========
 
-* Not an official Harness product... 
 * This product is not supported by the Harness Customer Support team.  If you have any problems or questions please open a [new issue](https://github.com/ldhertert/harness-cli/issues/new)
 * This is definitely a work in progress.  Not all API's have been implemented as CLI commands, and for the ones that have been, some functionality/permutations have not yet been implemented.  If there is something missing that you need, please open a [new issue](https://github.com/ldhertert/harness-cli/issues/new) or, even better, open a pull request.
 
@@ -794,6 +793,10 @@ Releasing
 2) Bump version number in package.json
 3) Locally run `npm run build` to ensure build will succeed
 4) Commit changes
-5) Tag the commit `git tag -a v1.x.x -m 'Release v1.x.x`
-6) Push with tags `git push origin --tags`
-7) Github actions will build and publish to npm and Github release - https://github.com/ldhertert/harness-cli/actions
+5) Push and release
+```sh
+  git tag -a "v${$(cat package.json | jq -r '.version')}" -m "Release v${$(cat package.json | jq -r '.version')}"
+  git push origin --tags
+  npm publish
+  ```
+6) Github actions will build and publish to npm and Github release - https://github.com/ldhertert/harness-cli/actions
