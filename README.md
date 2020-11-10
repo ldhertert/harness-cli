@@ -10,6 +10,8 @@ harness-cli
 * [Installation](#installation)
 * [Usage](#usage)
 * [Commands](#commands)
+*  Additional Documentation
+  * [Template syntax and capabilities](docs/Templates.md)
 
 Overview
 ========
@@ -687,9 +689,6 @@ OPTIONS
 
   --manifest=manifest                (required) A template manifest in either YAML or JSON format.  Can be a local file
                                      or URL.
-
-DESCRIPTION
-  Additional documentation available [here](docs/Templates.md).
 ```
 
 _See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.6/src/commands/template/exec.ts)_
