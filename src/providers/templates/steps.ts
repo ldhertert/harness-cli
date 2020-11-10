@@ -4,6 +4,7 @@ import * as minimatch from 'minimatch'
 import _ = require('lodash');
 import { fromYaml, toYaml, getStorageProvider } from '../../util/objects'
 import { File } from '../../util/filesystem'
+import * as traverse from 'traverse'
 
 export enum StepType {
     FileSource = 'FileSource',
@@ -17,6 +18,28 @@ export enum StepType {
     RenderTemplate = 'RenderTemplate',
     GraphQL = 'GraphQL',
     ExecuteTemplate = 'ExecuteTemplate',
+}
+
+function renderTemplate(original: string | any, context: TemplateExecutionContext) {
+    if (_.isString(original)) {
+        const data = {
+            vars: context.vars,
+            outputs: context.outputs,
+        }
+        const rendered = _.template(original)(data)
+        return rendered
+    } 
+    
+    if (_.isObject(original)) {
+        traverse(original).forEach(function (x) {
+            if (_.isString(x)) {
+                const rendered = renderTemplate(x, context)
+                this.update(rendered)
+            }
+        })
+    }
+
+    return original
 }
 
 export abstract class Step {
@@ -45,6 +68,7 @@ export class FileSourceStep extends Step {
     }
 
     public async run(context: TemplateExecutionContext): Promise<void> {
+        renderTemplate(this.source.opts, context)
         const storageProvider = getStorageProvider(this.source, context)
         await storageProvider.init()
         let files: File[] = []
@@ -84,9 +108,9 @@ export class RenameFileStep extends Step {
         }
         filesToProcess.forEach(file => {
             let templatedSearch = this.search
-            const templatedReplace = _.template(this.replace)(context.vars)
+            const templatedReplace = renderTemplate(this.replace, context)
             if (typeof templatedSearch === 'string') {
-                templatedSearch = _.template(templatedSearch)(context.vars)
+                templatedSearch = renderTemplate(templatedSearch, context)
             }
             file.path = _.replace(file.path, templatedSearch, templatedReplace)
         })
@@ -107,9 +131,9 @@ export class SetValueStep extends Step {
 
     public async run(context: TemplateExecutionContext): Promise<void> {
         let filesToProcess: File[] = []
-        this.value = _.template(this.value)(context.vars)
+        this.value = renderTemplate(this.value, context)
         for (const glob of this.files) {
-            const templatedGlob = _.template(glob)(context.vars)
+            const templatedGlob = renderTemplate(glob, context)
             filesToProcess = filesToProcess.concat(context.workspace.filter(file => minimatch(file.path, templatedGlob)))
         }
         filesToProcess.forEach(file => {
@@ -131,7 +155,7 @@ export class CreateApplicationStep extends Step {
     }
 
     run(context: TemplateExecutionContext): Promise<void> {
-        const name = _.template(this.applicationName)(context.vars)
+        const name = renderTemplate(this.applicationName, context)
         console.log(name)
         return Promise.resolve()
     }

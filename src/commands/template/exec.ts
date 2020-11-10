@@ -34,8 +34,6 @@ export default class TemplateExec extends Command {
         this.log(`Successfully loaded template from ${flags.manifest}`)
         const template = await this.parseTemplate(templateText)
         this.log(`Successfully parsed template '${template.name}'`)
-        const vars = await this.processVariables(template, inputVars)
-        this.log('Successfully proccessed variables')
 
         try {
             // const harness = await this.getHarnessClient()
@@ -47,7 +45,7 @@ export default class TemplateExec extends Command {
                 this.error(error, { exit: 1 })
             }
 
-            const result = await template.execute(vars, harness, flags.dryRun)
+            const result = await template.execute(inputVars, harness, flags.dryRun)
             this.debug(result)
             // const localStorage = new LocalStorageProvider({ directory: './tmp' })
             // await localStorage.storeFiles(result.workspace)
@@ -87,19 +85,6 @@ export default class TemplateExec extends Command {
             }
         }
         return new Template(parsedTemplate)
-    }
-
-    async processVariables(template: Template, userVars: any) {
-        const varsWithDefaultValues = template.variables.filter(v => v.defaultValue !== undefined)
-        const defaults = _.mapValues(_.keyBy(varsWithDefaultValues, 'name'), 'defaultValue')
-        const vars: any = {}
-        _.defaults(vars, userVars, defaults)
-        template.variables.forEach(v => {
-            if (v.required && vars[v.name] === undefined) {
-                throw new Error(`Missing required template variable ${v.name}`)
-            }
-        })
-        return Promise.resolve(vars)
     }
 
     parseVar(str: string) {

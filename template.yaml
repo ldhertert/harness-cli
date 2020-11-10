@@ -20,43 +20,19 @@ steps:
     type: FileSource
     source:
       sourceType: Harness
-      # opts:
-      #   accountId: Sy3KVuK1SZy2Z7OLhbKlNg
     files:
       - Setup/Applications/Cluster Bootstrapping/Services/prometheus/**/*.yaml
-  # - name: Set development cloud provider name
-  #   type: SetValue
-  #   file:
-  #     Setup/Applications/Harness Demo Application/Environments/development/Infrastructure
-  #     Definitions/GKE Dev Cluster.yaml
-  #   path: infrastructure[0].cloudProviderName
-  #   value: harness-demo-backup-dev
-
-  # - name: Set dev variable overrides for order service
-  #   type: SetValue
-  #   path: variableOverrides
-  #   file: Setup/Applications/Harness Demo Application/Environments/development/Index.yaml
-  #   value: []
-
-  # - name: Set development cloud provider name
-  #   type: SetValue
-  #   path: scopedServices
-  #   file:
-  #     Setup/Applications/Harness Demo Application/Environments/development/Infrastructure
-  #     Definitions/GKE Dev Cluster.yaml
-  #   value:
-  #     - order-service
   - name: Rename application
     type: RenameFile
     search: Setup/Applications/Cluster Bootstrapping/
-    replace: Setup/Applications/<%= applicationName %>/
+    replace: Setup/Applications/<%= vars.applicationName %>/
   - name: Rename service
     type: RenameFile
-    search: Setup/Applications/<%= applicationName %>/Services/prometheus
-    replace: Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>
+    search: Setup/Applications/<%= vars.applicationName %>/Services/prometheus
+    replace: Setup/Applications/<%= vars.applicationName %>/Services/<%= vars.serviceName %>
   - name: Set chart version
     type: SetValue
     path: helmChartConfig.chartVersion
-    file: Setup/Applications/<%= applicationName %>/Services/<%= serviceName %>/Manifests/Index.yaml
-    value: <%= chartVersion %>    
+    file: Setup/Applications/<%= vars.applicationName %>/Services/<%= vars.serviceName %>/Manifests/Index.yaml
+    value: <%= vars.chartVersion %>    
 

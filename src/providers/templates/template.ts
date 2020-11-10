@@ -13,9 +13,6 @@ export interface TemplateExecutionContext {
     vars: any
     workspace: File[]
     outputs: any
-    defaultCredentials: {
-        harness: HarnessApiOptions
-    }
 }
 
 /**
@@ -78,11 +75,8 @@ export class Template {
     public async execute(inputVars: any, destination: Harness, dryRun = false): Promise<TemplateExecutionContext> {
         // Create workspace
         const context: TemplateExecutionContext = {
-            vars: {},
-            workspace: [],
-            outputs: {},
-            defaultCredentials: {
-                harness: {
+            vars: {
+                destination: {
                     apiKey: destination.apiKey,
                     accountId: destination.accountId,
                     managerUrl: destination.managerUrl,
@@ -90,6 +84,8 @@ export class Template {
                     password: destination.password,
                 },
             },
+            workspace: this.sourceFiles || [],
+            outputs: {},
         }
 
         this.processVariables(inputVars, context)
@@ -115,16 +111,14 @@ export class Template {
     }
 
     private processVariables(inputVars: any, context: TemplateExecutionContext): void{
-        // Process variables
-        context.vars = inputVars || {}
-
         // Merge user provided variables with template variables with default values
-        const defaults: any = {}
+        const templateDefaults: any = {}
         this.variables.filter(v => v.defaultValue !== undefined)
             .forEach(v => {
-                defaults[v.name] = v.defaultValue
+                templateDefaults[v.name] = v.defaultValue
             })
-        _.defaults(context.vars, defaults)
+        const merged = _.assign({}, templateDefaults, context.vars, inputVars)
+        context.vars = merged
 
         // eslint-disable-next-line no-warning-comments
         // TODO: Evaluate any templatized variables

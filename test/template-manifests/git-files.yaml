@@ -1,0 +1,22 @@
+name: Test git file source
+
+variables:
+  - name: repoUrl
+    defaultValue: https://github.com/ldhertert/luke-testing-harness.git
+  - name: githubUsername
+  - name: githubPassword
+
+steps:
+  - name: Copy files from git repo
+    type: FileSource
+    source:
+      sourceType: Git
+      opts:
+        # directory: /tmp
+        repo: <%= vars.repoUrl %>
+        ref: master
+        auth:
+            username: <%= vars.githubUsername %>
+            password: <%= vars.githubPassword %>
+    files:
+      - Setup/Applications/Cluster Bootstrapping/Services/filebeat/**/*.yaml      

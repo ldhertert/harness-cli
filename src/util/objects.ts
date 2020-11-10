@@ -26,7 +26,7 @@ export function getStorageProvider(ref: StorageProviderRef, context: TemplateExe
     }
 
     if (ref.sourceType.toLowerCase() === StorageType.Harness.toLowerCase()) {
-        const opts = _.defaults({}, context.defaultCredentials.harness, ref.opts as HarnessApiOptions)
+        const opts = _.defaults({}, context.vars.destination, ref.opts as HarnessApiOptions)
         return new HarnessStorageProvider(opts as HarnessApiOptions)
     }
 

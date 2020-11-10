@@ -61,10 +61,15 @@ harness groups:create --name testing-group
 echo "Getting group"
 harness groups:get --name testing-group
 
+# harness template:exec --manifest ./test/template-manifests/git-files.yaml \
+#    --var githubUsername=ldhertert --var "githubPassword=${GITHUB_TOKEN}"
+
 harness template:exec --manifest ./template.yaml \
     --var applicationName=testing-app-renamed \
     --var serviceName=prometheus2 \
-    --var chartVersion=8.13.4
+    --var chartVersion=8.13.4 \
+    --var githubUsername=ldhertert \
+    --var "githubPassword=${GITHUB_TOKEN}"
 
 echo "Config as code stuff"
 harness config:list
