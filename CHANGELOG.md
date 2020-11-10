@@ -1,3 +1,8 @@
+0.9.6 (November 10, 2020)
+------------------------
+
+* Added documentation for `template:exec` command.  Tested/fixed a handful of template scenarios.
+
 0.9.5 (November 9, 2020)
 ------------------------
 

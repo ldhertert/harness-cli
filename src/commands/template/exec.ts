@@ -2,13 +2,13 @@ import { flags } from '@oclif/command'
 import { BaseCommand as Command } from '../../base-command'
 import * as fs from 'fs'
 import { Template } from '../../providers/templates/template'
-import * as _ from 'lodash'
 import * as yaml from 'js-yaml'
 import axios from 'axios'
 import { Harness } from '../../providers/harness/harness-api-client'
 
 export default class TemplateExec extends Command {
-    static description = 'Apply steps defined in template manifest and send reults to target Harness account'
+    static description = `Apply steps defined in template manifest and send reults to target Harness account.
+Additional documentation available [here](docs/Templates.md).`
 
     static flags = {
         ...Command.flags,
