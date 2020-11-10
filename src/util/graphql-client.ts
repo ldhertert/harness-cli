@@ -16,6 +16,9 @@ export class GraphQLError extends Error {
     }
 }
 
+export class ResourceConflictError extends GraphQLError {
+}
+
 export class GraphQLClient {
     endpoint: string;
     headers: any;

@@ -1,12 +1,37 @@
 name: Import cv-demo application
 description: See https://github.com/wings-software/cv-demo for more information
 variables:
-  - name: repoUrl
-    defaultValue: https://github.com/ldhertert/luke-testing-harness.git
-  - name: githubUsername
-  - name: githubPassword
-
+  - name: applicationName
+    defaultValue: cv-demo
+  - name: delegateName
+    defaultValue: plex
+  - name: cloudProviderName
+    defaultValue: cv-demo
+  - name: dockerConnectorName
+    defaultValue: cv-demo
 steps:
+  - name: Create Application
+    type: CreateApplication
+    applicationName: <%= vars.applicationName %>
+    skipExisting: true
+
+  - name: Create Cloud Provider
+    type: HarnessCLICommand
+    command: cloud-provider:create-k8s
+    args:
+      name: <%= vars.cloudProviderName %>
+      inheritFromDelegate: <%= vars.delegateName %>
+      skipValidation: false
+      skipExisting: true
+
+  - name: Create Docker Repository Connector
+    type: HarnessCLICommand
+    command: connectors:create-docker
+    args:
+      name: <%= vars.dockerConnectorName %>
+      skipExisting: true
+
+  # Note: Getting an error with Infrastructure definitions currently
   - name: Import files from git repo https://github.com/wings-software/cv-demo.git   
     type: FileSource
     source:
@@ -14,4 +39,26 @@ steps:
       opts:
         repo: https://github.com/wings-software/cv-demo.git      
     files:
-      - "**/*.yaml"
+      - Setup/Applications/cv-demo/**/*.yaml
+    exclude:
+      - "**/Infrastructure Definitions/**/*.yaml"
+      - "**/Service Verification/**/*.yaml"
+
+  - name: Set docker server for artifact sources
+    type: SetValue
+    path: serverName
+    files: 
+      - Setup/Applications/cv-demo/Services/cv-demo/Artifact Servers/harness_cv-demo.yaml
+      - Setup/Applications/cv-demo/Services/cv-demo-ui/Artifact Servers/harness_cv-demo-ui.yaml
+    value: <%= vars.dockerConnectorName %>      
+
+  # Fields that might need to be changed in workflows
+  # prometheus: customThresholdRefId: 0034526e5f2a4a3ea97011a559dda999
+  # AppDynamics: analysisServerConfigId: UeL6VqdfToGq1YcMW143Rw
+  # AppDynamics: applicationId, tierId
+  # NewRelic: analysisServerConfigId, applicationId, customThresholdRefId
+
+  - name: Rename application
+    type: RenameFile
+    search: Setup/Applications/cv-demo/
+    replace: Setup/Applications/<%= vars.applicationName %>/    

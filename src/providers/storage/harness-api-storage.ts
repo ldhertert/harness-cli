@@ -89,6 +89,9 @@ export class HarnessStorageProvider implements StorageProvider {
     }
 
     async storeFiles(files: File[]) {
+        // for (const file of files) {
+        //     await this.harness.configAsCode.upsertFile(file)
+        // }
         return this.harness.configAsCode.uploadConfigAsCodeZip(files)
     }
 

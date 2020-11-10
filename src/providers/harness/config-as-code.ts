@@ -91,7 +91,7 @@ export class ConfigAsCode {
             const response = await this.harness.privateApiPost(`/gateway/api/setup-as-code/yaml/upsert-entity?yamlFilePath=${file.path}`, data, {
                 ...data.getHeaders(),
                 accept: 'application/json, text/plain, */*',
-            })
+            }, { timeout: 2 * 60 * 1000 }) // 2 min timeout
             return response
         } catch (err) {
             return err

@@ -88,6 +88,7 @@ OPTIONS
 * [`harness config-as-code:get`](#harness-config-as-codeget)
 * [`harness config-as-code:list-files`](#harness-config-as-codelist-files)
 * [`harness config-as-code:upsert`](#harness-config-as-codeupsert)
+* [`harness connectors:create-docker [FILE]`](#harness-connectorscreate-docker-file)
 * [`harness connectors:create-git`](#harness-connectorscreate-git)
 * [`harness connectors:delete`](#harness-connectorsdelete)
 * [`harness github:create-repo`](#harness-githubcreate-repo)
@@ -119,6 +120,7 @@ OPTIONS
   --branch=branch              The branch name to use for git sync. Defaults to "master" if sync is enabled.
   --description=description    A description of the application
   --gitConnector=gitConnector  The name or id of the git connector to use for git sync.
+  --skipExisting               If true, this command will not fail if an resource with the same name already exists.
   --syncEnabled                Whether or not git sync should be enabled
 
 ALIASES
@@ -254,6 +256,9 @@ OPTIONS
 
   --serviceAccountTokenSecret=serviceAccountTokenSecret  The name or id of the secret that contains the service account
                                                          token
+
+  --skipExisting                                         If true, this command will not fail if an resource with the
+                                                         same name already exists.
 
   --skipValidation
 
@@ -402,6 +407,22 @@ ALIASES
 ```
 
 _See code: [src/commands/config-as-code/upsert.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.6/src/commands/config-as-code/upsert.ts)_
+
+## `harness connectors:create-docker [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ harness connectors:create-docker [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/connectors/create-docker.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.6/src/commands/connectors/create-docker.ts)_
 
 ## `harness connectors:create-git`
 

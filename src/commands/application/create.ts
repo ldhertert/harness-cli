@@ -14,6 +14,7 @@ export default class ApplicationsCreate extends BaseCommand {
         syncEnabled: flags.boolean({ description: 'Whether or not git sync should be enabled', dependsOn: ['gitConnector'] }),
         gitConnector: flags.string({ description: 'The name or id of the git connector to use for git sync.' }),
         branch: flags.string({ description: 'The branch name to use for git sync. Defaults to "master" if sync is enabled.' }),
+        skipExisting: flags.boolean({ description: 'If true, this command will not fail if an resource with the same name already exists.', default: false}),
     }
 
     async run() {
@@ -27,11 +28,11 @@ export default class ApplicationsCreate extends BaseCommand {
             gitSyncOptions = {
                 syncEnabled: flags.syncEnabled,
                 gitConnectorId: connector.id,
-                branch: flags.branch,
+                branch: flags.branch,            
             }
         }
 
-        const applications = await harness.applications.create(flags.name, flags.description, gitSyncOptions)
+        const applications = await harness.applications.create(flags.name, flags.description, gitSyncOptions, flags.skipExisting)
         this.log(applications)
     }
 }

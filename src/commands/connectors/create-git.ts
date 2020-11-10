@@ -8,7 +8,7 @@ export default class GitConnectorCreate extends Command {
     static flags = {
         ...Command.flags,
         name: flags.string({ description: 'The name of the connector', required: true, char: 'n' }),
-        url: flags.string({ description: 'The url for the repository', required: true, char: 'n' }),
+        url: flags.string({ description: 'The url for the repository', required: true }),
         username: flags.string({ description: 'The username to be used for git authentication', required: true }),
         passwordSecret: flags.string({ description: 'The name or id of the secret that contains the password to be used for git authentication', required: true }),
         branch: flags.string({ description: 'The git branch name', default: 'master' }),

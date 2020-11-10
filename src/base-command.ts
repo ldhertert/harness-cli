@@ -31,7 +31,7 @@ export abstract class BaseCommand extends Command {
     };
 
     log(message: any) {
-        if (this.context.flags.silent) {
+        if (this.context?.flags.silent) {
             return
         }
 

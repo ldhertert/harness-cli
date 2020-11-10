@@ -35,7 +35,7 @@ export class CloudProviders {
         this.client = client
     }
 
-    async create(name: string, options: K8sCloudProviderOptions) {
+    async create(name: string, options: K8sCloudProviderOptions, skipExisting?: boolean) {
         const query = `
         mutation ($input: CreateCloudProviderInput!) {
             result: createCloudProvider(input: $input) {
@@ -71,8 +71,18 @@ export class CloudProviders {
                 },
             }
         }
-        const result = await this.client.execute(query, vars)
-        return result
+        let result: any
+        try {
+            result = await this.client.execute(query, vars)
+            return result
+        } catch (err) {
+            if (err.errors?.filter((e: { message: string | string[]; }) => e.message.includes('already exists')).length > 0) {
+                if (skipExisting) {
+                    return result
+                }
+            }
+            throw err
+        }
     }
 
     async get(idOrName: string) {

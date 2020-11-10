@@ -13,6 +13,7 @@ const axiosRateLimit = require('axios-rate-limit')
 import { ConfigAsCode } from './config-as-code'
 import { Config } from '../../util/config'
 import { SecretManagers } from './secret-managers'
+import { DockerConnectors } from './docker-connectors'
 
 export interface HarnessApiOptions {
     accountId: string,
@@ -38,7 +39,7 @@ export class Harness {
     
     client!: GraphQLClient;
     applications!: Applications;
-    connectors!: { git: GitConnectors; };
+    connectors!: { git: GitConnectors; docker: DockerConnectors; };
     secrets!: Secrets;
     secretManagers!: SecretManagers
     environments!: Environments
@@ -82,6 +83,7 @@ export class Harness {
         this.applications = new Applications(this.client)
         this.connectors = {
             git: new GitConnectors(this.client),
+            docker: new DockerConnectors(this.client),
         }
         this.environments = new Environments(this.client, this)
         this.cloudProviders = new CloudProviders(this.client)
@@ -152,7 +154,7 @@ export class Harness {
         return response.data
     }
 
-    async privateApiPost(path: string, data: any, headers?: any) {
+    async privateApiPost(path: string, data: any, headers?: any, opts?: any) {
         const url = new URL(path, this.managerUrl)
         url.searchParams.append('accountId', this.accountId)
 
@@ -162,9 +164,12 @@ export class Harness {
         } else if (this.apiKey) {
             headers['x-api-key'] = this.apiKey
         }
+
         const response = await http.post(url.href, data, {
             headers: headers,
+            timeout: opts?.timeout,
         })
+
         if (response.data?.resource?.responseStatus === 'FAILED') {
             throw response.data.resource
         }

@@ -11,10 +11,19 @@ export interface TemplateRef {
     source: string
 }
 
-export interface TemplateExecutionContext {
+interface ApplicationContext {
+    logger: {
+        log: (message: any) => void;
+        debug: (...args: any[]) => void;
+        error: { (input: string | Error, options: { code?: string | undefined; exit: false; }): void; (input: string | Error, options?: { code?: string | undefined; exit?: number | undefined; } | undefined): never; };
+    };
+}
+
+export interface TemplateExecutionContext extends ApplicationContext {
     vars: any
     workspace: File[]
-    outputs: any
+    outputs: any    
+    dryRun: boolean
 }
 
 /**
@@ -61,7 +70,7 @@ export class Template {
                 stepFiles.push('**/*.yaml')
             }
             if (step.type === StepType.FileSource) {
-                this.steps.push(new FileSourceStep(step.name, step.source, stepFiles))
+                this.steps.push(new FileSourceStep(step.name, step.source, stepFiles, step.exclude || []))
             } else if (step.type === StepType.RenameFile) {
                 this.steps.push(new RenameFileStep(step.name, step.search, step.replace, stepFiles))
             } else if (step.type === StepType.SetValue) {
@@ -76,7 +85,7 @@ export class Template {
         }
     }
 
-    public async execute(inputVars: any, destination: Harness, dryRun = false): Promise<TemplateExecutionContext> {
+    public async execute(inputVars: any, destination: Harness, ctx: ApplicationContext, dryRun = false): Promise<TemplateExecutionContext> {
         // Create workspace
         const context: TemplateExecutionContext = {
             vars: {
@@ -90,11 +99,12 @@ export class Template {
             },
             workspace: this.sourceFiles || [],
             outputs: {},
+            logger: ctx.logger,
+            dryRun: dryRun,
         }
 
         this.processVariables(inputVars, context)
         await this.executeTemplateSteps(context)
-
         // Preview changes
 
         // Upsert yaml results
@@ -103,12 +113,19 @@ export class Template {
             const destinationStorage = new HarnessStorageProvider(destination)
             await destinationStorage.init()
             context.outputs.pushFilesResult = await destinationStorage.storeFiles(context.workspace)
+
             if (context.outputs.pushFilesResult.responseStatus === 'FAILED') {
                 throw new Error('Error pushing files to destination.\n' + JSON.stringify(context.outputs.pushFilesResult, undefined, 4))
             }
-            
             await destinationStorage.dispose()
         }
+
+        // dump files to local filesystem for debugging
+        // const workspaceDump = new LocalStorageProvider({ directory: './.tmp/workspace' })
+        // await workspaceDump.init()
+        // await workspaceDump.storeFiles(context.workspace)
+        // await workspaceDump.storeFile({ path: 'context.json', content: JSON.stringify({ vars: context.vars, outputs: context.outputs }, undefined, 4) })
+
         // Validate success
 
         return context

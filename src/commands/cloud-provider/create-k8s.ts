@@ -14,6 +14,7 @@ export default class CloudProviderCreateK8s extends Command {
         masterUrl: flags.string({ description: 'The Kubernetes master node URL. The easiest method to obtain the master URL is using kubectl: kubectl cluster-info', dependsOn: ['serviceAccountTokenSecret'] }),
         serviceAccountTokenSecret: flags.string({ description: 'The name or id of the secret that contains the service account token' }),
         skipValidation: flags.boolean({ description: '', default: false }),
+        skipExisting: flags.boolean({ description: 'If true, this command will not fail if an resource with the same name already exists.', default: false }),
     }
 
     async run() {
@@ -46,7 +47,7 @@ export default class CloudProviderCreateK8s extends Command {
             throw new Error('Either inherit from delegate or master url is required')
         }
 
-        const result = await harness.cloudProviders.create(flags.name, options)
+        const result = await harness.cloudProviders.create(flags.name, options, flags.skipExisting)
         this.log(result)
     }
 }

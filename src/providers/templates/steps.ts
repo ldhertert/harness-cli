@@ -21,28 +21,6 @@ export enum StepType {
     // ExecuteTemplate = 'ExecuteTemplate',
 }
 
-function renderTemplate(original: string | any, context: TemplateExecutionContext) {
-    if (_.isString(original)) {
-        const data = {
-            vars: context.vars,
-            outputs: context.outputs,
-        }
-        const rendered = _.template(original)(data)
-        return rendered
-    } 
-    
-    if (_.isObject(original)) {
-        traverse(original).forEach(function (x) {
-            if (_.isString(x)) {
-                const rendered = renderTemplate(x, context)
-                this.update(rendered)
-            }
-        })
-    }
-
-    return original
-}
-
 export abstract class Step {
     name: string;
     description?: string;
@@ -56,26 +34,60 @@ export abstract class Step {
     }
 
     abstract async run(context: TemplateExecutionContext): Promise<void>
+
+    renderTemplate(original: string | any, context: TemplateExecutionContext) {
+        if (_.isString(original)) {
+            const data = {
+                vars: context.vars,
+                outputs: context.outputs,
+            }
+            const rendered = _.template(original)(data)
+            return rendered
+        } 
+        
+        const recurse = this.renderTemplate
+        if (_.isObject(original)) {
+            traverse(original).forEach(function (x) {
+                if (_.isString(x)) {
+                    const rendered = recurse(x, context)
+                    this.update(rendered)
+                }
+            })
+        }
+    
+        return original
+    }
 }
 
 export class FileSourceStep extends Step {
     type = StepType.FileSource
 
     source: StorageProviderRef
+    exclude: string[];
 
-    public constructor(name: string, source: StorageProviderRef, files: string[]) {
+    public constructor(name: string, source: StorageProviderRef, files: string[], exclude: string[]) {
         super(name, files)
         this.source = source
+        this.exclude = exclude
     }
 
     public async run(context: TemplateExecutionContext): Promise<void> {
-        renderTemplate(this.source.opts, context)
+        this.renderTemplate(this.source.opts, context)
         const storageProvider = getStorageProvider(this.source, context)
         await storageProvider.init()
         let files: File[] = []
         for (const glob of this.files) {
             files = files.concat(await storageProvider.getFiles(glob))
         }
+
+        files = files.filter(file => {
+            for (const glob of this.exclude) {
+                if (minimatch(file.path, glob)) {
+                    return false
+                }
+            }
+            return true
+        })
         
         files.forEach((newFile: File) => {
             const existingFiles = context.workspace.filter(existingFile => newFile.path.toLowerCase() === existingFile.path.toLowerCase())
@@ -109,9 +121,9 @@ export class RenameFileStep extends Step {
         }
         filesToProcess.forEach(file => {
             let templatedSearch = this.search
-            const templatedReplace = renderTemplate(this.replace, context)
+            const templatedReplace = this.renderTemplate(this.replace, context)
             if (typeof templatedSearch === 'string') {
-                templatedSearch = renderTemplate(templatedSearch, context)
+                templatedSearch = this.renderTemplate(templatedSearch, context)
             }
             file.path = _.replace(file.path, templatedSearch, templatedReplace)
         })
@@ -132,9 +144,9 @@ export class SetValueStep extends Step {
 
     public async run(context: TemplateExecutionContext): Promise<void> {
         let filesToProcess: File[] = []
-        this.value = renderTemplate(this.value, context)
+        this.value = this.renderTemplate(this.value, context)
         for (const glob of this.files) {
-            const templatedGlob = renderTemplate(glob, context)
+            const templatedGlob = this.renderTemplate(glob, context)
             filesToProcess = filesToProcess.concat(context.workspace.filter(file => minimatch(file.path, templatedGlob)))
         }
         filesToProcess.forEach(file => {

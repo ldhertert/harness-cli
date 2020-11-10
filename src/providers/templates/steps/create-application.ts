@@ -7,6 +7,7 @@ export type CreateApplicationStepOptions = {
     gitConnector?: string,
     debug?: boolean,
     branch?: string,
+    skipExisting?: boolean,
 }
 
 export class CreateApplicationStep extends RunHarnessCLICommand {
@@ -20,6 +21,7 @@ export class CreateApplicationStep extends RunHarnessCLICommand {
                 gitConnector: opts.gitConnector,
                 syncEnabled: Boolean(opts.gitConnector),
                 branch: opts.branch,
+                skipExisting: opts.skipExisting,
             },
             debug: opts.debug,
         })

@@ -106,7 +106,7 @@ export class Applications {
         return result.data.result
     }
 
-    async create(name: string, description?: string, gitSyncOptions?: GitSyncOptions) {
+    async create(name: string, description?: string, gitSyncOptions?: GitSyncOptions, skipExisting?: boolean) {
         const query = `
         mutation ($input: CreateApplicationInput!) {
             result: createApplication(input: $input) {
@@ -128,6 +128,12 @@ export class Applications {
             const result = await this.client.execute(query, vars)
             application = result.data.result.resource
         } catch (exception) {
+            if (exception.errors?.filter((e: { message: string | string[]; }) => e.message.includes('Duplicate name')).length > 0) {
+                if (skipExisting) {
+                    return
+                } 
+                throw new Error('Application already exists')                
+            }
             // Seeing weird behavior with this API
             // Initial create returns both a result and an error saying that user is not authorized
             if (exception instanceof GraphQLError && exception.data?.result?.resource) {

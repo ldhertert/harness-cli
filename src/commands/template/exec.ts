@@ -43,8 +43,14 @@ export default class TemplateExec extends Command {
                 this.error('Error initializing Harness API Client', { exit: false })
                 this.error(error, { exit: 1 })
             }
-
-            const result = await template.execute(inputVars, harness, flags.dryRun)
+            const ctx = {
+                logger: {
+                    log: this.log,
+                    debug: this.debug,
+                    error: this.error,
+                },
+            }
+            const result = await template.execute(inputVars, harness, ctx, flags.dryRun)
             this.debug(result)
             // const localStorage = new LocalStorageProvider({ directory: './tmp' })
             // await localStorage.storeFiles(result.workspace)
