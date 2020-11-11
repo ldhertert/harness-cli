@@ -74,7 +74,7 @@ export class CloudProviders {
         let result: any
         try {
             result = await this.client.execute(query, vars)
-            return result
+            return result.data.result.resource
         } catch (err) {
             if (err.errors?.filter((e: { message: string | string[]; }) => e.message.includes('already exists')).length > 0) {
                 if (skipExisting) {

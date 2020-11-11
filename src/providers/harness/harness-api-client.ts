@@ -177,6 +177,29 @@ export class Harness {
         return response.data
     }
 
+    async privateApiPut(path: string, data: any, headers?: any, opts?: any) {
+        const url = new URL(path, this.managerUrl)
+        url.searchParams.append('accountId', this.accountId)
+
+        headers = headers || {}
+        if (this.bearerToken) {
+            headers.Authorization = `Bearer ${this.bearerToken}`
+        } else if (this.apiKey) {
+            headers['x-api-key'] = this.apiKey
+        }
+
+        const response = await http.put(url.href, data, {
+            headers: headers,
+            timeout: opts?.timeout,
+        })
+
+        if (response.data?.resource?.responseStatus === 'FAILED') {
+            throw response.data.resource
+        }
+        
+        return response.data
+    }
+
     async privateApiDelete(path: string) {
         const url = new URL(path, this.managerUrl)
         url.searchParams.append('accountId', this.accountId)
