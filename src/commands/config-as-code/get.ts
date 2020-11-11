@@ -25,7 +25,8 @@ export default class ConfigAsCodeGet extends Command {
         } catch (error) {
             this.error('Error initializing Harness API Client', { exit: false })
             this.error(error, { exit: 1 })
-        }
+        } 
+        // const harness = await this.getHarnessClient()
         
         const storageProvider = new HarnessStorageProvider({ accountId: harness.accountId }, harness)
         await storageProvider.init()

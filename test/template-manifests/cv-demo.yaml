@@ -9,12 +9,20 @@ variables:
     defaultValue: cv-demo
   - name: dockerConnectorName
     defaultValue: cv-demo
+  - name: dockerUsername
+    required: true
+  - name: dockerPassword
+    required: true
+  - name: secretManagerId
+    required: true
+    defaultValue: eWxcSyuVSpiPzXTjsMvxyw
 steps:
-  - name: Create Application
-    type: CreateApplication
-    applicationName: <%= vars.applicationName %>
-    skipExisting: true
+  # - name: Create Application
+  #   type: CreateApplication
+  #   applicationName: <%= vars.applicationName %>
+  #   skipExisting: true
 
+  # Need to add scoping settings for this
   - name: Create Cloud Provider
     type: HarnessCLICommand
     command: cloud-provider:create-k8s
@@ -24,11 +32,22 @@ steps:
       skipValidation: false
       skipExisting: true
 
+  - name: Create secret for docker credentials
+    type: HarnessCLICommand
+    command: secrets:create
+    args:
+      name: <%= vars.dockerConnectorName %>-docker-password
+      value: <%= vars.dockerPassword %>
+      secretManager: <%= vars.secretManagerId %>
+      skipExisting: true
+
   - name: Create Docker Repository Connector
     type: HarnessCLICommand
     command: connectors:create-docker
     args:
       name: <%= vars.dockerConnectorName %>
+      username: <%= vars.dockerUsername %>
+      passwordSecret: <%= vars.dockerConnectorName %>-docker-password
       skipExisting: true
 
   # Note: Getting an error with Infrastructure definitions currently

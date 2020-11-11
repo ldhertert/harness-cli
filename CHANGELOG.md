@@ -1,3 +1,11 @@
+0.9.7 (November 10, 2020)
+------------------------
+
+* Add template step for executing a Harness CLI command
+* Added command for creating docker registry connector
+* Added [full template file](test/template-manifests/cv-demo.yaml) to import sample application from https://github.com/wings-software/cv-demo
+* Added default scoping for k8s cloud providers that inherit from delegate
+
 0.9.6 (November 10, 2020)
 ------------------------
 

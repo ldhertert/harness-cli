@@ -31,6 +31,7 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
         }),
         secretManager: flags.string({ description: 'The id of the secret manager to leverage', required: true }),
         type: flags.enum({ options: [SecretType.Text], required: true, default: SecretType.Text }),
+        skipExisting: flags.boolean({ description: 'If true, this command will not fail if an resource with the same name already exists.', default: false}),
     }
 
     async run() {
@@ -38,15 +39,24 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
 
         const harness = await this.getHarnessClient()
 
-        const secret = await harness.secrets.create({
-            name: flags.name,
-            value: flags.value,
-            type: flags.type,
-            usageScope: await this.parseUsageScope(flags.scope, harness),
-            scopedToAccount: flags.accountScope,
-            secretManager: flags.secretManager,
-        })
-        this.log(secret)
+        try {
+            const secret = await harness.secrets.create({
+                name: flags.name,
+                value: flags.value,
+                type: flags.type,
+                usageScope: await this.parseUsageScope(flags.scope, harness),
+                scopedToAccount: flags.accountScope,
+                secretManager: flags.secretManager,
+            })
+            this.log(secret)
+        } catch (err) {
+            const existsError = err.errors?.filter((e: { message: string | string[]; }) => e.message.includes('Duplicate name')).length > 0
+            if (existsError && flags.skipExisting) {
+                this.debug('Resource already exists, but skipExisting is true.')
+            } else {
+                throw err
+            }
+        }
     }
 
     async parseUsageScope(scopes: string[], harness: Harness) {
