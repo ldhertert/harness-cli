@@ -480,8 +480,9 @@ USAGE
   $ harness connectors:delete
 
 OPTIONS
-  -n, --name=name  The name of the connector
-  --id=id          The id of the connector
+  -n, --name=name                        The name of the connector
+  --id=id                                The id of the connector
+  --type=(DockerConnector|GitConnector)  (required)
 
 ALIASES
   $ harness connector:delete

@@ -8,27 +8,38 @@ export interface GitSyncOptions {
 
 export class Applications {
     protected client: GraphQLClient;
+    // private fields = `
+    // id
+    // name
+    // description
+
+    // gitSyncConfig {
+    //     branch
+    //     syncEnabled
+    //     gitConnector {
+    //         id
+    //         name
+    //         URL
+    //     }
+    // }
+
+    // createdAt
+    // createdBy {
+    //     email
+    // }
+    // `
+
+    // removing git sync info for now due to problem with graphql api
     private fields = `
     id
     name
     description
-
-    gitSyncConfig {
-        branch
-        syncEnabled
-        gitConnector {
-            id
-            name
-            URL
-        }
-    }
 
     createdAt
     createdBy {
         email
     }
     `
-
     constructor(client: GraphQLClient) {
         this.client = client
     }

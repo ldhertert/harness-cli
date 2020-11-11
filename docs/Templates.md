@@ -14,7 +14,7 @@ A template file can be defined in either JSON or YAML, and can either be a local
 * `variables` - An array of variables that a user can provide at template execution time which can be referenced within each step
 * `steps` - An array of steps that will be executed sequentially that either fetch files and add them to the current execution context, transform files within the current execution context, or perhaps might take some sort of external action.
 
-You can view example templates [here](../test/template-manifests).
+You can view example templates [here](../test/template-manifests) and an example of executing templates [here](../test/template-manifests).
 
 # Template Execution
 
