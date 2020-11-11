@@ -1,7 +1,6 @@
 import { URL } from 'url'
 import { GraphQLClient } from '../../util/graphql-client'
 import { Applications } from './applications'
-import { GitConnectors } from './git-connectors'
 import { Secrets } from './secrets'
 import { Environments } from './environments'
 import { CloudProviders } from './cloud-providers'
@@ -13,7 +12,7 @@ const axiosRateLimit = require('axios-rate-limit')
 import { ConfigAsCode } from './config-as-code'
 import { Config } from '../../util/config'
 import { SecretManagers } from './secret-managers'
-import { DockerConnectors } from './docker-connectors'
+import { Connectors } from './connectors/connectors'
 
 export interface HarnessApiOptions {
     accountId: string,
@@ -39,7 +38,7 @@ export class Harness {
     
     client!: GraphQLClient;
     applications!: Applications;
-    connectors!: { git: GitConnectors; docker: DockerConnectors; };
+    connectors!: Connectors
     secrets!: Secrets;
     secretManagers!: SecretManagers
     environments!: Environments
@@ -81,10 +80,7 @@ export class Harness {
         this.secrets = new Secrets(this.client)
         this.secretManagers = new SecretManagers(this.client)
         this.applications = new Applications(this.client)
-        this.connectors = {
-            git: new GitConnectors(this.client),
-            docker: new DockerConnectors(this.client),
-        }
+        this.connectors = new Connectors(this.client)
         this.environments = new Environments(this.client, this)
         this.cloudProviders = new CloudProviders(this.client)
         this.groups = new Groups(this.client)

@@ -70,6 +70,17 @@ export class ConfigAsCode {
         const zip = new JSZip()
         files.forEach(f => zip.file(f.path, f.content))
 
+        /*
+        zip
+            .generateNodeStream({type: 'nodebuffer', streamFiles: true})
+            .pipe(fs.createWriteStream('out.zip'))
+            .on('finish', function () {
+                // JSZip generates a readable stream with a "end" event,
+                // but is piped here in a writable stream which emits a "finish" event.
+                console.log('out.zip written.')
+            })
+        */
+
         const data = new FormData()
         data.append('file', zip.generateNodeStream())
     

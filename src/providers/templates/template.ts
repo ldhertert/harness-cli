@@ -115,7 +115,10 @@ export class Template {
             context.outputs.pushFilesResult = await destinationStorage.storeFiles(context.workspace)
 
             if (context.outputs.pushFilesResult.responseStatus === 'FAILED') {
-                throw new Error('Error pushing files to destination.\n' + JSON.stringify(context.outputs.pushFilesResult, undefined, 4))
+                const failedFiles = context.outputs.pushFilesResult.filesStatus
+                    .filter((f: { status: string }) => f.status === 'FAILED')
+                    .map((f: { yamlFilePath: string; errorMssg: string }) => `\t'${f.yamlFilePath}': ${f.errorMssg}`)
+                throw new Error(`Error pushing files to destination. The following files failed:\n${failedFiles.join('\n')}`)
             }
             await destinationStorage.dispose()
         }

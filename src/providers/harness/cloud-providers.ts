@@ -1,4 +1,5 @@
 import { GraphQLClient } from '../../util/graphql-client'
+import _ = require('lodash');
 
 export enum K8sClusterDetailsType {
     Inherit = 'INHERIT_CLUSTER_DETAILS',
@@ -36,6 +37,15 @@ export class CloudProviders {
     }
 
     async create(name: string, options: K8sCloudProviderOptions, skipExisting?: boolean) {
+        if (skipExisting) {
+            try {
+                const existing = await this.get(name)
+                if (existing) {
+                    return existing
+                }
+            } catch { }
+        }
+        
         const query = `
         mutation ($input: CreateCloudProviderInput!) {
             result: createCloudProvider(input: $input) {
@@ -99,6 +109,37 @@ export class CloudProviders {
         }
     }
 
+    async list() {
+        const query = `
+        query ($limit: Int!, $offset: Int) {
+            result: cloudProviders(limit: $limit, offset: $offset) {
+                pageInfo {
+                    hasMore
+                }
+                nodes {
+                    ${this.fields}
+                }
+            }
+        }`
+
+        const vars: any = {}
+
+        const limit = 100
+        let offset = 0
+        let results: any[] = []
+        let hasMore = true
+        while (hasMore) {
+            vars.limit = limit
+            vars.offset = offset
+            const result = await this.client.execute(query, vars)
+            results = results.concat(result.data.result.nodes)
+            hasMore = result.data.result.pageInfo.hasMore
+            offset += limit
+        }
+
+        return results
+    }
+
     private async getById(id: string) {
         const query = `
         query ($id: String!) {
@@ -114,18 +155,24 @@ export class CloudProviders {
     }
 
     private async getByName(name: string) {
-        const query = `
-        query ($name: String!) {
-            result: cloudProviderByName(name: $name) {
-                ${this.fields}
-            }
-        }`
-
-        const vars = { name }
-
-        const result = await this.client.execute(query, vars)
-        return result.data.result
+        const all = await this.list()
+        return _.find(all, { name: name })
     }
+    
+    // Having issues with cloudProviderByName - see https://harness.atlassian.net/browse/DX-2219
+    // private async getByName(name: string) {
+    //     const query = `
+    //     query ($name: String!) {
+    //         result: cloudProviderByName(name: $name) {
+    //             ${this.fields}
+    //         }
+    //     }`
+
+    //     const vars = { name }
+
+    //     const result = await this.client.execute(query, vars)
+    //     return result.data.result
+    // }
 
     async delete(idOrName: string) {
         const resource = await this.get(idOrName)

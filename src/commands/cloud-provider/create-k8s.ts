@@ -52,14 +52,10 @@ export default class CloudProviderCreateK8s extends Command {
 
         const result = await harness.cloudProviders.create(flags.name, options, flags.skipExisting)
 
-        if (flags.inheritFromDelegate) {
+        /* if (flags.inheritFromDelegate && result) {
             // Use a hack to set initial scope for cloud provider
-            try {
-                await this.usePrivateApiToUpdateScope(result.id, flags.harnessUsername, flags.harnessPassword)
-            } catch (err) {
-                this.error('Error setting scopes on cloud provider.', err)
-            }
-        }
+            await this.usePrivateApiToUpdateScope(result.id, flags.harnessUsername, flags.harnessPassword)
+        } */
     }
 
     // This is a hack until we add scoping support for kubernetes cloud providers to AWS, or I can get it to work with

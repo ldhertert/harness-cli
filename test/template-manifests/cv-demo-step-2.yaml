@@ -1,0 +1,20 @@
+name: Import cv-demo application
+description: Step 2 of cv-demo import due to infra def import bug.
+variables:
+  - name: applicationName
+    defaultValue: cv-demo
+steps:
+  - name: Import files from git repo https://github.com/wings-software/cv-demo.git   
+    type: FileSource
+    source:
+      sourceType: Git
+      opts:
+        repo: https://github.com/wings-software/cv-demo.git      
+    files:
+      - Setup/Applications/cv-demo/Workflows/**/*.yaml
+      - Setup/Applications/cv-demo/Pipelines/**/*.yaml
+
+  - name: Rename application
+    type: RenameFile
+    search: Setup/Applications/cv-demo/
+    replace: Setup/Applications/<%= vars.applicationName %>/    

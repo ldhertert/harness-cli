@@ -50,7 +50,7 @@ Specific application, non-production environment: "rPyC0kD_SbymffS26SC_GQ::nonpr
             })
             this.log(secret)
         } catch (err) {
-            const existsError = err.errors?.filter((e: { message: string | string[]; }) => e.message.includes('Duplicate name')).length > 0
+            const existsError = err.errors?.filter((e: { message: string | string[]; }) => e.message.includes('Duplicate name') || e.message.includes('secret exists')).length > 0
             if (existsError && flags.skipExisting) {
                 this.debug('Resource already exists, but skipExisting is true.')
             } else {

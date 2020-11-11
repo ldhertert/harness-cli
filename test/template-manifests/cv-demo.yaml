@@ -15,14 +15,12 @@ variables:
     required: true
   - name: secretManagerId
     required: true
-    defaultValue: eWxcSyuVSpiPzXTjsMvxyw
 steps:
-  # - name: Create Application
-  #   type: CreateApplication
-  #   applicationName: <%= vars.applicationName %>
-  #   skipExisting: true
+  - name: Create Application
+    type: CreateApplication
+    applicationName: <%= vars.applicationName %>
+    skipExisting: true
 
-  # Need to add scoping settings for this
   - name: Create Cloud Provider
     type: HarnessCLICommand
     command: cloud-provider:create-k8s
@@ -62,6 +60,8 @@ steps:
     exclude:
       - "**/Infrastructure Definitions/**/*.yaml"
       - "**/Service Verification/**/*.yaml"
+      - "**/Workflows/**/*.yaml"
+      - "**/Pipelines/**/*.yaml"
 
   - name: Set docker server for artifact sources
     type: SetValue
