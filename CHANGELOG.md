@@ -1,3 +1,7 @@
+0.9.8 (November 10, 2020)
+------------------------
+* Forgot to commit a couple file before releasing
+
 0.9.7 (November 10, 2020)
 ------------------------
 
