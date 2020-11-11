@@ -99,6 +99,7 @@ OPTIONS
 * [`harness groups:get`](#harness-groupsget)
 * [`harness groups:list`](#harness-groupslist)
 * [`harness help [COMMAND]`](#harness-help-command)
+* [`harness k8s:create-namespace [FILE]`](#harness-k8screate-namespace-file)
 * [`harness secrets:create`](#harness-secretscreate)
 * [`harness secrets:delete`](#harness-secretsdelete)
 * [`harness template:exec`](#harness-templateexec)
@@ -646,6 +647,22 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `harness k8s:create-namespace [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ harness k8s:create-namespace [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/k8s/create-namespace.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.8/src/commands/k8s/create-namespace.ts)_
 
 ## `harness secrets:create`
 
