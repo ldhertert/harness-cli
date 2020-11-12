@@ -4,6 +4,7 @@ harness-cli
 [![Version](https://img.shields.io/npm/v/@ldhertert/harness-cli.svg)](https://npmjs.org/package/@ldhertert/harness-cli)
 [![Downloads/week](https://img.shields.io/npm/dw/@ldhertert/harness-cli.svg)](https://npmjs.org/package/@ldhertert/harness-cli)
 [![License](https://img.shields.io/npm/l/@ldhertert/harness-cli.svg)](https://github.com/ldhertert/harness-cli/blob/master/package.json)
+[![Slack](https://img.shields.io/badge/slack-@harness/community-yellow.svg?logo=slack)](https://harnesscommunity.slack.com/archives/C01ETG99YHJ)
 
 * [Overview](#overview)
 * [Disclaimers](#disclaimers)
@@ -22,8 +23,8 @@ on streamlining common app team onboarding tasks, such as creating applications,
 Disclaimers
 ===========
 
-* This product is not supported by the Harness Customer Support team.  If you have any problems or questions please open a [new issue](https://github.com/ldhertert/harness-cli/issues/new)
-* This is definitely a work in progress.  Not all API's have been implemented as CLI commands, and for the ones that have been, some functionality/permutations have not yet been implemented.  If there is something missing that you need, please open a [new issue](https://github.com/ldhertert/harness-cli/issues/new) or, even better, open a pull request.
+* This product is not supported by the Harness Customer Support team.  If you have any problems or questions please open a [new issue](https://github.com/ldhertert/harness-cli/issues/new) or join our [slack channel](https://harnesscommunity.slack.com/archives/C01ETG99YHJ)
+* This is definitely a work in progress.  Not all API's have been implemented as CLI commands, and for the ones that have been, some functionality/permutations have not yet been implemented.  If there is something missing that you need, please open a [new issue](https://github.com/ldhertert/harness-cli/issues/new), join our [slack channel](https://harnesscommunity.slack.com/archives/C01ETG99YHJ).
 
 Installation
 ============
