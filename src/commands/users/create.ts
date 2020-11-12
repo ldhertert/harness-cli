@@ -18,7 +18,7 @@ export default class UsersCreate extends Command {
 
         const harness = await this.getHarnessClient()
         
-        const groupIds = []
+        const groupIds: any[] = []
         this.log(flags.group)
         for (const group of flags.group) {
             groupIds.push((await harness.groups.get(group)).id)   

@@ -1,8 +1,8 @@
 import { Harness } from './harness-api-client'
-import * as traverse from 'traverse'
+import traverse from 'traverse'
 import * as _ from 'lodash'
 import { File } from '../../util/filesystem'
-import * as FormData from 'form-data'
+import FormData from 'form-data'
 import JSZip = require('jszip');
 
 export interface ConfigAsCodeFile {

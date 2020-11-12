@@ -32,6 +32,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "*",
     "@oclif/test": "*",
+    "@tsconfig/node12": "^1.0.7",
     "@types/chai": "*",
     "@types/flat": "^5.0.1",
     "@types/js-yaml": "^3.12.5",
@@ -84,7 +85,7 @@
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "mocha -r ts-node/register test/commands/application/*.test.ts",
+    "test": "mocha -r ts-node/register -r dotenv/config test/commands/application/create.test.ts",
     "version": "oclif-dev readme && git add README.md",
     "pkg-macos": "pkg . -t node12-macos-x64 -o ./dist/harness-macos-x64",
     "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64",

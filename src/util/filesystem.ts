@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import * as os from 'os'
-import * as globSync from 'glob'
+import globSync from 'glob'
 
 export interface File {
     path: string;

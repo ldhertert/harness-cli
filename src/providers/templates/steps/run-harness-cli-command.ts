@@ -1,6 +1,6 @@
 import { Step, StepType } from '../steps'
 import { TemplateExecutionContext } from '../template'
-import * as execa from 'execa'
+import execa from 'execa'
 import * as _ from 'lodash'
 
 interface Dict<T> {

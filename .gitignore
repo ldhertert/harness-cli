@@ -10,3 +10,4 @@ node_modules
 .env
 /build
 src/debug.ts
+tsconfig.tsbuildinfo

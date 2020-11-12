@@ -1,10 +1,10 @@
 import { StorageProviderRef } from '../storage/storage-provider'
 import { TemplateExecutionContext } from './template'
-import * as minimatch from 'minimatch'
+import minimatch from 'minimatch'
 import _ = require('lodash');
 import { fromYaml, toYaml, getStorageProvider } from '../../util/objects'
 import { File } from '../../util/filesystem'
-import * as traverse from 'traverse'
+import traverse from 'traverse'
 
 export enum StepType {
     FileSource = 'FileSource',

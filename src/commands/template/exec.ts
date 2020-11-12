@@ -5,6 +5,7 @@ import { Template } from '../../providers/templates/template'
 import * as yaml from 'js-yaml'
 import axios from 'axios'
 import { Harness } from '../../providers/harness/harness-api-client'
+import { URL } from 'url'
 
 export default class TemplateExec extends Command {
     static description = 'Apply steps defined in template manifest and send reults to target Harness account.'

@@ -1,7 +1,7 @@
 import { File } from '../../util/filesystem'
 import { Harness, HarnessApiOptions } from '../harness/harness-api-client'
 import { StorageType, StorageProviderRef, StorageProvider } from './storage-provider'
-import * as glob from 'minimatch'
+import glob from 'minimatch'
 import { ConfigAsCodeFile } from '../harness/config-as-code'
 import * as _ from 'lodash'
 
