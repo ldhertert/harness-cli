@@ -29,14 +29,13 @@ const cloudProviderValidationRule: RoleRule = {
     verbs: ['list'],
 }
 
-export const HarnessRBACRules = {
-    fullAccessRule,
-    cloudProviderValidationRule,
-}
-
-async function getClient(defaultNamespace?: string) {
+async function getClient(defaultNamespace?: string, kubeconfig?: string) {
     const kc = new k8s.KubeConfig()
-    kc.loadFromDefault()
+    if (kubeconfig) {
+        kc.loadFromFile(kubeconfig)
+    } else {
+        kc.loadFromDefault()
+    }
     const _defaultNamespace = defaultNamespace || 'default'
     const client = {
         core: kc.makeApiClient(k8s.CoreV1Api),
@@ -119,11 +118,15 @@ async function getClient(defaultNamespace?: string) {
                 }
             }
         }
+        return {
+            name: serviceAccount,
+            namespace: ns,
+        }
     }
 
     const generateKubeCfg = async function (serviceAccount: string, namespace: string) {
         const sa = await getServiceAccount(serviceAccount, namespace)
-        if (!sa) { 
+        if (!sa?.cert || !sa?.token) { 
             return
         }
         
@@ -176,18 +179,17 @@ async function getClient(defaultNamespace?: string) {
         return result
     }
 
-    const test = async function () {
-        const result = {}
-        return result
-    }
-
     return {
-        test,
+        kubeconfig: kc,
         rbac: {
             roles: {
                 create: createRole,
                 createClusterRoleBinding,
                 createRoleBinding,
+                rules: {
+                    fullAccessRule,
+                    cloudProviderValidationRule,
+                },
             },
             serviceAccounts: {
                 create: createServiceAccount,

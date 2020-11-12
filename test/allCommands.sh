@@ -84,6 +84,12 @@ artifactType: DOCKER
 deploymentType: HELM
 helmVersion: V3"
 
+harness k8s:create-namespace --name myapp 
+harness k8s:create-service-account --name harness --namespace myapp
+harness k8s:get-service-account --name harness --namespace myapp
+harness k8s:create-role --name harness --namespace myapp --serviceAccount harness --namespaceAdmin
+harness k8s:create-role --listDeploymentsInDefaultNamespace --serviceAccount harness --serviceAccountNamespace myapp
+
 ### Clean up ###
 
 echo "Cleaning up"

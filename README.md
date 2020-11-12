@@ -99,7 +99,11 @@ OPTIONS
 * [`harness groups:get`](#harness-groupsget)
 * [`harness groups:list`](#harness-groupslist)
 * [`harness help [COMMAND]`](#harness-help-command)
-* [`harness k8s:create-namespace [FILE]`](#harness-k8screate-namespace-file)
+* [`harness k8s:create-namespace`](#harness-k8screate-namespace)
+* [`harness k8s:create-namespaced-cloudprovider`](#harness-k8screate-namespaced-cloudprovider)
+* [`harness k8s:create-role`](#harness-k8screate-role)
+* [`harness k8s:create-service-account`](#harness-k8screate-service-account)
+* [`harness k8s:get-service-account [FILE]`](#harness-k8sget-service-account-file)
 * [`harness secrets:create`](#harness-secretscreate)
 * [`harness secrets:delete`](#harness-secretsdelete)
 * [`harness template:exec`](#harness-templateexec)
@@ -648,13 +652,93 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 
-## `harness k8s:create-namespace [FILE]`
+## `harness k8s:create-namespace`
+
+Create a new Kubernetes namespace
+
+```
+USAGE
+  $ harness k8s:create-namespace
+
+OPTIONS
+  --kubeconfig=kubeconfig  Path to a kubeconfig file. If not specified, the following search order takes precedence:
+                           KUBECONFIG environment variable, default kubectl config file (i.e. ~/.kube/config).
+
+  --name=name              (required) The name of the new namespace
+```
+
+_See code: [src/commands/k8s/create-namespace.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.8/src/commands/k8s/create-namespace.ts)_
+
+## `harness k8s:create-namespaced-cloudprovider`
+
+```
+USAGE
+  $ harness k8s:create-namespaced-cloudprovider
+
+OPTIONS
+  -n, --namespace=namespace        (required) The name of the namespace
+  --role=role                      [default: harness] The name of the role
+  --serviceAccount=serviceAccount  [default: harness] The name of the service account
+```
+
+_See code: [src/commands/k8s/create-namespaced-cloudprovider.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.8/src/commands/k8s/create-namespaced-cloudprovider.ts)_
+
+## `harness k8s:create-role`
+
+```
+USAGE
+  $ harness k8s:create-role
+
+OPTIONS
+  --kubeconfig=kubeconfig                            Path to a kubeconfig file. If not specified, the following search
+                                                     order takes precedence: KUBECONFIG environment variable, default
+                                                     kubectl config file (i.e. ~/.kube/config).
+
+  --listDeploymentsInDefaultNamespace                Grants the account permissions to list deployments in the default
+                                                     namespace. This is required for cloud provider validation to be
+                                                     successful without skipping validation.
+
+  --name=name                                        [default: harness] The name of the role
+
+  --namespace=namespace                              The namespace to create the role in. If not specified, the default
+                                                     namespace in your kubeconfig will be used
+
+  --namespaceAdmin                                   Grant full permissions to a specific namespace.
+
+  --serviceAccount=serviceAccount                    [default: harness] Specify a service account to create a role
+                                                     binding for
+
+  --serviceAccountNamespace=serviceAccountNamespace  The namespace of the service account. If not provided, the service
+                                                     account for the role is used.
+```
+
+_See code: [src/commands/k8s/create-role.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.8/src/commands/k8s/create-role.ts)_
+
+## `harness k8s:create-service-account`
+
+```
+USAGE
+  $ harness k8s:create-service-account
+
+OPTIONS
+  --kubeconfig=kubeconfig  Path to a kubeconfig file. If not specified, the following search order takes precedence:
+                           KUBECONFIG environment variable, default kubectl config file (i.e. ~/.kube/config).
+
+  --name=name              [default: harness] The name of the service account
+
+  --namespace=namespace    The name of the namespace. If not specified, the default namespace in your kubeconfig will be
+                           used
+```
+
+_See code: [src/commands/k8s/create-service-account.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.8/src/commands/k8s/create-service-account.ts)_
+
+## `harness k8s:get-service-account [FILE]`
 
 describe the command here
 
 ```
 USAGE
-  $ harness k8s:create-namespace [FILE]
+  $ harness k8s:get-service-account [FILE]
 
 OPTIONS
   -f, --force
@@ -662,7 +746,7 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src/commands/k8s/create-namespace.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.8/src/commands/k8s/create-namespace.ts)_
+_See code: [src/commands/k8s/get-service-account.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.8/src/commands/k8s/get-service-account.ts)_
 
 ## `harness secrets:create`
 
