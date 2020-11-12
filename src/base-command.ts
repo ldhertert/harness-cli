@@ -6,7 +6,7 @@ import {Input, OutputArgs, OutputFlags } from '@oclif/parser'
 export abstract class BaseCommand extends Command {
     static flags = {
         debug: flags.boolean({ hidden: true, description: 'Print debug logs to stdout.', env: 'HARNESS_CLI_DEBUG' }),
-        jsonpath: flags.string({ hidden: true, description: 'Apply jsonpath expression to output prior to printing' }),
+        select: flags.string({ hidden: true, description: 'Apply expression to output prior to printing' }),
         managerUrl: flags.string({ hidden: true, description: 'The Harness Manager URL.  Can also be set via HARNESS_MANAGER_URL environment variable', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
         harnessAccountId: flags.string({ hidden: true, description: 'The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment variable.', env: 'HARNESS_ACCOUNT' }),
         harnessApiKey: flags.string({ hidden: true, description: 'The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.', env: 'HARNESS_API_KEY' }),
@@ -35,7 +35,11 @@ export abstract class BaseCommand extends Command {
             return
         }
 
-        if (message && _.isObject(message)) {
+        if (_.isObject(message) && this.context?.flags.select) {
+            message = _.get(message, this.context.flags.select, message)
+        }
+        
+        if (_.isObject(message)) {
             console.log(JSON.stringify(message, undefined, 4))
         } else {
             console.log(message)

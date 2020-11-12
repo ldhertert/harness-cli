@@ -37,6 +37,8 @@ export default class K8sCreateRole extends Command {
       } catch (ex) {
           if (ex?.response?.body?.code === 409) {
               this.warn('Role already exists. Continuing.')
+          } else if (ex?.response?.body?.message) {
+              throw new Error(ex.response.body.message)
           } else {
               throw ex
           }
@@ -52,6 +54,8 @@ export default class K8sCreateRole extends Command {
           } catch (ex) {
               if (ex?.response?.body?.code === 409) {
                   this.warn('Role already exists. Continuing.')
+              } else if (ex?.response?.body?.message) {
+                  throw new Error(ex.response.body.message)
               } else {
                   throw ex
               }

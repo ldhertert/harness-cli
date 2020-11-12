@@ -20,11 +20,13 @@ export default class K8sCreateServiceAccount extends Command {
       // create service account in namespace (if needed)
       try {
           const serviceAccount = await k8s.rbac.serviceAccounts.create(flags.name, flags.namespace)
-          this.log(`Created service account ${flags.name} in ${flags.namespace} namespace`)
+          this.warn(`Created service account ${flags.name} in ${flags.namespace} namespace`)
           this.debug(serviceAccount)
       } catch (ex) {
           if (ex?.response?.body?.code === 409) {
               this.log('Service account already exists. Continuing.')
+          } else if (ex?.response?.body?.message) {
+              throw new Error(ex.response.body.message)
           } else {
               throw ex
           }

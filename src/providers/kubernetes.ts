@@ -169,6 +169,7 @@ async function getClient(defaultNamespace?: string, kubeconfig?: string) {
         return result
     }
 
+    // eslint-disable-next-line max-params
     const createRoleBinding = async function (name: string, serviceAccount: string, serviceAccountNamespace: string, role: string, namespace?: string) {
         const roleDef: k8s.V1RoleBinding = {
             metadata: { name: name, namespace: namespace || _defaultNamespace},

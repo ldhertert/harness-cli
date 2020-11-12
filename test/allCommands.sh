@@ -85,8 +85,13 @@ deploymentType: HELM
 helmVersion: V3"
 
 harness k8s:create-namespace --name myapp 
-harness k8s:create-service-account --name harness --namespace myapp
-harness k8s:get-service-account --name harness --namespace myapp
+harness k8s:create-service-account --name harness --namespace myapp | read token
+harness k8s:get-service-account --name harness --namespace myapp --select token
+harness secret:create --name k8s-myapp-sa-token --value "${token}" --secretManager eWxcSyuVSpiPzXTjsMvxyw
+
+harness k8s:cluster-info --select master | read kubernetes_master
+
+
 harness k8s:create-role --name harness --namespace myapp --serviceAccount harness --namespaceAdmin
 harness k8s:create-role --listDeploymentsInDefaultNamespace --serviceAccount harness --serviceAccountNamespace myapp
 
