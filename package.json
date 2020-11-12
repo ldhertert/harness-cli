@@ -46,9 +46,8 @@
     "eslint-plugin-unicorn": "^21.0.0",
     "globby": "*",
     "mocha": "*",
-    "nyc": "*",
     "pkg": "^4.4.9",
-    "ts-node": "*",
+    "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
   },
   "engines": {
@@ -85,7 +84,7 @@
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "mocha -r ts-node/register test/commands/application/*.test.ts",
     "version": "oclif-dev readme && git add README.md",
     "pkg-macos": "pkg . -t node12-macos-x64 -o ./dist/harness-macos-x64",
     "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64",
