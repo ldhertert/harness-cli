@@ -8,6 +8,7 @@
   "bugs": "https://github.com/ldhertert/harness-cli/issues",
   "dependencies": {
     "-": "0.0.1",
+    "@kubernetes/client-node": "^0.13.0",
     "@oclif/command": "*",
     "@oclif/config": "*",
     "@oclif/plugin-autocomplete": "^0.2.0",
