@@ -155,24 +155,18 @@ export class CloudProviders {
     }
 
     private async getByName(name: string) {
-        const all = await this.list()
-        return _.find(all, { name: name })
+        const query = `
+        query ($name: String!) {
+            result: cloudProviderByName(name: $name) {
+                ${this.fields}
+            }
+        }`
+
+        const vars = { name }
+
+        const result = await this.client.execute(query, vars)
+        return result.data.result
     }
-    
-    // Having issues with cloudProviderByName - see https://harness.atlassian.net/browse/DX-2219
-    // private async getByName(name: string) {
-    //     const query = `
-    //     query ($name: String!) {
-    //         result: cloudProviderByName(name: $name) {
-    //             ${this.fields}
-    //         }
-    //     }`
-
-    //     const vars = { name }
-
-    //     const result = await this.client.execute(query, vars)
-    //     return result.data.result
-    // }
 
     async delete(idOrName: string) {
         const resource = await this.get(idOrName)
