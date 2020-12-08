@@ -21,6 +21,7 @@ export abstract class BaseCommand extends Command {
             harness: {
                 accountId?: string,
                 apiKey?: string,
+                managerUrl?: string,
             }
         };
         logger: {
@@ -65,6 +66,7 @@ export abstract class BaseCommand extends Command {
                 harness: {
                     accountId: parsedFlags.harnessAccountId,
                     apiKey: parsedFlags.harnessApiKey,
+                    managerUrl: parsedArgs.managerUrl,
                 },
             },
             logger: {
@@ -82,7 +84,12 @@ export abstract class BaseCommand extends Command {
 
     async getHarnessClient() {
         if (this.context.config.harness.accountId && this.context.config.harness.apiKey) {
-            const client = new Harness({ accountId: this.context.config.harness.accountId, apiKey: this.context.config.harness.apiKey})
+            const client = new Harness({ 
+                accountId: this.context.config.harness.accountId, 
+                apiKey: this.context.config.harness.apiKey,
+                managerUrl: this.context.config.harness.managerUrl,
+            })
+            
             try {
                 await client.init()
                 return client
