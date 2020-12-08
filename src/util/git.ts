@@ -92,11 +92,7 @@ export class Git {
             })
 
         await Promise.all(filesToStage.map(async file => {
-            if (file.remove) {
-                await git.remove({ fs, dir: this.cwd, filepath: file.path })
-            } else {
-                await git.add({ fs, dir: this.cwd, filepath: file.path })
-            }
+            await (file.remove ? git.remove({ fs, dir: this.cwd, filepath: file.path }) : git.add({ fs, dir: this.cwd, filepath: file.path }))
         }))
 
         status = await git.statusMatrix({

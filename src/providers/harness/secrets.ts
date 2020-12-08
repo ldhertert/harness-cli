@@ -110,12 +110,7 @@ export class Secrets {
             }
         }`
 
-        let scope: UsageScope | undefined
-        if (options.scopedToAccount) {
-            scope = undefined
-        } else {
-            scope = options.usageScope || DefaultUsageScope
-        }
+        const scope = options.scopedToAccount ? undefined : options.usageScope || DefaultUsageScope
 
         const vars = {
             input: {

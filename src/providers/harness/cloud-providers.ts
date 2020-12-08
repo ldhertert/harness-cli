@@ -1,5 +1,4 @@
 import { GraphQLClient } from '../../util/graphql-client'
-import _ = require('lodash');
 
 export enum K8sClusterDetailsType {
     Inherit = 'INHERIT_CLUSTER_DETAILS',

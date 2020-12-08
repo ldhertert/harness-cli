@@ -134,7 +134,7 @@ export class Template {
         return context
     }
 
-    private processVariables(inputVars: any, context: TemplateExecutionContext): void{
+    private processVariables(inputVars: any, context: TemplateExecutionContext): void {
         // Merge user provided variables with template variables with default values
         const templateDefaults: any = {}
         this.variables.filter(v => v.defaultValue !== undefined)
