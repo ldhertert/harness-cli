@@ -1,3 +1,8 @@
+0.9.9 (December 8, 2020)
+------------------------
+* Add commands for common kubernetes administrative tasks
+* Fix support for custom manager URL in most commands
+
 0.9.8 (November 10, 2020)
 ------------------------
 * Forgot to commit a couple file before releasing
