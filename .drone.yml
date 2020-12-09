@@ -1,0 +1,12 @@
+kind: pipeline
+name: default
+
+steps:
+- name: release
+  image: node
+  commands:
+  - npm release
+
+trigger:
+  event:
+  - tag
