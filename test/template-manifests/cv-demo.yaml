@@ -4,7 +4,7 @@ variables:
   - name: applicationName
     defaultValue: cv-demo
   - name: delegateName
-    defaultValue: plex
+    defaultValue: cv-demo
   - name: cloudProviderName
     defaultValue: cv-demo
   - name: dockerConnectorName
@@ -58,10 +58,7 @@ steps:
     files:
       - Setup/Applications/cv-demo/**/*.yaml
     exclude:
-      - "**/Infrastructure Definitions/**/*.yaml"
       - "**/Service Verification/**/*.yaml"
-      - "**/Workflows/**/*.yaml"
-      - "**/Pipelines/**/*.yaml"
 
   - name: Set docker server for artifact sources
     type: SetValue

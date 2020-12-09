@@ -13,13 +13,8 @@ export SECRET_MANAGER_ID='eWxcSyuVSpiPzXTjsMvxyw'
 harness template:exec --manifest ./test/template-manifests/cv-demo.yaml \
     -v "dockerUsername=${DOCKER_USERNAME}" \
     -v "dockerPassword=${DOCKER_PASSWORD}" \
-    -v "secretManagerId=${SECRET_MANAGER_ID}"
-
-read -n 1 -s -r -p "Please manually create infra definition, then press any key to continue."
-
-echo "\nRunning second half of the template"
-
-harness template:exec --manifest ./test/template-manifests/cv-demo-step-2.yaml
+    -v "secretManagerId=${SECRET_MANAGER_ID}" \
+    -v "delegateName=luke-mbp"
 
 ##### clean up #####
 
