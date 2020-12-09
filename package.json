@@ -90,7 +90,7 @@
         "pkg-macos": "pkg . -t node12-macos-x64 -o ./dist/harness-macos-x64",
         "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64",
         "pkg-windows": "pkg . -t node12-win-x64 -o ./dist/harness-win-x64",
-        "pkg": "rm node_modules/@octokit/openapi-types/generated/types.ts && npm run pkg-macos && npm run pkg-linux && npm run pkg-windows",
+        "pkg": "rm -f ./node_modules/@octokit/openapi-types/generated/types.ts && npm run pkg-macos && npm run pkg-linux && npm run pkg-windows",
         "release": "release-it"
     },
     "types": "lib/index.d.ts",
