@@ -2,16 +2,26 @@ kind: pipeline
 name: default
 
 steps:
-- name: release
+- name: Build
+  image: node
+  commands:
+    - npm run build
+    - npm run pkg
+- name: NPM Publish
   image: node
   environment:
     GITHUB_TOKEN:
       from_secret: GITHUB_TOKEN
-    NPM_TOKEN:
-      from_secret: NPM_TOKEN
   commands:
   - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-  - npm release
+  - npm run release-npm
+- name: GitHub Release
+  image: node
+  environment:
+    GITHUB_TOKEN:
+      from_secret: GITHUB_TOKEN
+  commands:
+  - npm run release-github
 
 trigger:
   event:
