@@ -33,7 +33,7 @@ export abstract class Step {
         this.files = files
     }
 
-    abstract async run(context: TemplateExecutionContext): Promise<void>
+    abstract run(context: TemplateExecutionContext): Promise<void>
 
     renderTemplate(original: string | any, context: TemplateExecutionContext) {
         if (_.isString(original)) {
