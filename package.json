@@ -81,7 +81,7 @@
     "repository": "ldhertert/harness-cli",
     "scripts": {
         "lint": "eslint ./src",
-        "compile": "tsc",
+        "compile": "./node_modules/typescript/bin/tsc",
         "build": "npm run compile && npm run lint && oclif-dev readme",
         "postpack": "rm -f oclif.manifest.json",
         "posttest": "eslint . --ext .ts --config .eslintrc",
@@ -96,7 +96,5 @@
         "release-github": "release-it --no-increment --no-git --no-npm --github.release --github.assets='./dist/harness*' --ci"
     },
     "types": "lib/index.d.ts",
-    "release-it": {
-        
-    }
+    "release-it": {}
 }
