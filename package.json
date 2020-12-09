@@ -87,13 +87,13 @@
         "posttest": "eslint . --ext .ts --config .eslintrc",
         "prepack": "rm tsconfig.tsbuildinfo && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
         "test": "mocha -r ts-node/register -r dotenv/config test/commands/application/create.test.ts",
-        "version": "npm run build && release-it patch --no-npm",
         "pkg-macos": "pkg . -t node12-macos-x64 -o ./dist/harness-macos-x64",
         "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64",
         "pkg-windows": "pkg . -t node12-win-x64 -o ./dist/harness-win-x64",
         "pkg": "rm -f ./node_modules/@octokit/openapi-types/generated/types.ts && npm run pkg-macos && npm run pkg-linux && npm run pkg-windows",
-        "release-npm": "release-it --no-increment --no-git --ci",
-        "release-github": "release-it --no-increment --no-git --no-npm --github.release --github.assets='./dist/harness*' --ci"
+        "release-npm": "release-it",
+        "release-github": "npm run pkg && release-it --no-increment --no-git --no-npm --github.release --github.assets='./dist/harness*' --ci",
+        "release": "npm run build && npm run release-npm && npm run release-github"
     },
     "types": "lib/index.d.ts",
     "release-it": {}

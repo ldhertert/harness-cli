@@ -6,22 +6,22 @@ steps:
   image: node
   commands:
     - npm run build
-    - npm run pkg
-- name: NPM Publish
-  image: node
-  environment:
-    GITHUB_TOKEN:
-      from_secret: GITHUB_TOKEN
-  commands:
-  - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-  - npm run release-npm
-- name: GitHub Release
-  image: node
-  environment:
-    GITHUB_TOKEN:
-      from_secret: GITHUB_TOKEN
-  commands:
-  - npm run release-github
+#     - npm run pkg
+# - name: NPM Publish
+#   image: node
+#   environment:
+#     GITHUB_TOKEN:
+#       from_secret: GITHUB_TOKEN
+#   commands:
+#   - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+#   - npm run release-npm
+# - name: GitHub Release
+#   image: node
+#   environment:
+#     GITHUB_TOKEN:
+#       from_secret: GITHUB_TOKEN
+#   commands:
+#   - npm run release-github
 
 trigger:
   event:
