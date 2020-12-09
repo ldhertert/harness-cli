@@ -4,7 +4,13 @@ name: default
 steps:
 - name: release
   image: node
+  environment:
+    GITHUB_TOKEN:
+      from_secret: GITHUB_TOKEN
+    NPM_TOKEN:
+      from_secret: NPM_TOKEN
   commands:
+  - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
   - npm release
 
 trigger:
