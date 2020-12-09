@@ -62,7 +62,7 @@ OPTIONS
   --harnessApiKey=harnessApiKey        The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.
 
   --managerUrl=managerUrl              [default: https://app.harness.io] The Harness Manager URL.  Can also be set via
-                                       HARNESS_MANAGER_URL environment variable
+                                       HARNESS_MANAGER_URL environment variable.  If a path is included, then that path is used as the API root.  Otherwise, the default API root will be /gateway/api.
 
   -s, --silent                         Supress stdout logging. Can also be set via
                                        HARNESS_CLI_SILENT environment variable

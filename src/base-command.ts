@@ -7,7 +7,7 @@ export abstract class BaseCommand extends Command {
     static flags = {
         debug: flags.boolean({ hidden: true, description: 'Print debug logs to stdout.', env: 'HARNESS_CLI_DEBUG' }),
         select: flags.string({ hidden: true, description: 'Apply expression to output prior to printing' }),
-        managerUrl: flags.string({ hidden: true, description: 'The Harness Manager URL.  Can also be set via HARNESS_MANAGER_URL environment variable', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
+        managerUrl: flags.string({ hidden: true, description: 'The Harness Manager URL.  Can also be set via HARNESS_MANAGER_URL environment variable. If a path is included, then that path is used as the API root.  Otherwise, the default API root will be /gateway/api.', default: 'https://app.harness.io', env: 'HARNESS_MANAGER_URL' }),
         harnessAccountId: flags.string({ hidden: true, description: 'The Harness Account Id.  Can also be set via HARNESS_ACCOUNT environment variable.', env: 'HARNESS_ACCOUNT' }),
         harnessApiKey: flags.string({ hidden: true, description: 'The Harness API Key. Can also be set via HARNESS_API_KEY environment variable.', env: 'HARNESS_API_KEY' }),
         silent: flags.boolean({ hidden: true, description: 'Supress stdout logging', default: false, char: 's', env: 'HARNESS_CLI_SILENT' }),

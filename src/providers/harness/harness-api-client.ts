@@ -30,6 +30,7 @@ let http = axios.create()
 
 export class Harness {
     managerUrl: string;
+    apiBase: string;
     accountId: string;
     apiKey?: string;
     username?: string;
@@ -49,8 +50,8 @@ export class Harness {
 
     constructor(options?: HarnessApiOptions) {
         options = options || Config.Harness
-
-        this.managerUrl = new URL(options.url || defaultManagerUrl).origin
+        this.apiBase = Harness.getApiBase(options.url)
+        this.managerUrl = new URL(this.apiBase).origin
 
         this.apiKey = options.apiKey || Config.Harness.apiKey
         this.username = options.username || Config.Harness.username
@@ -74,8 +75,8 @@ export class Harness {
         } else {
             throw new Error('Either API Key or username/password are required')
         }
-
-        this.client = new GraphQLClient(`${this.managerUrl}/gateway/api/graphql?accountId=${this.accountId}`, headers)
+        
+        this.client = new GraphQLClient(`${this.apiBase}/graphql?accountId=${this.accountId}`, headers)
 
         this.secrets = new Secrets(this.client)
         this.secretManagers = new SecretManagers(this.client)
@@ -88,12 +89,24 @@ export class Harness {
         this.configAsCode = new ConfigAsCode(this)
     }
 
+    static getApiBase(managerUrl?: string) {
+        const url = new URL(managerUrl || defaultManagerUrl)
+        let apiRoot = '/gateway/api'
+
+        if (url.pathname !== '/') {
+            apiRoot = url.pathname
+        }
+
+        return `${url.origin}${apiRoot}`
+    }
+
     static async login(username: string, password: string, managerUrl?: string) {
         const data = {
             authorization: 'Basic ' + Buffer.from(username + ':' + password).toString('base64'),
         }
         
-        const response = await http.post(`${new URL(managerUrl || defaultManagerUrl).origin}/gateway/api/users/login`, data)
+        const apiBase = this.getApiBase(managerUrl)
+        const response = await http.post(`${apiBase}/users/login`, data)
 
         return {
             token: response.data.resource.token,
@@ -110,7 +123,7 @@ export class Harness {
         const parsed = new URL(url)
 
         const options: HarnessApiOptions = {
-            url: parsed.origin,
+            url: parsed.origin + parsed.pathname,
             accountId: '',
         }
 
