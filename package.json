@@ -91,9 +91,7 @@
         "pkg-linux": "pkg . -t node12-linux-x64 -o ./dist/harness-linux-x64",
         "pkg-windows": "pkg . -t node12-win-x64 -o ./dist/harness-win-x64",
         "pkg": "rm -f ./node_modules/@octokit/openapi-types/generated/types.ts && npm run pkg-macos && npm run pkg-linux && npm run pkg-windows",
-        "release-npm": "release-it",
-        "release-github": "npm run pkg && release-it --no-increment --no-git --no-npm --github.release --github.assets='./dist/harness*' --ci",
-        "release": "npm run build && npm run release-npm && npm run release-github"
+        "release": "npm run build && npm run pkg && release-it --github.release --github.assets='./dist/harness*' --only-version"
     },
     "types": "lib/index.d.ts",
     "release-it": {}
