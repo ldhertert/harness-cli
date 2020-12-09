@@ -1,10 +1,12 @@
 kind: pipeline
+type: docker
 name: default
 
 steps:
 - name: Build
   image: node
   commands:
+    - npm install
     - npm run build
 #     - npm run pkg
 # - name: NPM Publish
@@ -25,4 +27,4 @@ steps:
 
 trigger:
   event:
-  - tag
+  - push
