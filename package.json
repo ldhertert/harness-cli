@@ -102,7 +102,7 @@
             ]
         },
         "git": {
-            "requireCleanWorkingDir": false,
+            "requireCleanWorkingDir": true,
             "requireBranch": "master"
         },
         "npm": {
