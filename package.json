@@ -1,6 +1,6 @@
 {
   "name": "@ldhertert/harness-cli",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "author": "Luke Hertert @ldhertert",
   "bin": {
     "harness": "./bin/run"

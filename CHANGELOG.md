@@ -1,3 +1,8 @@
+0.9.11 (December 8, 2020)
+------------------------
+* Add support for custom Harness API root in Manager URL.
+* Change API endpoint used to fetch YAML file contents.
+
 0.9.10 (December 8, 2020)
 ------------------------
 * Fix support for custom manager URL in base command
