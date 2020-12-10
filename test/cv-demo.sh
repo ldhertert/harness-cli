@@ -28,9 +28,3 @@ harness template:exec --harnessAccountId SAsyUUHTTImuYSZ35HPDvw --manifest ./tes
     --var serviceName=k8s2 \
     --var repoName=dsfaf \
     --debug
-
-BASIC_AUTH='xxx'
-BEARER_TOKEN=$(curl 'https://app.harness.io/gateway/api/users/login' \
-  -H 'accept: application/json, text/plain, */*' \
-  -H 'content-type: application/json;charset=UTF-8' \
-  --data-binary "{\"authorization\":\"Basic ${BASIC_AUTH}\"}" | jq -r '.resource.token')
