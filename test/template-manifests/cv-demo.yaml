@@ -78,3 +78,13 @@ steps:
     type: RenameFile
     search: Setup/Applications/cv-demo/
     replace: Setup/Applications/<%= vars.applicationName %>/    
+
+  # Need to add step to push workspace to destination
+  # Create namespace cv-demo
+  # Deploy ingress controller
+  # Deploy prometheus (add ingress rule?)
+  # Deploy elk (add ingress rule?)
+  # Create prometheus and elk connectors
+  ### http://elasticsearch-loadbalancer.cv-demo:80
+  ### http://prometheus-service.cv-demo:8080/
+  # In cv-demo-canary workflow, select prometheus and elk connectors in verification steps
