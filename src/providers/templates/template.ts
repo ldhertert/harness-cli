@@ -90,7 +90,8 @@ export class Template {
         const context: TemplateExecutionContext = {
             vars: {
                 destination: {
-                    apiKey: destination.apiKey,
+                    // Disable API key auth until https://github.com/ldhertert/harness-cli/issues/7 is fixed
+                    // apiKey: destination.apiKey,
                     accountId: destination.accountId,
                     managerUrl: destination.managerUrl,
                     username: destination.username,
@@ -106,6 +107,10 @@ export class Template {
         this.processVariables(inputVars, context)
         await this.executeTemplateSteps(context)
         // Preview changes
+        if (context.workspace.length > 0) {
+            context.logger.debug('Workspace contents')
+            context.logger.debug(context.workspace)
+        }
 
         // Upsert yaml results
         if (!dryRun && context.workspace.length > 0) {
