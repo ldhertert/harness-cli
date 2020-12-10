@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { URL } from 'url'
 
 interface Headers {
@@ -7,22 +7,21 @@ interface Headers {
 type Params = Headers
 
 interface RequestMetadata {
-    http: {
-        request: {
-            query: Params,
-            headers: Headers,
-            method?: string,
-            url: string,
-        },
-        response: {
-            headers: Headers,
-            status: number,
-            statusText: string,
-        },
-    }
+    request: {
+        query: Params,
+        headers: Headers,
+        method?: string,
+        url: string,
+    },
+    response: {
+        headers: Headers,
+        status: number,
+        statusText: string,
+        content?: any,
+    },
 }
 
-type HttpResult<T> = T & RequestMetadata;
+type HttpResult<T> = T &  { http: RequestMetadata };
 
 type ExposedAxiosConfigProps = Pick<AxiosRequestConfig,
     'baseURL' | 'url' | 'timeout' | 'responseType' |
@@ -33,8 +32,8 @@ export interface HttpClientConfg extends ExposedAxiosConfigProps {
     params?: Params,
 }
 
-type RequestInterceptor = (config: AxiosRequestConfig) => Promise<AxiosRequestConfig> | void
-type ResponseInterceptor = (response: AxiosResponse<any>) => Promise<AxiosResponse<any>> | void
+export type RequestInterceptor = (config: AxiosRequestConfig) => Promise<AxiosRequestConfig> | void
+export type ResponseInterceptor = (response: AxiosResponse<any>) => Promise<AxiosResponse<any>> | void
 
 export default class HttpClient {
     protected client: AxiosInstance
@@ -50,27 +49,15 @@ export default class HttpClient {
         try {
             const response = await this.client.request<HttpResult<T>>(options)
             const result = response.data
-            result.http = {
-                request: {
-                    url: new URL(response.config.url || '/', response.config.baseURL).href,
-                    method: response.config.method,
-                    query: response.config.params,
-                    headers: response.config.headers,
-                },
-                response: {
-                    headers: response.headers,
-                    status: response.status,
-                    statusText: response.statusText,
-                },
-            }
+            result.http = HttpClient.extractRequestMetadata(response)
             return result
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
-                console.log(error.response.data)
-                console.log(error.response.status)
-                console.log(error.response.headers)
+                // console.log(error.response.data)
+                // console.log(error.response.status)
+                // console.log(error.response.headers)
             } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -78,9 +65,11 @@ export default class HttpClient {
                 // console.log(error.request)
             } else {
                 // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message)
+                // console.log('Error', error.message)
             }
             // console.log(error.config)
+            // throw error
+            // console.log((error as AxiosError).toJSON())
             throw error
         }
     }
@@ -113,6 +102,23 @@ export default class HttpClient {
         options.method = 'delete'
         const response = await this.request<T>(url, options)
         return response
+    }
+
+    static extractRequestMetadata(response: AxiosResponse): RequestMetadata {
+        return {
+            request: {
+                url: new URL(response.config.url || '/', response.config.baseURL).href,
+                method: response.config.method,
+                query: response.config.params,
+                headers: response.config.headers,
+            },
+            response: {
+                headers: response.headers,
+                status: response.status,
+                statusText: response.statusText,
+                content: response.data,
+            },
+        }
     }
 
     onRequest(handler: RequestInterceptor) {

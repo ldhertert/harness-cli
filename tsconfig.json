@@ -8,6 +8,8 @@
         "sourceMap": true,
         "noImplicitAny": false,
         "incremental": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
     },
     "include": [
         "src/**/*"
