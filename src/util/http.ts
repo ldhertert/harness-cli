@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { URL } from 'url'
 
 interface Headers {
@@ -46,32 +46,10 @@ export default class HttpClient {
         options = options || {}
         options.url = url
 
-        try {
-            const response = await this.client.request<HttpResult<T>>(options)
-            const result = response.data
-            result.http = HttpClient.extractRequestMetadata(response)
-            return result
-        } catch (error) {
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                // console.log(error.response.data)
-                // console.log(error.response.status)
-                // console.log(error.response.headers)
-            } else if (error.request) {
-                // The request was made but no response was received
-                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                // http.ClientRequest in node.js
-                // console.log(error.request)
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                // console.log('Error', error.message)
-            }
-            // console.log(error.config)
-            // throw error
-            // console.log((error as AxiosError).toJSON())
-            throw error
-        }
+        const response = await this.client.request<HttpResult<T>>(options)
+        const result = response.data
+        result.http = HttpClient.extractRequestMetadata(response)
+        return result
     }
 
     async get<T = any>(url: string, params?:  Params, options?: HttpClientConfg): Promise<HttpResult<T>> {
@@ -97,7 +75,7 @@ export default class HttpClient {
         return response
     }
 
-    async delete<T = any>(url: string, data?:  any, options?: HttpClientConfg): Promise<HttpResult<T>> {
+    async delete<T = any>(url: string, options?: HttpClientConfg): Promise<HttpResult<T>> {
         options = options || {}
         options.method = 'delete'
         const response = await this.request<T>(url, options)
