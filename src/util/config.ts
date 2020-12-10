@@ -17,6 +17,9 @@ export interface GitCredentials extends Credentials {
 }
 
 export class Config {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    public static Version = require('../../package.json').version
+    
     public static Git: GitCredentials = {
         username: process.env.GIT_USERNAME,
         password: process.env.GIT_PASSWORD,
