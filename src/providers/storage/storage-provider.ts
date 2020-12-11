@@ -1,4 +1,7 @@
 import { File } from '../../util/filesystem'
+import { ConfigLocal } from './local-storage'
+import { ConfigGit } from './git-storage'
+import { HarnessApiOptions } from '../harness/harness-api-client'
 
 export enum StorageType {
     Local = 'Local',
@@ -8,7 +11,7 @@ export enum StorageType {
 
 export interface StorageProviderRef {
     sourceType: StorageType
-    opts?: unknown
+    opts?: ConfigLocal | ConfigGit | HarnessApiOptions
 }
 
 export interface StorageProvider {

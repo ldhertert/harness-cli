@@ -59,6 +59,7 @@ steps:
       - Setup/Applications/cv-demo/**/*.yaml
     exclude:
       - "**/Service Verification/**/*.yaml"
+      - "Setup/Applications/cv-demo/Environments/**/*.yaml"
 
   - name: Set docker server for artifact sources
     type: SetValue
@@ -79,7 +80,13 @@ steps:
     search: Setup/Applications/cv-demo/
     replace: Setup/Applications/<%= vars.applicationName %>/    
 
-  # Need to add step to push workspace to destination
+  # - name: Dump workspace
+  # type: DumpWorkspace
+  #  destination: /tmp/workspaceDump
+
+  # - name: Push to destination
+  #  type: PushToDestination
+
   # Create namespace cv-demo
   # Deploy ingress controller
   # Deploy prometheus (add ingress rule?)

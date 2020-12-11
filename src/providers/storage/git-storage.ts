@@ -9,7 +9,7 @@ export interface ConfigGit extends ConfigLocal, GitOptions {
 export class GitStorageProvider extends LocalStorageProvider {
     protected git: Git
 
-    constructor(options: GitOptions) {
+    constructor(options: ConfigGit) {
         const git = new Git(options)
         const config = options as unknown as ConfigLocal
         config.directory = git.cwd
@@ -19,7 +19,7 @@ export class GitStorageProvider extends LocalStorageProvider {
         this.git = git
     }
 
-    static createRef(opts: GitOptions): StorageProviderRef {
+    static createRef(opts: ConfigGit): StorageProviderRef {
         return {
             sourceType: StorageType.Git,
             opts: opts,

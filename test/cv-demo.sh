@@ -15,6 +15,7 @@ harness template:exec --manifest ./test/template-manifests/cv-demo.yaml \
     -v "dockerPassword=${DOCKER_PASSWORD}" \
     -v "secretManagerId=${SECRET_MANAGER_ID}" \
     -v "delegateName=luke-mbp"
+    
 
 ##### clean up #####
 
@@ -22,9 +23,3 @@ harness template:exec --manifest ./test/template-manifests/cv-demo.yaml \
 # harness cloud-provider:delete --nameOrId cv-demo
 # harness connector:delete --name cv-demo --type DockerConnector
 # harness secrets:delete --name cv-demo-docker-password
-
-harness template:exec --harnessAccountId SAsyUUHTTImuYSZ35HPDvw --manifest ./test/template-manifests/luis.yaml \
-    --var applicationName=luis-luke \
-    --var serviceName=k8s2 \
-    --var repoName=dsfaf \
-    --debug

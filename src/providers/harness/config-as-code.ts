@@ -70,34 +70,28 @@ export class ConfigAsCode {
         const zip = new JSZip()
         files.forEach(f => zip.file(f.path, f.content))
 
-        /*
-        zip
-            .generateNodeStream({type: 'nodebuffer', streamFiles: true})
-            .pipe(fs.createWriteStream('out.zip'))
-            .on('finish', function () {
-                // JSZip generates a readable stream with a "end" event,
-                // but is piped here in a writable stream which emits a "finish" event.
-                console.log('out.zip written.')
-            })
-        */
+        // zip
+        //     .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+        //     .pipe(fs.createWriteStream('out.zip'))
+        //     .on('finish', function () {
+        //         // JSZip generates a readable stream with a "end" event,
+        //         // but is piped here in a writable stream which emits a "finish" event.
+        //         console.log('out.zip written.')
+        //     })
 
         const data = new FormData()
         data.append('file', zip.generateNodeStream())
-    
-        try {
-            const response = await this.harness.privateApiPost('/gateway/api/setup-as-code/yaml/upsert-entities', data, {
-                ...data.getHeaders(),
-            })
-            return response
-        } catch (err) {
-            return err
-        }        
+
+        const response = await this.harness.privateApiPost('/gateway/api/setup-as-code/yaml/upsert-entities', data, {
+            ...data.getHeaders(),
+        })
+        return response
     }
 
     async upsertFile(file: File) {
         const data = new FormData()
         data.append('yamlContent', file.content)
-    
+
         try {
             const response = await this.harness.privateApiPost(`/gateway/api/setup-as-code/yaml/upsert-entity?yamlFilePath=${file.path}`, data, {
                 ...data.getHeaders(),
@@ -106,6 +100,6 @@ export class ConfigAsCode {
             return response
         } catch (err) {
             return err
-        }        
+        }
     }
 }

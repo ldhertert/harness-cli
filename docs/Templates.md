@@ -303,3 +303,20 @@ steps:
     args:
       nameOrId: Plex
 ```
+
+## Dump Workspace
+
+Dump the contents of the workspace for template debugging purposes.
+
+Options:
+
+* `type`: `DumpWorkspace`
+* `destination`: A directory path that the workspace files will written to on disk.  If this is not present, then the contents will be printed to the console output.
+
+Example: 
+
+```yaml
+  - name: Dump workspace
+    type: DumpWorkspace
+    destination: /tmp/workspaceDump
+```

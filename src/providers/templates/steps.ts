@@ -12,6 +12,8 @@ export enum StepType {
     SetValue = 'SetValue',
     HarnessCLICommand = 'HarnessCLICommand',
     CreateApplication = 'CreateApplication',
+    DumpWorkspace = 'DumpWorkspace',
+    PushToDestination = 'PushToDestination',
     // RegexReplace = 'RegexReplace',
     // RunContainer = 'RunContainer',
     // JSONPatch = 'JSONPatch',

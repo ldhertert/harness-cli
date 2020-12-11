@@ -1,11 +1,12 @@
 import { Variable } from './variables'
 import { Step, StepType, FileSourceStep, RenameFileStep, SetValueStep } from './steps'
 import { File } from '../../util/filesystem'
-import * as _ from 'lodash'
+import _ from 'lodash'
 import { Harness } from '../harness/harness-api-client'
-import { HarnessStorageProvider } from '../storage/harness-api-storage'
 import { RunHarnessCLICommand } from './steps/run-harness-cli-command'
 import { CreateApplicationStep } from './steps/create-application'
+import { DumpWorkspace } from './steps/dump-workspace'
+import { PushToDestination } from './steps/push-to-destination'
 
 export interface TemplateRef {
     source: string
@@ -79,7 +80,11 @@ export class Template {
                 this.steps.push(new CreateApplicationStep(step.name, step))
             }  else if (step.type === StepType.HarnessCLICommand) {
                 this.steps.push(new RunHarnessCLICommand(step.name, { command: step.command, args: step.args, silent: step.silent, debug: step.debug }))
-            } else {
+            } else if (step.type === StepType.DumpWorkspace) {
+                this.steps.push(new DumpWorkspace(step.name, { destination: step.destination }))
+            } else if (step.type === StepType.PushToDestination) {
+                this.steps.push(new PushToDestination(step.name, { files: stepFiles, destination: step.destination }))
+            }  else {
                 throw new Error('Invalid step type')
             }
         }
@@ -104,36 +109,40 @@ export class Template {
             dryRun: dryRun,
         }
 
+        const finalStep = new PushToDestination('Push changes to destination after all steps complete', { 
+            files: ['**/*.yaml'],
+            destination: {
+                accountId: context.vars.destination.accountId,
+                managerUrl: context.vars.destination.managerUrl,
+                username: context.vars.destination.username,
+                password: context.vars.destination.password,
+            }, 
+        })
+        this.steps.push(finalStep)
+
         this.processVariables(inputVars, context)
         await this.executeTemplateSteps(context)
-        // Preview changes
-        if (context.workspace.length > 0) {
-            context.logger.debug('Workspace contents')
-            context.logger.debug(context.workspace)
-        }
 
-        // Upsert yaml results
-        if (!dryRun && context.workspace.length > 0) {
-            console.log('Pushing changes to destination')
-            const destinationStorage = new HarnessStorageProvider(destination)
-            await destinationStorage.init()
-            context.outputs.pushFilesResult = await destinationStorage.storeFiles(context.workspace)
+        // // Upsert yaml results
+        // if (!dryRun && context.workspace.length > 0) {
+        //     console.log('Pushing changes to destination')
+        //     const destinationStorage = new HarnessStorageProvider(destination)
+        //     await destinationStorage.init()
 
-            if (context.outputs.pushFilesResult.responseStatus === 'FAILED') {
-                const failedFiles = context.outputs.pushFilesResult.filesStatus
-                    .filter((f: { status: string }) => f.status === 'FAILED')
-                    .map((f: { yamlFilePath: string; errorMssg: string }) => `\t'${f.yamlFilePath}': ${f.errorMssg}`)
-                throw new Error(`Error pushing files to destination. The following files failed:\n${failedFiles.join('\n')}`)
-            }
-            await destinationStorage.dispose()
-        }
+        //     try {
+        //         context.outputs.pushFilesResult = await destinationStorage.storeFiles(context.workspace)
 
-        // dump files to local filesystem for debugging
-        // const workspaceDump = new LocalStorageProvider({ directory: './.tmp/workspace' })
-        // await workspaceDump.init()
-        // await workspaceDump.storeFiles(context.workspace)
-        // await workspaceDump.storeFile({ path: 'context.json', content: JSON.stringify({ vars: context.vars, outputs: context.outputs }, undefined, 4) })
-
+        //         if (context.outputs.pushFilesResult.responseStatus === 'FAILED') {
+        //             const failedFiles = context.outputs.pushFilesResult.filesStatus
+        //                 .filter((f: { status: string }) => f.status === 'FAILED')
+        //                 .map((f: { yamlFilePath: string; errorMssg: string }) => `\t'${f.yamlFilePath}': ${f.errorMssg}`)
+        //             throw new Error(`Error pushing files to destination. The following files failed:\n${failedFiles.join('\n')}`)
+        //         }
+        //         await destinationStorage.dispose()
+        //     } catch (err) {
+        //         context.logger.log(err)
+        //     }
+        // }
         // Validate success
 
         return context
