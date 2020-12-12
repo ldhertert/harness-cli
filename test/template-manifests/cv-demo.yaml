@@ -59,7 +59,7 @@ steps:
       - Setup/Applications/cv-demo/**/*.yaml
     exclude:
       - "**/Service Verification/**/*.yaml"
-      - "Setup/Applications/cv-demo/Environments/**/*.yaml"
+      # - "Setup/Applications/cv-demo/Environments/**/*.yaml"
 
   - name: Set docker server for artifact sources
     type: SetValue
@@ -81,8 +81,8 @@ steps:
     replace: Setup/Applications/<%= vars.applicationName %>/    
 
   # - name: Dump workspace
-  # type: DumpWorkspace
-  #  destination: /tmp/workspaceDump
+  #   type: DumpWorkspace
+  #   destination: /Users/lukehertert/code/harness-cli/workspace
 
   # - name: Push to destination
   #  type: PushToDestination

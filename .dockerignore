@@ -1,0 +1,9 @@
+.github
+.nyc_output
+.vscode
+dist
+docs
+lib
+node_modules
+.env
+tsconfig.tsbuildinfo
