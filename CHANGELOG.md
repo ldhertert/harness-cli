@@ -1,3 +1,7 @@
+0.9.12 (April 14, 2021)
+------------------------
+* Update dependency with vulnerability
+
 0.9.11 (December 8, 2020)
 ------------------------
 * Add support for custom Harness API root in Manager URL.
