@@ -107,7 +107,7 @@ OPTIONS
 * [`harness k8s:get-service-account`](#harness-k8sget-service-account)
 * [`harness secrets:create`](#harness-secretscreate)
 * [`harness secrets:delete`](#harness-secretsdelete)
-* [`harness secrets:get [FILE]`](#harness-secretsget-file)
+* [`harness secrets:get`](#harness-secretget)
 * [`harness template:exec`](#harness-templateexec)
 * [`harness users:create`](#harness-userscreate)
 * [`harness users:delete`](#harness-usersdelete)
@@ -828,13 +828,13 @@ ALIASES
 
 _See code: [src/commands/secrets/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/delete.ts)_
 
-## `harness secrets:get [FILE]`
+## `harness secrets:get`
 
 Get the secrets by Id or by Name
 
 ```
 USAGE
-  $ harness secrets:get [FILE]
+  $ harness secrets:get
 
 OPTIONS
   -f, --force
