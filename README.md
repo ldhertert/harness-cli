@@ -107,7 +107,7 @@ OPTIONS
 * [`harness k8s:get-service-account`](#harness-k8sget-service-account)
 * [`harness secrets:create`](#harness-secretscreate)
 * [`harness secrets:delete`](#harness-secretsdelete)
-* [`harness secrets:get`](#harness-secretget)
+* [`harness secrets:get`](#harness-secretsget)
 * [`harness template:exec`](#harness-templateexec)
 * [`harness users:create`](#harness-userscreate)
 * [`harness users:delete`](#harness-usersdelete)
