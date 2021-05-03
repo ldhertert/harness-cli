@@ -950,7 +950,7 @@ Build dockerfile
 
   ```
   docker build --rm -t harness-cli .
-  docker run --rm harness-cli harness --version
+  docker run --rm harness-cli --version
   ```
 
 Releasing
