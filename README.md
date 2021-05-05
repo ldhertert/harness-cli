@@ -108,6 +108,7 @@ OPTIONS
 * [`harness secrets:create`](#harness-secretscreate)
 * [`harness secrets:delete`](#harness-secretsdelete)
 * [`harness secrets:get`](#harness-secretsget)
+* [`harness secrets:update`](#harness-secretsupdate)
 * [`harness template:exec`](#harness-templateexec)
 * [`harness users:create`](#harness-userscreate)
 * [`harness users:delete`](#harness-usersdelete)
@@ -830,19 +831,70 @@ _See code: [src/commands/secrets/delete.ts](https://github.com/ldhertert/harness
 
 ## `harness secrets:get`
 
-Get the secrets by Id or by Name
+Get Secret By Id or By Name
 
 ```
 USAGE
   $ harness secrets:get
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print or -i, --id=secretId
+  -n, --name=name          The name of the secret
+  --id=id                  The id of the secret
+  --type=(ENCRYPTED_TEXT)  (required) [default: ENCRYPTED_TEXT]
+
+ALIASES
+  $ harness secret:get
+  $ harness secrets:get
 ```
 
 _See code: [src/commands/secrets/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/get.ts)_
+
+## `harness secrets:update`
+
+Update a text secret
+
+```
+USAGE
+  $ harness secrets:update
+
+OPTIONS
+  -n, --name=name
+      The name of the secret
+
+  -v, --value=value
+      (required) The value of the secret
+
+  --accountScope
+      Scope this secret to the account for use in delegate profiles
+
+  --id=id
+      The id of the secret
+
+  --scope=scope
+      [default: ALL_APPS::PROD_ENVS,ALL_APPS::NON_PROD_ENVS] 
+      Restrict the use of this resource to specific Harness components.  
+      The expected format is 'application::environment'.  
+      The supported values for applications are 'ALL_APPS', an application name, or an application id.  
+      The supported values for environments are 'PROD_ENVS', 'NON_PROD_ENVS', an environment name, or an environment id.
+
+      Examples:
+      All applications, production environments: 'ALL_APPS::PROD_ENVS'
+      All applications, non-production environments: 'ALL_APPS::NON_PROD_ENVS'
+      Specific application, specific environment: 'MyCoolApp::development'
+      Specific application, non-production environment: 'rPyC0kD_SbymffS26SC_GQ::nonprod'
+
+  --secretManager=secretManager
+      (required) The id of the secret manager to leverage
+
+  --type=(ENCRYPTED_TEXT)
+      (required) [default: ENCRYPTED_TEXT]
+
+ALIASES
+  $ harness secret:update
+  $ harness secrets:update
+```
+
+_See code: [src/commands/secrets/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/update.ts)_
 
 ## `harness template:exec`
 
