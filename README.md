@@ -107,6 +107,7 @@ OPTIONS
 * [`harness k8s:get-service-account`](#harness-k8sget-service-account)
 * [`harness secrets:create`](#harness-secretscreate)
 * [`harness secrets:delete`](#harness-secretsdelete)
+* [`harness secrets:get`](#harness-secretsget)
 * [`harness template:exec`](#harness-templateexec)
 * [`harness users:create`](#harness-userscreate)
 * [`harness users:delete`](#harness-usersdelete)
@@ -827,6 +828,22 @@ ALIASES
 
 _See code: [src/commands/secrets/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/delete.ts)_
 
+## `harness secrets:get`
+
+Get the secrets by Id or by Name
+
+```
+USAGE
+  $ harness secrets:get
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print or -i, --id=secretId
+```
+
+_See code: [src/commands/secrets/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/get.ts)_
+
 ## `harness template:exec`
 
 Apply steps defined in template manifest and send reults to target Harness account.
@@ -950,7 +967,7 @@ Build dockerfile
 
   ```
   docker build --rm -t harness-cli .
-  docker run --rm harness-cli harness --version
+  docker run --rm harness-cli --version
   ```
 
 Releasing
