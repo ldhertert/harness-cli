@@ -1,3 +1,8 @@
+0.9.16 (May 6, 2021)
+------------------------
+* add `secrets:get`
+* add `secrets:update`
+
 0.9.12 (April 14, 2021)
 ------------------------
 * Update dependency with vulnerability
