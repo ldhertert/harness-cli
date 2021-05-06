@@ -11,11 +11,12 @@ export default class SecretsUpdate extends Command {
     static flags = {
         ...Command.flags,
         name: flags.string({
-            description: 'The name of the secret',
+            description: 'The name of the secret (alternative to id)',
             char: 'n',
             exclusive: ['id'],
         }),
-        id: flags.string({ description: 'The id of the secret' }),
+        id: flags.string({ 
+            description: 'The id of the secret (alternative to name)' }),
         value: flags.string({
             description: 'The value of the secret',
             required: true,
@@ -42,15 +43,6 @@ Specific application, non-production environment: 'rPyC0kD_SbymffS26SC_GQ::nonpr
             default: ['ALL_APPS::PROD_ENVS', 'ALL_APPS::NON_PROD_ENVS'],
             exclusive: ['accountScope'],
         }),
-        secretManager: flags.string({
-            description: 'The id of the secret manager to leverage',
-            required: true,
-        }),
-        type: flags.enum({
-            options: [SecretType.Text],
-            required: true,
-            default: SecretType.Text,
-        }),
     }
 
     async run() {
@@ -66,10 +58,8 @@ Specific application, non-production environment: 'rPyC0kD_SbymffS26SC_GQ::nonpr
         const secret = await harness.secrets.update(nameOrId, {
             name: flags.name,
             value: flags.value,
-            type: flags.type,
             usageScope: await this.parseUsageScope(flags.scope, harness),
             scopedToAccount: flags.accountScope,
-            secretManager: flags.secretManager,
         })
         this.log(secret)
     }

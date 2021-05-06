@@ -131,6 +131,8 @@ export class Secrets {
 
     async update(idOrName: string, options: UpdateSecretOptions) {
         const old = await this.get(idOrName, options.type)
+        console.log('secret after get')
+        console.log(old)
         const query = `
         mutation ($input: UpdateSecretInput!) {
             result: updateSecret(input: $input) {
@@ -152,7 +154,6 @@ export class Secrets {
                 encryptedText: {
                     name: options.name,
                     value: options.value,
-                    secretManagerId: options.secretManager,
                     usageScope: scope,
                     scopedToAccount: options.scopedToAccount,
                 },                
