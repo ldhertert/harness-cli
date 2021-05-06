@@ -1,7 +1,6 @@
 import { BaseCommand as Command } from '../../base-command'
 import { flags } from '@oclif/command'
 import { UsageScope, AppEnvScope, FilterType, EnvFilterType } from '../../providers/harness/types/scopes'
-import { SecretType } from '../../providers/harness/secrets'
 import { Harness } from '../../providers/harness/harness-api-client'
 
 export default class SecretsUpdate extends Command {

@@ -859,7 +859,7 @@ USAGE
 
 OPTIONS
   -n, --name=name
-      The name of the secret
+      The name of the secret (alternative to id)
 
   -v, --value=value
       (required) The value of the secret
@@ -868,7 +868,7 @@ OPTIONS
       Scope this secret to the account for use in delegate profiles
 
   --id=id
-      The id of the secret
+      The id of the secret (alternative to name)
 
   --scope=scope
       [default: ALL_APPS::PROD_ENVS,ALL_APPS::NON_PROD_ENVS] 
@@ -882,12 +882,6 @@ OPTIONS
       All applications, non-production environments: 'ALL_APPS::NON_PROD_ENVS'
       Specific application, specific environment: 'MyCoolApp::development'
       Specific application, non-production environment: 'rPyC0kD_SbymffS26SC_GQ::nonprod'
-
-  --secretManager=secretManager
-      (required) The id of the secret manager to leverage
-
-  --type=(ENCRYPTED_TEXT)
-      (required) [default: ENCRYPTED_TEXT]
 
 ALIASES
   $ harness secret:update
