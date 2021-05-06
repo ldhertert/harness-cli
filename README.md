@@ -859,16 +859,16 @@ USAGE
 
 OPTIONS
   -n, --name=name
-      The name of the secret
+      The name of the secret (alternative to `id`)
+  
+  --id=id 
+      The id of the secret (alternative to `name`)
 
   -v, --value=value
-      (required) The value of the secret
+      The value of the secret
 
   --accountScope
       Scope this secret to the account for use in delegate profiles
-
-  --id=id
-      The id of the secret
 
   --scope=scope
       [default: ALL_APPS::PROD_ENVS,ALL_APPS::NON_PROD_ENVS] 
@@ -887,7 +887,7 @@ OPTIONS
       (required) The id of the secret manager to leverage
 
   --type=(ENCRYPTED_TEXT)
-      (required) [default: ENCRYPTED_TEXT]
+      [default: ENCRYPTED_TEXT]
 
 ALIASES
   $ harness secret:update
