@@ -138,7 +138,7 @@ ALIASES
   $ harness application:create
 ```
 
-_See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/application/create.ts)_
+_See code: [src/commands/application/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/application/create.ts)_
 
 ## `harness application:delete`
 
@@ -158,7 +158,7 @@ ALIASES
   $ harness application:delete
 ```
 
-_See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/application/delete.ts)_
+_See code: [src/commands/application/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/application/delete.ts)_
 
 ## `harness application:get`
 
@@ -178,7 +178,7 @@ ALIASES
   $ harness application:get
 ```
 
-_See code: [src/commands/application/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/application/get.ts)_
+_See code: [src/commands/application/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/application/get.ts)_
 
 ## `harness application:list`
 
@@ -195,7 +195,7 @@ ALIASES
   $ harness application:list
 ```
 
-_See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/application/list.ts)_
+_See code: [src/commands/application/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/application/list.ts)_
 
 ## `harness application:update`
 
@@ -220,7 +220,7 @@ ALIASES
   $ harness application:update
 ```
 
-_See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/application/update.ts)_
+_See code: [src/commands/application/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/application/update.ts)_
 
 ## `harness autocomplete [SHELL]`
 
@@ -285,7 +285,7 @@ ALIASES
   $ harness cloud-providers:create-k8s
 ```
 
-_See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/cloud-provider/create-k8s.ts)_
+_See code: [src/commands/cloud-provider/create-k8s.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/cloud-provider/create-k8s.ts)_
 
 ## `harness cloud-provider:delete`
 
@@ -303,7 +303,7 @@ ALIASES
   $ harness cloud-providers:delete
 ```
 
-_See code: [src/commands/cloud-provider/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/cloud-provider/delete.ts)_
+_See code: [src/commands/cloud-provider/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/cloud-provider/delete.ts)_
 
 ## `harness cloud-provider:get`
 
@@ -321,7 +321,7 @@ ALIASES
   $ harness cloud-providers:get
 ```
 
-_See code: [src/commands/cloud-provider/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/cloud-provider/get.ts)_
+_See code: [src/commands/cloud-provider/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/cloud-provider/get.ts)_
 
 ## `harness config-as-code:delete`
 
@@ -345,7 +345,7 @@ ALIASES
   $ harness config-as-code:delete
 ```
 
-_See code: [src/commands/config-as-code/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/config-as-code/delete.ts)_
+_See code: [src/commands/config-as-code/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/config-as-code/delete.ts)_
 
 ## `harness config-as-code:get`
 
@@ -372,7 +372,7 @@ ALIASES
   $ harness config-as-code:get
 ```
 
-_See code: [src/commands/config-as-code/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/config-as-code/get.ts)_
+_See code: [src/commands/config-as-code/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/config-as-code/get.ts)_
 
 ## `harness config-as-code:list-files`
 
@@ -394,7 +394,7 @@ ALIASES
   $ harness config-as-code:list-files
 ```
 
-_See code: [src/commands/config-as-code/list-files.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/config-as-code/list-files.ts)_
+_See code: [src/commands/config-as-code/list-files.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/config-as-code/list-files.ts)_
 
 ## `harness config-as-code:upsert`
 
@@ -424,7 +424,7 @@ ALIASES
   $ harness config-as-code:update
 ```
 
-_See code: [src/commands/config-as-code/upsert.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/config-as-code/upsert.ts)_
+_See code: [src/commands/config-as-code/upsert.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/config-as-code/upsert.ts)_
 
 ## `harness connectors:create-docker`
 
@@ -451,7 +451,7 @@ ALIASES
   $ harness connectors:create-docker
 ```
 
-_See code: [src/commands/connectors/create-docker.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/connectors/create-docker.ts)_
+_See code: [src/commands/connectors/create-docker.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/connectors/create-docker.ts)_
 
 ## `harness connectors:create-git`
 
@@ -477,7 +477,7 @@ ALIASES
   $ harness connectors:create-git
 ```
 
-_See code: [src/commands/connectors/create-git.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/connectors/create-git.ts)_
+_See code: [src/commands/connectors/create-git.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/connectors/create-git.ts)_
 
 ## `harness connectors:delete`
 
@@ -497,7 +497,7 @@ ALIASES
   $ harness connectors:delete
 ```
 
-_See code: [src/commands/connectors/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/connectors/delete.ts)_
+_See code: [src/commands/connectors/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/connectors/delete.ts)_
 
 ## `harness github:create-repo`
 
@@ -519,7 +519,7 @@ OPTIONS
   --visibility=(private|public|internal)  [default: private] Visibility settings for the repository
 ```
 
-_See code: [src/commands/github/create-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/github/create-repo.ts)_
+_See code: [src/commands/github/create-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/github/create-repo.ts)_
 
 ## `harness github:create-webhook`
 
@@ -539,7 +539,7 @@ OPTIONS
                                variable GITHUB_TOKEN.
 ```
 
-_See code: [src/commands/github/create-webhook.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/github/create-webhook.ts)_
+_See code: [src/commands/github/create-webhook.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/github/create-webhook.ts)_
 
 ## `harness github:delete-repo`
 
@@ -558,7 +558,7 @@ OPTIONS
                      GITHUB_TOKEN.
 ```
 
-_See code: [src/commands/github/delete-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/github/delete-repo.ts)_
+_See code: [src/commands/github/delete-repo.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/github/delete-repo.ts)_
 
 ## `harness groups:create`
 
@@ -583,7 +583,7 @@ ALIASES
   $ harness groups:create
 ```
 
-_See code: [src/commands/groups/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/groups/create.ts)_
+_See code: [src/commands/groups/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/groups/create.ts)_
 
 ## `harness groups:delete`
 
@@ -602,7 +602,7 @@ ALIASES
   $ harness groups:delete
 ```
 
-_See code: [src/commands/groups/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/groups/delete.ts)_
+_See code: [src/commands/groups/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/groups/delete.ts)_
 
 ## `harness groups:get`
 
@@ -621,7 +621,7 @@ ALIASES
   $ harness groups:get
 ```
 
-_See code: [src/commands/groups/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/groups/get.ts)_
+_See code: [src/commands/groups/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/groups/get.ts)_
 
 ## `harness groups:list`
 
@@ -636,7 +636,7 @@ ALIASES
   $ harness groups:list
 ```
 
-_See code: [src/commands/groups/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/groups/list.ts)_
+_See code: [src/commands/groups/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/groups/list.ts)_
 
 ## `harness help [COMMAND]`
 
@@ -670,7 +670,7 @@ OPTIONS
   --name=name              [default: harness] The name of the service account
 ```
 
-_See code: [src/commands/k8s/cluster-info.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/k8s/cluster-info.ts)_
+_See code: [src/commands/k8s/cluster-info.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/k8s/cluster-info.ts)_
 
 ## `harness k8s:create-namespace`
 
@@ -687,7 +687,7 @@ OPTIONS
   --name=name              (required) The name of the new namespace
 ```
 
-_See code: [src/commands/k8s/create-namespace.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/k8s/create-namespace.ts)_
+_See code: [src/commands/k8s/create-namespace.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/k8s/create-namespace.ts)_
 
 ## `harness k8s:create-role`
 
@@ -720,7 +720,7 @@ OPTIONS
                                                      account for the role is used.
 ```
 
-_See code: [src/commands/k8s/create-role.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/k8s/create-role.ts)_
+_See code: [src/commands/k8s/create-role.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/k8s/create-role.ts)_
 
 ## `harness k8s:create-service-account`
 
@@ -740,7 +740,7 @@ OPTIONS
                            used
 ```
 
-_See code: [src/commands/k8s/create-service-account.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/k8s/create-service-account.ts)_
+_See code: [src/commands/k8s/create-service-account.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/k8s/create-service-account.ts)_
 
 ## `harness k8s:get-service-account`
 
@@ -760,7 +760,7 @@ OPTIONS
                            used
 ```
 
-_See code: [src/commands/k8s/get-service-account.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/k8s/get-service-account.ts)_
+_See code: [src/commands/k8s/get-service-account.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/k8s/get-service-account.ts)_
 
 ## `harness secrets:create`
 
@@ -807,7 +807,7 @@ ALIASES
   $ harness secrets:create
 ```
 
-_See code: [src/commands/secrets/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/create.ts)_
+_See code: [src/commands/secrets/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/secrets/create.ts)_
 
 ## `harness secrets:delete`
 
@@ -827,7 +827,7 @@ ALIASES
   $ harness secrets:delete
 ```
 
-_See code: [src/commands/secrets/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/delete.ts)_
+_See code: [src/commands/secrets/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/secrets/delete.ts)_
 
 ## `harness secrets:get`
 
@@ -838,8 +838,8 @@ USAGE
   $ harness secrets:get
 
 OPTIONS
-  -n, --name=name          The name of the secret (alternative to `id`)
-  --id=id                  The id of the secret (alternative to `name`)
+  -n, --name=name          The name of the secret
+  --id=id                  The id of the secret
   --type=(ENCRYPTED_TEXT)  (required) [default: ENCRYPTED_TEXT]
 
 ALIASES
@@ -847,7 +847,7 @@ ALIASES
   $ harness secrets:get
 ```
 
-_See code: [src/commands/secrets/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/get.ts)_
+_See code: [src/commands/secrets/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/secrets/get.ts)_
 
 ## `harness secrets:update`
 
@@ -894,7 +894,7 @@ ALIASES
   $ harness secrets:update
 ```
 
-_See code: [src/commands/secrets/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/secrets/update.ts)_
+_See code: [src/commands/secrets/update.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/secrets/update.ts)_
 
 ## `harness template:exec`
 
@@ -920,7 +920,7 @@ OPTIONS
                                      or URL.
 ```
 
-_See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/template/exec.ts)_
+_See code: [src/commands/template/exec.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/template/exec.ts)_
 
 ## `harness users:create`
 
@@ -940,7 +940,7 @@ ALIASES
   $ harness users:create
 ```
 
-_See code: [src/commands/users/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/users/create.ts)_
+_See code: [src/commands/users/create.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/users/create.ts)_
 
 ## `harness users:delete`
 
@@ -960,7 +960,7 @@ ALIASES
   $ harness users:delete
 ```
 
-_See code: [src/commands/users/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/users/delete.ts)_
+_See code: [src/commands/users/delete.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/users/delete.ts)_
 
 ## `harness users:get`
 
@@ -980,7 +980,7 @@ ALIASES
   $ harness users:get
 ```
 
-_See code: [src/commands/users/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/users/get.ts)_
+_See code: [src/commands/users/get.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/users/get.ts)_
 
 ## `harness users:list`
 
@@ -995,7 +995,7 @@ ALIASES
   $ harness users:list
 ```
 
-_See code: [src/commands/users/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.15/src/commands/users/list.ts)_
+_See code: [src/commands/users/list.ts](https://github.com/ldhertert/harness-cli/blob/v0.9.16/src/commands/users/list.ts)_
 <!-- commandsstop -->
 
 Development
