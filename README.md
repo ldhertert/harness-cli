@@ -838,8 +838,8 @@ USAGE
   $ harness secrets:get
 
 OPTIONS
-  -n, --name=name          The name of the secret
-  --id=id                  The id of the secret
+  -n, --name=name          The name of the secret (alternative to `id`)
+  --id=id                  The id of the secret (alternative to `name`)
   --type=(ENCRYPTED_TEXT)  (required) [default: ENCRYPTED_TEXT]
 
 ALIASES
