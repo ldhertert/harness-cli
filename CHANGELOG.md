@@ -1,4 +1,4 @@
-0.9.16 (May 18, 2021)
+0.10.0 (May 18, 2021)
 ------------------------
 * add `secrets:get`
 * add `secrets:update`
