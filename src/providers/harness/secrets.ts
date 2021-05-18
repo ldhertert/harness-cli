@@ -152,7 +152,6 @@ export class Secrets {
                 encryptedText: {
                     name: options.name,
                     value: options.value,
-                    secretManagerId: options.secretManager,
                     usageScope: scope,
                     scopedToAccount: options.scopedToAccount,
                 },                
