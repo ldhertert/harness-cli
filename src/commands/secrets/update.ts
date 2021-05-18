@@ -10,12 +10,11 @@ export default class SecretsUpdate extends Command {
     static flags = {
         ...Command.flags,
         name: flags.string({
-            description: 'The name of the secret (alternative to id)',
+            description: 'The name of the secret.  If you want to rename a secret, then secret ID must also be provided.',
             char: 'n',
-            exclusive: ['id'],
         }),
         id: flags.string({ 
-            description: 'The id of the secret (alternative to name)' }),
+            description: 'The id of the secret' }),
         value: flags.string({
             description: 'The value of the secret',
             required: true,
@@ -49,17 +48,20 @@ Specific application, non-production environment: 'rPyC0kD_SbymffS26SC_GQ::nonpr
 
         const harness = await this.getHarnessClient()
 
-        const nameOrId = flags.name || flags.id
+        const nameOrId = flags.id || flags.name
         if (!nameOrId) {
             this.error('Either name or id is required.')
         }
 
+        const existingSecret = await harness.secrets.get(nameOrId)
+
         const secret = await harness.secrets.update(nameOrId, {
-            name: flags.name,
+            name: flags.name || existingSecret.name,
             value: flags.value,
             usageScope: await this.parseUsageScope(flags.scope, harness),
             scopedToAccount: flags.accountScope,
         })
+
         this.log(secret)
     }
 
