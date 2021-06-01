@@ -1,3 +1,7 @@
+0.11.1 (June 1, 2021)
+------------------------
+* add API Key auth support for all `config-as-code` commands except `get`
+
 0.10.0 (May 18, 2021)
 ------------------------
 * add `secrets:get`
