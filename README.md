@@ -332,11 +332,11 @@ USAGE
   $ harness config-as-code:delete
 
 OPTIONS
-  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
-                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
+  --harnessPassword=harnessPassword  [DEPRECATED] The Harness password. Can also be set via HARNESS_PASSWORD environment
+                                     variable.
 
-  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
-                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+  --harnessUsername=harnessUsername  [DEPRECATED] The Harness username. Can also be set via HARNESS_USERNAME environment
+                                     variable.
 
   --path=path                        (required) The file path to delete.  Glob patterns are supported.
 
@@ -362,6 +362,9 @@ OPTIONS
   --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
                                      suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
 
+  --out=out                          A directory path on the local filesystem that will be used to write file contents
+                                     to disk.
+
   --path=path                        (required) The file path(s) to fetch contents for. Glob patterns are supported.
 
   --raw                              Output raw YAML content instead of a JSON array.  This is only supported when there
@@ -383,11 +386,11 @@ USAGE
   $ harness config-as-code:list-files
 
 OPTIONS
-  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
-                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
+  --harnessPassword=harnessPassword  [DEPRECATED] The Harness password. Can also be set via HARNESS_PASSWORD environment
+                                     variable.
 
-  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
-                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+  --harnessUsername=harnessUsername  [DEPRECATED] The Harness username. Can also be set via HARNESS_USERNAME environment
+                                     variable.
 
 ALIASES
   $ harness config:list
@@ -405,15 +408,21 @@ USAGE
   $ harness config-as-code:upsert
 
 OPTIONS
-  --content=content                  (required) The YAML content
+  --content=content                  The YAML content
 
-  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
-                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
+  --harnessPassword=harnessPassword  [DEPRECATED] The Harness password. Can also be set via HARNESS_PASSWORD environment
+                                     variable.
 
-  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
-                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+  --harnessUsername=harnessUsername  [DEPRECATED] The Harness username. Can also be set via HARNESS_USERNAME environment
+                                     variable.
 
-  --path=path                        (required) The file path
+  --path=path                        The file path
+
+  --source=source                    The path to a directory on the local filesystem that contains files to be upserted.
+                                     Source files must contain a valid Harness config as code path structure relative to
+                                     the source directory.
+
+  --sourcePattern=sourcePattern      [default: **/*.yaml] A glob pattern to limit files to include from source directory
 
 ALIASES
   $ harness config:upsert
@@ -904,11 +913,11 @@ OPTIONS
 
   --dryRun                           Executes all template steps but does not push result to destination
 
-  --harnessPassword=harnessPassword  (required) The Harness password. This is required for now until the underlying APIs
-                                     suport API key auth.  Can also be set via HARNESS_PASSWORD environment variable.
+  --harnessPassword=harnessPassword  [DEPRECATED] The Harness password. Can also be set via HARNESS_PASSWORD environment
+                                     variable.
 
-  --harnessUsername=harnessUsername  (required) The Harness username. This is required for now until the underlying APIs
-                                     suport API key auth.  Can also be set via HARNESS_USERNAME environment variable.
+  --harnessUsername=harnessUsername  [DEPRECATED] The Harness username. Can also be set via HARNESS_USERNAME environment
+                                     variable.
 
   --manifest=manifest                (required) A template manifest in either YAML or JSON format.  Can be a local file
                                      or URL.
