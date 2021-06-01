@@ -101,4 +101,21 @@ export abstract class BaseCommand extends Command {
             this.error('The arguments harnessAccountId and harnessApiKey are required.')
         }
     }
+
+    async getHarnessClientDeprecated(username?: string, password?: string) {
+        if (username || password) {
+            this.warn('Username and password auth is deprecated and support will be removed in a future release.  Please switch to using API key auth instead.')
+            const harness = new Harness({ accountId: this.context.config.harness.accountId || '', username: username, password: password })
+            try {
+                await harness.init()
+                return harness
+            } catch (error) {
+                this.error('Error initializing Harness API Client', { exit: false })
+                this.error(error, { exit: 1 })
+            } 
+        } else {
+            const harness = await this.getHarnessClient()
+            return harness
+        }
+    }
 }

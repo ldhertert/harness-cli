@@ -10,6 +10,12 @@ export interface ConfigAsCodeFile {
     contentUrl: string,
 }
 
+// eslint-disable-next-line no-warning-comments
+// TODO: Move this to a throttle function inside harness api client
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export class ConfigAsCode {
     protected harness: Harness;
 
@@ -28,7 +34,8 @@ export class ConfigAsCode {
         // })
         const appNodes = _.filter(traverse(root).nodes(), n => n && n.shortClassName === 'Application' && n.appId)
         for (const node of appNodes) {
-            const app = await this.harness.privateApiGet(`/gateway/api/setup-as-code/yaml/application?appId=${node.appId}`)
+            await sleep(1100)
+            const app = await this.harness.privateApiGet(`/gateway/api/setup-as-code/yaml/directory?appId=${node.appId}`)
             yaml = yaml.concat(this.getYamlNodes(app))
         }
 
