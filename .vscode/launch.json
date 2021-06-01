@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug javascript file",
+            "program": "${workspaceFolder}/src/util/gql-query-codegen.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+        {
           "type": "node",
           "request": "launch",
           "name": "Launch Program",

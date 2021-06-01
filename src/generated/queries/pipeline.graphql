@@ -1,0 +1,8 @@
+query pipeline($pipelineId: String!) {
+  result: pipeline(pipelineId: $pipelineId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

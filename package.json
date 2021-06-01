@@ -31,6 +31,11 @@
         "tslib": "^2.0.3"
     },
     "devDependencies": {
+        "@graphql-codegen/cli": "^1.21.4",
+        "@graphql-codegen/typed-document-node": "^1.18.5",
+        "@graphql-codegen/typescript": "^1.22.0",
+        "@graphql-codegen/typescript-operations": "^1.17.16",
+        "@graphql-typed-document-node/core": "^3.1.0",
         "@oclif/dev-cli": "^1.25.1",
         "@oclif/test": "^1.2.8",
         "@tsconfig/node12": "^1.0.7",

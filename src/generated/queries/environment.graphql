@@ -1,0 +1,8 @@
+query environment($environmentId: String!) {
+  result: environment(environmentId: $environmentId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

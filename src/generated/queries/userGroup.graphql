@@ -1,0 +1,8 @@
+query userGroup($userGroupId: String!) {
+  result: userGroup(userGroupId: $userGroupId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

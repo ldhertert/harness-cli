@@ -1,0 +1,5 @@
+fragment applicationFields on Application {
+    id
+    name
+    description
+}

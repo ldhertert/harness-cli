@@ -1,0 +1,8 @@
+query pipelineByName($applicationId: String!, $pipelineName: String!) {
+  result: pipelineByName(applicationId: $applicationId, pipelineName: $pipelineName) {
+   nodes {
+      id
+      name
+    }
+  }
+}

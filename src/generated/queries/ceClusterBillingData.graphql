@@ -1,0 +1,12 @@
+query ceClusterBillingData($aggregateFunction: [ceAggregation], $filters: [ceFilter], $groupBy: [ceGroupBy], $limit: Int = 100, $offset: Int, $select: [ceSelect], $sortCriteria: [ceSort]) {
+  result: ceClusterBillingData(aggregateFunction: $aggregateFunction, filters: $filters, groupBy: $groupBy, limit: $limit, offset: $offset, select: $select, sortCriteria: $sortCriteria) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

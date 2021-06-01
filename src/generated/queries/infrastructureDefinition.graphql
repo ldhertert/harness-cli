@@ -1,0 +1,8 @@
+query infrastructureDefinition($infrastructureId: String!) {
+  result: infrastructureDefinition(infrastructureId: $infrastructureId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

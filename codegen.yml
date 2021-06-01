@@ -1,0 +1,21 @@
+overwrite: true
+schema:
+  - https://app.harness.io/gateway/api/graphql?accountId=${HARNESS_ACCOUNT_ID}:
+      headers:
+        x-api-key: ${HARNESS_API_KEY}
+documents: "src/providers/harness/queries/*.graphql"
+generates:
+  src/generated/types.generated.ts:
+    - typescript
+    - typescript-operations
+    - typed-document-node
+    # - "typescript-graphql-request"
+    # - "typescript-generic-sdk"
+  # src/generated/:
+  #   preset: near-operation-file
+  #   presetConfig:
+  #     extension: .generated.ts
+  #     baseTypesPath: types.ts
+  #   plugins:
+  #     - typescript-operations
+  #     - typed-document-node

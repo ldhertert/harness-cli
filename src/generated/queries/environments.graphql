@@ -1,0 +1,12 @@
+query environments($filters: [EnvironmentFilter], $limit: Int = 100, $offset: Int) {
+  result: environments(filters: $filters, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

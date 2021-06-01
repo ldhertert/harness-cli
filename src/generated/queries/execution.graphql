@@ -1,0 +1,8 @@
+query execution($executionId: String!) {
+  result: execution(executionId: $executionId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

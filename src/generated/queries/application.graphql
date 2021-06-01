@@ -1,0 +1,8 @@
+query application($applicationId: String!) {
+  result: application(applicationId: $applicationId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

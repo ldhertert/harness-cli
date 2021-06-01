@@ -1,0 +1,8 @@
+query deploymentStats($aggregateFunction: DeploymentAggregationFunction, $filters: [DeploymentFilter], $groupBy: [DeploymentAggregation], $includeIndirectExecutions: Boolean, $sortCriteria: [DeploymentSortCriteria]) {
+  result: deploymentStats(aggregateFunction: $aggregateFunction, filters: $filters, groupBy: $groupBy, includeIndirectExecutions: $includeIndirectExecutions, sortCriteria: $sortCriteria) {
+   nodes {
+      id
+      name
+    }
+  }
+}

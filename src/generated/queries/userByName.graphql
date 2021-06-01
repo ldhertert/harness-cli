@@ -1,0 +1,8 @@
+query userByName($name: String!) {
+  result: userByName(name: $name) {
+   nodes {
+      id
+      name
+    }
+  }
+}

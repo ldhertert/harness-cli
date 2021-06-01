@@ -1,0 +1,5 @@
+query application($id: String!) {
+    result: application(applicationId: $id) {
+        ...applicationFields
+    }
+}

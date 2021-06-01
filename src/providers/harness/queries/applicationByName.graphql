@@ -1,0 +1,5 @@
+query applicationByName($name: String!) {
+    result: applicationByName(name: $name) {
+        ...applicationFields
+    }
+}

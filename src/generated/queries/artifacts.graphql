@@ -1,0 +1,12 @@
+query artifacts($filters: [ArtifactFilter], $limit: Int = 100, $offset: Int) {
+  result: artifacts(filters: $filters, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

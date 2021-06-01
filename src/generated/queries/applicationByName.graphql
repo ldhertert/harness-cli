@@ -1,0 +1,8 @@
+query applicationByName($name: String!) {
+  result: applicationByName(name: $name) {
+   nodes {
+      id
+      name
+    }
+  }
+}

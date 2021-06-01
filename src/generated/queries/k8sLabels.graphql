@@ -1,0 +1,12 @@
+query k8sLabels($filters: [K8sLabelFilter], $limit: Int = 100, $offset: Int) {
+  result: k8sLabels(filters: $filters, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

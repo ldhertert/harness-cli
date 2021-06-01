@@ -1,0 +1,8 @@
+query tag($tagId: String!) {
+  result: tag(tagId: $tagId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

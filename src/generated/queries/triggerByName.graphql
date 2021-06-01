@@ -1,0 +1,8 @@
+query triggerByName($applicationId: String!, $triggerName: String!) {
+  result: triggerByName(applicationId: $applicationId, triggerName: $triggerName) {
+   nodes {
+      id
+      name
+    }
+  }
+}

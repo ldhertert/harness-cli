@@ -1,0 +1,12 @@
+query instances($filters: [InstanceFilter], $limit: Int = 100, $offset: Int) {
+  result: instances(filters: $filters, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

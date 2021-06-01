@@ -1,0 +1,8 @@
+query userByEmail($email: String!) {
+  result: userByEmail(email: $email) {
+   nodes {
+      id
+      name
+    }
+  }
+}

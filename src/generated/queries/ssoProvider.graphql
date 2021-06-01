@@ -1,0 +1,8 @@
+query ssoProvider($ssoProviderId: String!) {
+  result: ssoProvider(ssoProviderId: $ssoProviderId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

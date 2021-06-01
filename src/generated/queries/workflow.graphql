@@ -1,0 +1,8 @@
+query workflow($workflowId: String!) {
+  result: workflow(workflowId: $workflowId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

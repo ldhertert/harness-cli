@@ -1,0 +1,12 @@
+query triggers($filters: [TriggerFilter], $limit: Int = 100, $offset: Int) {
+  result: triggers(filters: $filters, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

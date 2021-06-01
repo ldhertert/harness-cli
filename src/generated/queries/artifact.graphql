@@ -1,0 +1,8 @@
+query artifact($artifactId: String!) {
+  result: artifact(artifactId: $artifactId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

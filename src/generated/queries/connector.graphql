@@ -1,0 +1,8 @@
+query connector($connectorId: String!) {
+  result: connector(connectorId: $connectorId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

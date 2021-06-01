@@ -1,0 +1,12 @@
+query ssoProviders($limit: Int = 100, $offset: Int) {
+  result: ssoProviders(limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

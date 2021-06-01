@@ -1,0 +1,12 @@
+query executions($filters: [ExecutionFilter], $includeIndirectExecutions: Boolean, $limit: Int = 100, $offset: Int) {
+  result: executions(filters: $filters, includeIndirectExecutions: $includeIndirectExecutions, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

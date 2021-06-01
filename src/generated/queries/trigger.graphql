@@ -1,0 +1,8 @@
+query trigger($triggerId: String!) {
+  result: trigger(triggerId: $triggerId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

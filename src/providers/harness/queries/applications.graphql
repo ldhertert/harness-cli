@@ -1,0 +1,10 @@
+query applications($limit: Int = 100, $offset: Int) {
+    result: applications(limit: $limit, offset: $offset) {
+        pageInfo {
+            hasMore
+        }
+        nodes {
+            ...applicationFields
+        }
+    }
+}

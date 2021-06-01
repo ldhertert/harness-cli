@@ -1,0 +1,12 @@
+query userGroups($limit: Int = 100, $offset: Int) {
+  result: userGroups(limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

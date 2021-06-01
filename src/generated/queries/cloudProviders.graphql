@@ -1,0 +1,12 @@
+query cloudProviders($filters: [CloudProviderFilter], $limit: Int = 100, $offset: Int) {
+  result: cloudProviders(filters: $filters, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

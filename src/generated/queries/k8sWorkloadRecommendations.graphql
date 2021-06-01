@@ -1,0 +1,12 @@
+query k8sWorkloadRecommendations($filters: [WorkloadFilter], $limit: Int = 100, $offset: Int) {
+  result: k8sWorkloadRecommendations(filters: $filters, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}

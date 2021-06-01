@@ -1,0 +1,8 @@
+query executionInputs($applicationId: String!, $entityId: String!, $executionType: ExecutionType!, $variableInputs: [VariableInput]) {
+  result: executionInputs(applicationId: $applicationId, entityId: $entityId, executionType: $executionType, variableInputs: $variableInputs) {
+   nodes {
+      id
+      name
+    }
+  }
+}

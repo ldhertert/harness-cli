@@ -1,0 +1,8 @@
+query service($serviceId: String!) {
+  result: service(serviceId: $serviceId) {
+   nodes {
+      id
+      name
+    }
+  }
+}

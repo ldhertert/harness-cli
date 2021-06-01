@@ -1,0 +1,12 @@
+query services($filters: [ServiceFilter], $limit: Int = 100, $offset: Int) {
+  result: services(filters: $filters, limit: $limit, offset: $offset) {
+   nodes {
+      id
+      name
+    }
+
+    pageInfo {
+      hasMore
+    }
+  }
+}
