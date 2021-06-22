@@ -14,7 +14,7 @@ function generateGraphQLSchema() {
 }
 
 function generateTypescriptTypesFromJSONSchema() {
-    // quicktype --src-lang schema --lang typescript jsonSchema.json -o out.ts
+    // quicktype --src-lang schema --lang typescript jsonSchema.json -o types.ts --nice-property-names --just-types -t HarnessApi --alphabetize-properties 
 }
 
 // Generate JSON Schema file from GraphQL Schema
